@@ -10,7 +10,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import kotlin.jvm.Throws
 
-object DefaultClient {
+object SolapiClient {
 
     private const val PROTOCOL = "https"
     private const val DOMAIN = "api.solapi.com"

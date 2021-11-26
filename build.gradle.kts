@@ -4,6 +4,7 @@ plugins {
     java
     kotlin("jvm") version "1.6.0"
     kotlin("plugin.serialization") version "1.6.0"
+    id("org.jetbrains.dokka") version "1.6.0"
 }
 
 group = "net.nurigo"
@@ -23,6 +24,7 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1")
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
+    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.6.0")
 }
 
 tasks.getByName<Test>("test") {
@@ -36,4 +38,8 @@ compileKotlin.kotlinOptions {
 val compileTestKotlin: KotlinCompile by tasks
 compileTestKotlin.kotlinOptions {
     jvmTarget = "1.8"
+}
+
+tasks.dokkaHtml.configure {
+    outputDirectory.set(buildDir.resolve("dokka"))
 }
