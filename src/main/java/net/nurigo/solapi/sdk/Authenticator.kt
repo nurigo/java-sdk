@@ -1,0 +1,42 @@
+package net.nurigo.solapi.sdk
+
+import org.apache.commons.codec.binary.Hex
+import java.nio.charset.StandardCharsets
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.util.*
+import javax.crypto.Mac
+import javax.crypto.spec.SecretKeySpec
+
+
+class Authenticator(
+    private var apiKey: String,
+    private var apiSecretKey: String
+) {
+
+    companion object {
+        const val ENCRYPTION_ALGORITHM = "HmacSHA256"
+    }
+
+    @Throws
+    fun generateAuthInfo(): String {
+        if (apiKey == "" || apiSecretKey == "") {
+            throw Error("API Key or API Secret Key is empty")
+        }
+
+        val salt = UUID.randomUUID().toString().replace(Regex("-"), "")
+        val date = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toString().split(Regex("\\[")).toTypedArray()[0]
+
+        val encryptionInstance = Mac.getInstance(ENCRYPTION_ALGORITHM)
+        val secretKey = SecretKeySpec(apiSecretKey.toByteArray(StandardCharsets.UTF_8), ENCRYPTION_ALGORITHM)
+
+        encryptionInstance.init(secretKey)
+        val signature = String(
+            (date + salt).toByteArray(StandardCharsets.UTF_8)
+                .let { encryptionInstance.doFinal(it) }
+                .let { Hex.encodeHex(it) }
+        )
+
+        return "HMAC-SHA256 Apikey=${apiKey}, Date=${date}, salt=${salt}, signature=${signature}"
+    }
+}
