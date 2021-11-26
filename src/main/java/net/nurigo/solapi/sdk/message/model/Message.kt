@@ -2,14 +2,12 @@ package net.nurigo.solapi.sdk.message.model
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonObject
 
 @Serializable
 data class Message(
-    // TODO: Options 모델 정의
     var kakaoOptions: KakaoOption? = null,
-    var naverOptions: JsonObject? = null,
-    var rcsOptions: JsonObject? = null,
+    var naverOptions: NaverOption? = null,
+    var rcsOptions: RcsOption? = null,
     // TODO: ENUM 필요
     var type: String? = null,
     var country: String = "82",

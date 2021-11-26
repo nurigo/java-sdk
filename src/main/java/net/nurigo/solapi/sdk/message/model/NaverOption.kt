@@ -4,8 +4,8 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 
 @Serializable
-data class KakaoOption(
-    var pfId: String? = null,
+data class NaverOption(
+    var talkId: String? = null,
     var templateId: String? = null,
     var variables: JsonObject? = null
 )

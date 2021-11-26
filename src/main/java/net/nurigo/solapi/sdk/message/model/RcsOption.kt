@@ -4,8 +4,10 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 
 @Serializable
-data class KakaoOption(
-    var pfId: String? = null,
+data class RcsOption(
+    var brandId: String? = null,
+    // TODO: Enum으로 해야 함
+    var mmsType: String? = null,
     var templateId: String? = null,
     var variables: JsonObject? = null
 )
