@@ -44,6 +44,9 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String) : MessageServi
             .build()
         val contentType = "application/json".toMediaType()
         val jsonConfig = Json {
+            coerceInputValues = true
+            explicitNulls = false
+            encodeDefaults = true
             ignoreUnknownKeys = true
         }
 

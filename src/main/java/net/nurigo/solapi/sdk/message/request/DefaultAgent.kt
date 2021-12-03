@@ -1,6 +1,9 @@
 package net.nurigo.solapi.sdk.message.request
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class DefaultAgent(
-    val sdkVersion: String = "java/4.0.0",
-    val osPlatform: String = System.getProperty("os.name")
+    var sdkVersion: String? = "java/4.0.0",
+    var osPlatform: String? = System.getProperty("os.name")
 )
