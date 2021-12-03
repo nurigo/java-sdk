@@ -1,5 +1,6 @@
-package net.nurigo.solapi.sdk
+package net.nurigo.solapi.sdk.message.lib
 
+import net.nurigo.solapi.sdk.message.exception.SolapiKeyException
 import org.apache.commons.codec.binary.Hex
 import java.nio.charset.StandardCharsets
 import java.time.ZoneId
@@ -9,19 +10,20 @@ import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
 
-class Authenticator(
-    private var apiKey: String,
-    private var apiSecretKey: String
+internal class Authenticator(
+    private val apiKey: String,
+    private val apiSecretKey: String
 ) {
 
     companion object {
-        const val ENCRYPTION_ALGORITHM = "HmacSHA256"
+        private const val ENCRYPTION_ALGORITHM = "HmacSHA256"
     }
 
     @Throws
     fun generateAuthInfo(): String {
         if (apiKey == "" || apiSecretKey == "") {
-            throw Error("API Key or API Secret Key is empty")
+            // TODO: 다국어화 필요
+            throw SolapiKeyException("유효한 API Key or API Secret Key를 입력하셔야 합니다.")
         }
 
         val salt = UUID.randomUUID().toString().replace(Regex("-"), "")

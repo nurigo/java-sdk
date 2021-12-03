@@ -8,26 +8,24 @@ data class Message(
     var kakaoOptions: KakaoOption? = null,
     var naverOptions: NaverOption? = null,
     var rcsOptions: RcsOption? = null,
-    // TODO: ENUM 필요
     var type: String? = null,
-    var country: String = "82",
+    var country: String? = null,
     var subject: String? = null,
     var imageId: String? = null,
     var dateProcessed: String? = null,
     var dateReported: String? = null,
-    // TODO: ENUM 필요
     var statusCode: String? = null,
     var replacement: Boolean? = null,
     var autoTypeDetect: Boolean? = null,
-    // TODO: ENUM 필요
     var status: String? = null,
     var messageId: String? = null,
     var groupId: String? = null,
     var accountId: String? = null,
     var text: String? = null,
-    var from: String? = null,
     var dateCreated: Instant? = null,
     var dateUpdated: Instant? = null,
+    val to: String? = null,
+    val from: String? = null
 ) {
 
     override fun equals(other: Any?): Boolean {
@@ -53,9 +51,10 @@ data class Message(
         if (groupId != other.groupId) return false
         if (accountId != other.accountId) return false
         if (text != other.text) return false
-        if (from != other.from) return false
         if (dateCreated != other.dateCreated) return false
         if (dateUpdated != other.dateUpdated) return false
+        if (from != other.from) return false
+        if (to != other.to) return false
 
         return true
     }
@@ -78,9 +77,10 @@ data class Message(
         result = 31 * result + (groupId?.hashCode() ?: 0)
         result = 31 * result + (accountId?.hashCode() ?: 0)
         result = 31 * result + (text?.hashCode() ?: 0)
-        result = 31 * result + (from?.hashCode() ?: 0)
         result = 31 * result + (dateCreated?.hashCode() ?: 0)
         result = 31 * result + (dateUpdated?.hashCode() ?: 0)
+        result = 31 * result + (from?.hashCode() ?: 0)
+        result = 31 * result + (to?.hashCode() ?: 0)
         return result
     }
 }

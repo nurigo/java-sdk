@@ -1,7 +1,6 @@
 package net.nurigo.solapi.sdk.message.model
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonObject
 
 @Serializable
 data class RcsOption(
@@ -9,5 +8,5 @@ data class RcsOption(
     // TODO: Enum으로 해야 함
     var mmsType: String? = null,
     var templateId: String? = null,
-    var variables: JsonObject? = null
+    var variables: MutableMap<String, String> = mutableMapOf()
 )
