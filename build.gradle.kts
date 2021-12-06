@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "net.nurigo"
-version = "0.0.1"
+version = "4.0.0"
 
 repositories {
     mavenCentral()
