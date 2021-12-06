@@ -24,8 +24,8 @@ data class Message(
     var text: String? = null,
     var dateCreated: Instant? = null,
     var dateUpdated: Instant? = null,
-    val to: String? = null,
-    val from: String? = null
+    var to: String? = null,
+    var from: String? = null
 ) {
 
     override fun equals(other: Any?): Boolean {
