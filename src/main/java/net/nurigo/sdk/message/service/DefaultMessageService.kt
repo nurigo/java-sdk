@@ -1,7 +1,6 @@
 package net.nurigo.sdk.message.service
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import net.nurigo.sdk.message.exception.SolapiBadRequestException
@@ -17,22 +16,19 @@ import net.nurigo.sdk.message.response.ErrorResponse
 import net.nurigo.sdk.message.response.MessageListResponse
 import net.nurigo.sdk.message.response.MultipleMessageSentResponse
 import net.nurigo.sdk.message.response.SingleMessageSentResponse
+import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import java.net.URL
 import kotlin.jvm.Throws
 
-class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: URL) : MessageService {
+class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String) : MessageService {
     private var messageHttpService: MessageHttpService
 
     // TODO: Client initializer 셋팅해야 함
     init {
-        val interceptor = HttpLoggingInterceptor()
         val client = OkHttpClient.Builder()
-            .addInterceptor(interceptor)
             .addInterceptor { chain ->
                 val authInfo = Authenticator(apiKey, apiSecretKey).generateAuthInfo()
                 val request: Request = chain.request()

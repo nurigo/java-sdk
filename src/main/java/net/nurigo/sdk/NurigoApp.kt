@@ -5,7 +5,7 @@ import java.net.URL
 
 object NurigoApp {
 
-    fun initialize(apiKey: String, apiSecretKey: String, domain: URL): DefaultMessageService {
+    fun initialize(apiKey: String, apiSecretKey: String, domain: String): DefaultMessageService {
         return DefaultMessageService(apiKey, apiSecretKey, domain)
     }
 }
