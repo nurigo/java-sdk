@@ -1,0 +1,10 @@
+package net.nurigo.sdk.message.request
+
+import kotlinx.serialization.Serializable
+import net.nurigo.sdk.message.model.StorageType
+
+@Serializable
+data class FileUploadRequest(
+    var file: String? = null,
+    var type: StorageType? = null,
+)
