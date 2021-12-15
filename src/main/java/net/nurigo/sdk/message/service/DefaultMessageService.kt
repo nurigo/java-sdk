@@ -64,13 +64,12 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
      * @suppress 파일을 접근 가능한 경로로 입력하셔야 합니다.
      * */
     @Throws
-    fun uploadImage(filePath: String, fileType: StorageType = StorageType.MMS): String? {
-        val imgFile = File(filePath)
-        val length = imgFile.length()
+    fun uploadImage(file: File, fileType: StorageType = StorageType.MMS): String? {
+        val length = file.length()
         val imageByte = ByteArray(length.toInt())
         val fis: FileInputStream?
         try {
-            fis = FileInputStream(imgFile)
+            fis = FileInputStream(file)
             fis.read(imageByte)
         } catch (e: Exception) {
             e.printStackTrace()
