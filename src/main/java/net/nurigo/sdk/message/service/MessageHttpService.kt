@@ -1,7 +1,10 @@
 package net.nurigo.sdk.message.service
 
+import net.nurigo.sdk.message.model.Balance
+import net.nurigo.sdk.message.request.FileUploadRequest
 import net.nurigo.sdk.message.request.MultipleMessageSendingRequest
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest
+import net.nurigo.sdk.message.response.FileUploadResponse
 import net.nurigo.sdk.message.response.MessageListResponse
 import net.nurigo.sdk.message.response.MultipleMessageSentResponse
 import net.nurigo.sdk.message.response.SingleMessageSentResponse
@@ -18,4 +21,10 @@ interface MessageHttpService : MessageService {
 
     @POST("/messages/v4/send-many")
     fun sendMany(@Body parameter: MultipleMessageSendingRequest): Call<MultipleMessageSentResponse>
+
+    @POST("/storage/v1/files")
+    fun uploadFile(@Body fileUploadRequest: FileUploadRequest): Call<FileUploadResponse>
+
+    @GET("/cash/v1/balance")
+    fun getBalance(): Call<Balance>
 }

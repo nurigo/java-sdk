@@ -1,7 +1,6 @@
 package net.nurigo.sdk
 
 import net.nurigo.sdk.message.service.DefaultMessageService
-import java.net.URL
 
 object NurigoApp {
 
