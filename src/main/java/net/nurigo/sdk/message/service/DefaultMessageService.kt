@@ -15,7 +15,6 @@ import net.nurigo.sdk.message.request.FileUploadRequest
 import net.nurigo.sdk.message.request.MessageListRequest
 import net.nurigo.sdk.message.request.MultipleMessageSendingRequest
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest
-import net.nurigo.sdk.message.response.ErrorCode.*
 import net.nurigo.sdk.message.response.ErrorResponse
 import net.nurigo.sdk.message.response.MessageListResponse
 import net.nurigo.sdk.message.response.MultipleMessageSentResponse
@@ -39,6 +38,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
                 val request: Request = chain.request()
                     .newBuilder()
                     .addHeader("Authorization", authInfo)
+                    .addHeader("x-beta-microservices", "messages-v4-alpha")
                     .build()
                 chain.proceed(request)
             }
@@ -116,9 +116,9 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
         } else {
             val errorResponse: ErrorResponse = Json.decodeFromString(response.errorBody()?.string() ?: "")
             when (errorResponse.errorCode) {
-                ValidationError -> throw SolapiBadRequestException(errorResponse.errorMessage)
-                InvalidApiKey -> throw SolapiInvalidApiKeyException(errorResponse.errorMessage)
-                FailedToAddMessage -> throw SolapiBadRequestException(errorResponse.errorMessage)
+                "ValidationError" -> throw SolapiBadRequestException(errorResponse.errorMessage)
+                "InvalidApiKey" -> throw SolapiInvalidApiKeyException(errorResponse.errorMessage)
+                "FailedToAddMessage" -> throw SolapiBadRequestException(errorResponse.errorMessage)
                 else -> throw SolapiUnknownException("${errorResponse.errorCode}: ${errorResponse.errorMessage}")
             }
         }
@@ -136,9 +136,9 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
         } else {
             val errorResponse: ErrorResponse = Json.decodeFromString(response.errorBody()?.string() ?: "")
             when (errorResponse.errorCode) {
-                ValidationError -> throw SolapiBadRequestException(errorResponse.errorMessage)
-                InvalidApiKey -> throw SolapiInvalidApiKeyException(errorResponse.errorMessage)
-                FailedToAddMessage -> throw SolapiBadRequestException(errorResponse.errorMessage)
+                "ValidationError" -> throw SolapiBadRequestException(errorResponse.errorMessage)
+                "InvalidApiKey" -> throw SolapiInvalidApiKeyException(errorResponse.errorMessage)
+                "FailedToAddMessage" -> throw SolapiBadRequestException(errorResponse.errorMessage)
                 else -> throw SolapiUnknownException("${errorResponse.errorCode}: ${errorResponse.errorMessage}")
             }
         }
