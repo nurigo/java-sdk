@@ -7,10 +7,10 @@ data class Balance(
     /**
      * 충전금액
      */
-    var balance: Int? = null,
+    var balance: Float? = null,
 
     /**
      * 포인트(충전금액과 가치 동일)
      */
-    var point: Int? = null,
+    var point: Float? = null,
 )
