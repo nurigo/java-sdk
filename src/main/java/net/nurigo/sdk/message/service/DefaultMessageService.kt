@@ -38,7 +38,6 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
                 val request: Request = chain.request()
                     .newBuilder()
                     .addHeader("Authorization", authInfo)
-                    .addHeader("x-beta-microservices", "messages-v4-alpha")
                     .build()
                 chain.proceed(request)
             }
