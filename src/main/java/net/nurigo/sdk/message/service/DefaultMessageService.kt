@@ -3,10 +3,10 @@ package net.nurigo.sdk.message.service
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import net.nurigo.sdk.message.exception.SolapiBadRequestException
-import net.nurigo.sdk.message.exception.SolapiFileUploadException
-import net.nurigo.sdk.message.exception.SolapiInvalidApiKeyException
-import net.nurigo.sdk.message.exception.SolapiUnknownException
+import net.nurigo.sdk.message.exception.NurigoBadRequestException
+import net.nurigo.sdk.message.exception.NurigoFileUploadException
+import net.nurigo.sdk.message.exception.NurigoInvalidApiKeyException
+import net.nurigo.sdk.message.exception.NurigoUnknownException
 import net.nurigo.sdk.message.extension.toStringValueMap
 import net.nurigo.sdk.message.lib.Authenticator
 import net.nurigo.sdk.message.model.Balance
@@ -84,7 +84,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
             return response.body()?.fileId
         } else {
             val errorResponse: ErrorResponse = Json.decodeFromString(response.errorBody()?.string() ?: "")
-            throw SolapiFileUploadException(errorResponse.errorMessage)
+            throw NurigoFileUploadException(errorResponse.errorMessage)
         }
     }
 
@@ -100,7 +100,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
             return response.body()
         } else {
             val errorResponse: ErrorResponse = Json.decodeFromString(response.errorBody()?.string() ?: "")
-            throw SolapiUnknownException("${errorResponse.errorCode}: ${errorResponse.errorMessage}")
+            throw NurigoUnknownException("${errorResponse.errorCode}: ${errorResponse.errorMessage}")
         }
     }
 
@@ -116,10 +116,10 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
         } else {
             val errorResponse: ErrorResponse = Json.decodeFromString(response.errorBody()?.string() ?: "")
             when (errorResponse.errorCode) {
-                "ValidationError" -> throw SolapiBadRequestException(errorResponse.errorMessage)
-                "InvalidApiKey" -> throw SolapiInvalidApiKeyException(errorResponse.errorMessage)
-                "FailedToAddMessage" -> throw SolapiBadRequestException(errorResponse.errorMessage)
-                else -> throw SolapiUnknownException("${errorResponse.errorCode}: ${errorResponse.errorMessage}")
+                "ValidationError" -> throw NurigoBadRequestException(errorResponse.errorMessage)
+                "InvalidApiKey" -> throw NurigoInvalidApiKeyException(errorResponse.errorMessage)
+                "FailedToAddMessage" -> throw NurigoBadRequestException(errorResponse.errorMessage)
+                else -> throw NurigoUnknownException("${errorResponse.errorCode}: ${errorResponse.errorMessage}")
             }
         }
     }
@@ -136,10 +136,10 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
         } else {
             val errorResponse: ErrorResponse = Json.decodeFromString(response.errorBody()?.string() ?: "")
             when (errorResponse.errorCode) {
-                "ValidationError" -> throw SolapiBadRequestException(errorResponse.errorMessage)
-                "InvalidApiKey" -> throw SolapiInvalidApiKeyException(errorResponse.errorMessage)
-                "FailedToAddMessage" -> throw SolapiBadRequestException(errorResponse.errorMessage)
-                else -> throw SolapiUnknownException("${errorResponse.errorCode}: ${errorResponse.errorMessage}")
+                "ValidationError" -> throw NurigoBadRequestException(errorResponse.errorMessage)
+                "InvalidApiKey" -> throw NurigoInvalidApiKeyException(errorResponse.errorMessage)
+                "FailedToAddMessage" -> throw NurigoBadRequestException(errorResponse.errorMessage)
+                else -> throw NurigoUnknownException("${errorResponse.errorCode}: ${errorResponse.errorMessage}")
             }
         }
     }
@@ -151,10 +151,10 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
     fun getBalance(): Balance {
         val response = this.messageHttpService.getBalance().execute()
         if (response.isSuccessful) {
-            return response.body() ?: throw SolapiUnknownException("잔액 조회 데이터를 불러오지 못했습니다.")
+            return response.body() ?: throw NurigoUnknownException("잔액 조회 데이터를 불러오지 못했습니다.")
         } else {
             val errorResponse: ErrorResponse = Json.decodeFromString(response.errorBody()?.string() ?: "")
-            throw SolapiUnknownException("${errorResponse.errorCode}: ${errorResponse.errorMessage}")
+            throw NurigoUnknownException("${errorResponse.errorCode}: ${errorResponse.errorMessage}")
         }
     }
 }

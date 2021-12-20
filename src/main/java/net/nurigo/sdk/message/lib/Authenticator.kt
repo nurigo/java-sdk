@@ -1,6 +1,6 @@
 package net.nurigo.sdk.message.lib
 
-import net.nurigo.sdk.message.exception.SolapiKeyException
+import net.nurigo.sdk.message.exception.NurigoApiKeyException
 import org.apache.commons.codec.binary.Hex
 import java.nio.charset.StandardCharsets
 import java.time.ZoneId
@@ -23,7 +23,7 @@ internal class Authenticator(
     fun generateAuthInfo(): String {
         if (apiKey == "" || apiSecretKey == "") {
             // TODO: 다국어화 필요
-            throw SolapiKeyException("유효한 API Key or API Secret Key를 입력하셔야 합니다.")
+            throw NurigoApiKeyException("유효한 API Key or API Secret Key를 입력하셔야 합니다.")
         }
 
         val salt = UUID.randomUUID().toString().replace(Regex("-"), "")
