@@ -7,7 +7,7 @@
 #### 단일 메시지 발송
 
 ```
-DefaultMessageService messageService = NurigoApp.INSTANCE.initialize("api key", "api secretkey");
+DefaultMessageService messageService = NurigoApp.INSTANCE.initialize("API Key", "API Secret Key", "Nurigo API URL");
 Message message = new Message();
 message.setFrom("발신번호");
 message.setTo("수신번호");
