@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class DefaultAgent(
-    val sdkVersion: String = "java/4.1.3",
+    val sdkVersion: String = "java/4.2.0",
     val osPlatform: String = System.getProperty("os.name")
 )

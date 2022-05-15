@@ -1,6 +1,7 @@
 package net.nurigo.sdk.message.service
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import net.nurigo.sdk.message.exception.NurigoBadRequestException
@@ -28,6 +29,7 @@ import java.io.File
 import java.io.FileInputStream
 
 
+@OptIn(ExperimentalSerializationApi::class)
 class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String) : MessageService {
     private var messageHttpService: MessageHttpService
 
@@ -105,8 +107,8 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
     }
 
     /**
-    * 단일 메시지 발송 API
-    * */
+     * 단일 메시지 발송 API
+     * */
     @Throws
     fun sendOne(parameter: SingleMessageSendingRequest): SingleMessageSentResponse? {
         val response = this.messageHttpService.sendOne(parameter).execute()

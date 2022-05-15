@@ -22,7 +22,6 @@ internal class Authenticator(
     @Throws
     fun generateAuthInfo(): String {
         if (apiKey == "" || apiSecretKey == "") {
-            // TODO: 다국어화 필요
             throw NurigoApiKeyException("유효한 API Key or API Secret Key를 입력하셔야 합니다.")
         }
 
