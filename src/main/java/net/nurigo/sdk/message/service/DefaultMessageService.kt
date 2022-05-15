@@ -128,6 +128,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
 
     /**
      * 다중 메시지(2건 이상) 발송 API
+     * @deprecated use Send method
      * */
     @Throws
     fun sendMany(parameter: MultipleMessageSendingRequest): MultipleMessageSentResponse? {

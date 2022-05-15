@@ -48,7 +48,12 @@ tasks.withType<JavaCompile>().configureEach {
 
 val compileKotlin: KotlinCompile by tasks
 compileKotlin.kotlinOptions {
+    freeCompilerArgs = listOf("-opt-in=kotlin.RequiresOptIn")
     jvmTarget = "1.8"
+}
+
+tasks.dokkaHtml.configure {
+    outputDirectory.set(buildDir.resolve("../docs"))
 }
 
 val ossusername: String by project
