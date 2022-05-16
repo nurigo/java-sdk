@@ -93,7 +93,7 @@ publishing {
             pom {
                 name.set("Nurigo SDK")
                 description.set("누리고 서비스에서 사용되는 문자 발송용 SDK")
-                url.set("https://github.com/nurigo/java-sdk-v4")
+                url.set("https://github.com/nurigo/java-sdk")
                 licenses {
                     license {
                         name.set("The Apache License, Version 2.0")
