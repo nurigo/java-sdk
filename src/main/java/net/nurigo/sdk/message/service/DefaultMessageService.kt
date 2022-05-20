@@ -12,14 +12,9 @@ import net.nurigo.sdk.message.extension.toStringValueMap
 import net.nurigo.sdk.message.lib.Authenticator
 import net.nurigo.sdk.message.model.Balance
 import net.nurigo.sdk.message.model.StorageType
-import net.nurigo.sdk.message.request.FileUploadRequest
-import net.nurigo.sdk.message.request.MessageListRequest
-import net.nurigo.sdk.message.request.MultipleMessageSendingRequest
-import net.nurigo.sdk.message.request.SingleMessageSendingRequest
+import net.nurigo.sdk.message.request.*
+import net.nurigo.sdk.message.response.*
 import net.nurigo.sdk.message.response.ErrorResponse
-import net.nurigo.sdk.message.response.MessageListResponse
-import net.nurigo.sdk.message.response.MultipleMessageSentResponse
-import net.nurigo.sdk.message.response.SingleMessageSentResponse
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -123,6 +118,21 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
                 "FailedToAddMessage" -> throw NurigoBadRequestException(errorResponse.errorMessage)
                 else -> throw NurigoUnknownException("${errorResponse.errorCode}: ${errorResponse.errorMessage}")
             }
+        }
+    }
+
+    /**
+     * 다중 메시지(2건 이상) 발송 및 예약 발송 API
+     */
+    @Throws
+    fun send(parameter: MultipleDetailMessageSendingRequest): MultipleDetailMessageSentResponse? {
+        val response = this.messageHttpService.sendManyDetail(parameter).execute()
+
+        if (response.isSuccessful) {
+            return response.body()
+        } else {
+            val errorString = response.errorBody()?.string() ?: "Server error encountered";
+            throw NurigoUnknownException(errorString)
         }
     }
 
