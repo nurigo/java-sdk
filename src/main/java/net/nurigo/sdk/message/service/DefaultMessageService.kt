@@ -1,6 +1,8 @@
 package net.nurigo.sdk.message.service
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import kotlinx.datetime.Instant
+import kotlinx.datetime.toKotlinInstant
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -11,6 +13,7 @@ import net.nurigo.sdk.message.exception.NurigoUnknownException
 import net.nurigo.sdk.message.extension.toStringValueMap
 import net.nurigo.sdk.message.lib.Authenticator
 import net.nurigo.sdk.message.model.Balance
+import net.nurigo.sdk.message.model.Message
 import net.nurigo.sdk.message.model.StorageType
 import net.nurigo.sdk.message.request.*
 import net.nurigo.sdk.message.response.*
@@ -22,7 +25,6 @@ import org.apache.commons.codec.binary.Base64
 import retrofit2.Retrofit
 import java.io.File
 import java.io.FileInputStream
-
 
 @OptIn(ExperimentalSerializationApi::class)
 class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String) : MessageService {
@@ -89,8 +91,9 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
      * 메시지 조회 API
      * */
     @Throws
-    fun getMessageList(parameter: MessageListRequest = MessageListRequest()): MessageListResponse? {
-        val mappedParameter = parameter.toStringValueMap()
+    fun getMessageList(parameter: MessageListRequest?): MessageListResponse? {
+        val generatedParameter = parameter ?: MessageListRequest()
+        val mappedParameter = generatedParameter.toStringValueMap()
         val response = this.messageHttpService.getMessageList(mappedParameter).execute()
 
         if (response.isSuccessful) {
@@ -125,10 +128,34 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
      * 단일 메시지 발송 및 다중 메시지(2건 이상) 예약 발송 API
      */
     @Throws
-    fun send(parameter: DetailMessageSendingRequest): MultipleDetailMessageSentResponse? {
+    fun send(message: Message, scheduledDateTime: java.time.Instant?): MultipleDetailMessageSentResponse? {
+        var formattedScheduledDateTime: Instant? = null;
+        if (scheduledDateTime != null) {
+            formattedScheduledDateTime = scheduledDateTime.toKotlinInstant()
+        }
         val multipleParameter = MultipleDetailMessageSendingRequest(
-            messages = listOf(parameter.messages),
-            scheduledDate = parameter.scheduledDate
+            messages = listOf(message),
+            scheduledDate = formattedScheduledDateTime
+        )
+
+        val response = this.messageHttpService.sendManyDetail(multipleParameter).execute()
+
+        if (response.isSuccessful) {
+            return response.body()
+        } else {
+            val errorString = response.errorBody()?.string() ?: "Server error encountered";
+            throw NurigoUnknownException(errorString)
+        }
+    }
+
+    /**
+     * 단일 메시지 발송 및 다중 메시지(2건 이상) 예약 발송 API
+     */
+    @Throws
+    fun send(message: Message, scheduledDate: Instant?): MultipleDetailMessageSentResponse? {
+        val multipleParameter = MultipleDetailMessageSendingRequest(
+            messages = listOf(message),
+            scheduledDate = scheduledDate
         )
 
         val response = this.messageHttpService.sendManyDetail(multipleParameter).execute()
@@ -145,7 +172,34 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
      * 다중 메시지(2건 이상) 발송 및 예약 발송 API
      */
     @Throws
-    fun send(parameter: MultipleDetailMessageSendingRequest): MultipleDetailMessageSentResponse? {
+    fun send(messages: List<Message>, scheduledDateTime: java.time.Instant?): MultipleDetailMessageSentResponse? {
+        var formattedScheduledDateTime: Instant? = null;
+        if (scheduledDateTime != null) {
+            formattedScheduledDateTime = scheduledDateTime.toKotlinInstant()
+        }
+        val parameter = MultipleDetailMessageSendingRequest(
+            messages,
+            formattedScheduledDateTime
+        )
+        val response = this.messageHttpService.sendManyDetail(parameter).execute()
+
+        if (response.isSuccessful) {
+            return response.body()
+        } else {
+            val errorString = response.errorBody()?.string() ?: "Server error encountered";
+            throw NurigoUnknownException(errorString)
+        }
+    }
+
+    /**
+     * 다중 메시지(2건 이상) 발송 및 예약 발송 API
+     */
+    @Throws
+    fun send(messages: List<Message>, scheduledDateTime: Instant?): MultipleDetailMessageSentResponse? {
+        val parameter = MultipleDetailMessageSendingRequest(
+            messages,
+            scheduledDateTime
+        )
         val response = this.messageHttpService.sendManyDetail(parameter).execute()
 
         if (response.isSuccessful) {

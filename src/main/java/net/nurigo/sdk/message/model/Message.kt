@@ -43,14 +43,19 @@ data class Message(
     var imageId: String? = null,
 
     /**
-     * 발송 처리일자
+*     * 발송 접수일자
      */
-    var dateProcessed: String? = null,
+    var dateProcessed: Instant? = null,
 
     /**
      * 통신사 결과 값 통보일자
      */
-    var dateReported: String? = null,
+    var dateReported: Instant? = null,
+
+    /**
+     * 실제 메시지 발송 완료일자
+     */
+    var dateReceived: Instant? = null,
 
     /**
      * 메시지 상태코드
