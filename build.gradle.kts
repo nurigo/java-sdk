@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "net.nurigo"
-version = "4.2.0"
+version = "4.2.1"
 
 repositories {
     mavenCentral()
@@ -115,6 +115,10 @@ publishing {
                     }
                 }
                 developers {
+                    developer {
+                        name.set("Nurigo CX Team")
+                        email.set("contact@nurigo.net")
+                    }
                     developer {
                         id.set("hosy")
                         name.set("Hosy Lee")
