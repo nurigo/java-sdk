@@ -122,6 +122,26 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
     }
 
     /**
+     * 단일 메시지 발송 및 다중 메시지(2건 이상) 예약 발송 API
+     */
+    @Throws
+    fun send(parameter: DetailMessageSendingRequest): MultipleDetailMessageSentResponse? {
+        val multipleParameter = MultipleDetailMessageSendingRequest(
+            messages = listOf(parameter.messages),
+            scheduledDate = parameter.scheduledDate
+        )
+
+        val response = this.messageHttpService.sendManyDetail(multipleParameter).execute()
+
+        if (response.isSuccessful) {
+            return response.body()
+        } else {
+            val errorString = response.errorBody()?.string() ?: "Server error encountered";
+            throw NurigoUnknownException(errorString)
+        }
+    }
+
+    /**
      * 다중 메시지(2건 이상) 발송 및 예약 발송 API
      */
     @Throws

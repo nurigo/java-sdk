@@ -9,7 +9,6 @@ import java.util.*
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
-
 internal class Authenticator(
     private val apiKey: String,
     private val apiSecretKey: String
@@ -37,7 +36,6 @@ internal class Authenticator(
                 .let { encryptionInstance.doFinal(it) }
                 .let { Hex.encodeHex(it) }
         )
-
         return "HMAC-SHA256 Apikey=${apiKey}, Date=${date}, salt=${salt}, signature=${signature}"
     }
 }
