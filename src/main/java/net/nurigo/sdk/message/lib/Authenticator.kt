@@ -9,7 +9,6 @@ import java.util.*
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
-
 internal class Authenticator(
     private val apiKey: String,
     private val apiSecretKey: String
@@ -22,7 +21,6 @@ internal class Authenticator(
     @Throws
     fun generateAuthInfo(): String {
         if (apiKey == "" || apiSecretKey == "") {
-            // TODO: 다국어화 필요
             throw NurigoApiKeyException("유효한 API Key or API Secret Key를 입력하셔야 합니다.")
         }
 
@@ -38,7 +36,6 @@ internal class Authenticator(
                 .let { encryptionInstance.doFinal(it) }
                 .let { Hex.encodeHex(it) }
         )
-
         return "HMAC-SHA256 Apikey=${apiKey}, Date=${date}, salt=${salt}, signature=${signature}"
     }
 }

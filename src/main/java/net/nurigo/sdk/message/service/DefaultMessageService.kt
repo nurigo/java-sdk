@@ -1,6 +1,9 @@
 package net.nurigo.sdk.message.service
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import kotlinx.datetime.Instant
+import kotlinx.datetime.toKotlinInstant
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import net.nurigo.sdk.message.exception.NurigoBadRequestException
@@ -10,15 +13,11 @@ import net.nurigo.sdk.message.exception.NurigoUnknownException
 import net.nurigo.sdk.message.extension.toStringValueMap
 import net.nurigo.sdk.message.lib.Authenticator
 import net.nurigo.sdk.message.model.Balance
+import net.nurigo.sdk.message.model.Message
 import net.nurigo.sdk.message.model.StorageType
-import net.nurigo.sdk.message.request.FileUploadRequest
-import net.nurigo.sdk.message.request.MessageListRequest
-import net.nurigo.sdk.message.request.MultipleMessageSendingRequest
-import net.nurigo.sdk.message.request.SingleMessageSendingRequest
+import net.nurigo.sdk.message.request.*
+import net.nurigo.sdk.message.response.*
 import net.nurigo.sdk.message.response.ErrorResponse
-import net.nurigo.sdk.message.response.MessageListResponse
-import net.nurigo.sdk.message.response.MultipleMessageSentResponse
-import net.nurigo.sdk.message.response.SingleMessageSentResponse
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -27,7 +26,7 @@ import retrofit2.Retrofit
 import java.io.File
 import java.io.FileInputStream
 
-
+@OptIn(ExperimentalSerializationApi::class)
 class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String) : MessageService {
     private var messageHttpService: MessageHttpService
 
@@ -92,8 +91,9 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
      * 메시지 조회 API
      * */
     @Throws
-    fun getMessageList(parameter: MessageListRequest = MessageListRequest()): MessageListResponse? {
-        val mappedParameter = parameter.toStringValueMap()
+    fun getMessageList(parameter: MessageListRequest?): MessageListResponse? {
+        val generatedParameter = parameter ?: MessageListRequest()
+        val mappedParameter = generatedParameter.toStringValueMap()
         val response = this.messageHttpService.getMessageList(mappedParameter).execute()
 
         if (response.isSuccessful) {
@@ -105,8 +105,8 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
     }
 
     /**
-    * 단일 메시지 발송 API
-    * */
+     * 단일 메시지 발송 API
+     * */
     @Throws
     fun sendOne(parameter: SingleMessageSendingRequest): SingleMessageSentResponse? {
         val response = this.messageHttpService.sendOne(parameter).execute()
@@ -125,7 +125,94 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
     }
 
     /**
+     * 단일 메시지 발송 및 다중 메시지(2건 이상) 예약 발송 API
+     */
+    @Throws
+    fun send(message: Message, scheduledDateTime: java.time.Instant?): MultipleDetailMessageSentResponse? {
+        var formattedScheduledDateTime: Instant? = null;
+        if (scheduledDateTime != null) {
+            formattedScheduledDateTime = scheduledDateTime.toKotlinInstant()
+        }
+        val multipleParameter = MultipleDetailMessageSendingRequest(
+            messages = listOf(message),
+            scheduledDate = formattedScheduledDateTime
+        )
+
+        val response = this.messageHttpService.sendManyDetail(multipleParameter).execute()
+
+        if (response.isSuccessful) {
+            return response.body()
+        } else {
+            val errorString = response.errorBody()?.string() ?: "Server error encountered";
+            throw NurigoUnknownException(errorString)
+        }
+    }
+
+    /**
+     * 단일 메시지 발송 및 다중 메시지(2건 이상) 예약 발송 API
+     */
+    @Throws
+    fun send(message: Message, scheduledDate: Instant?): MultipleDetailMessageSentResponse? {
+        val multipleParameter = MultipleDetailMessageSendingRequest(
+            messages = listOf(message),
+            scheduledDate = scheduledDate
+        )
+
+        val response = this.messageHttpService.sendManyDetail(multipleParameter).execute()
+
+        if (response.isSuccessful) {
+            return response.body()
+        } else {
+            val errorString = response.errorBody()?.string() ?: "Server error encountered";
+            throw NurigoUnknownException(errorString)
+        }
+    }
+
+    /**
+     * 다중 메시지(2건 이상) 발송 및 예약 발송 API
+     */
+    @Throws
+    fun send(messages: List<Message>, scheduledDateTime: java.time.Instant?): MultipleDetailMessageSentResponse? {
+        var formattedScheduledDateTime: Instant? = null;
+        if (scheduledDateTime != null) {
+            formattedScheduledDateTime = scheduledDateTime.toKotlinInstant()
+        }
+        val parameter = MultipleDetailMessageSendingRequest(
+            messages,
+            formattedScheduledDateTime
+        )
+        val response = this.messageHttpService.sendManyDetail(parameter).execute()
+
+        if (response.isSuccessful) {
+            return response.body()
+        } else {
+            val errorString = response.errorBody()?.string() ?: "Server error encountered";
+            throw NurigoUnknownException(errorString)
+        }
+    }
+
+    /**
+     * 다중 메시지(2건 이상) 발송 및 예약 발송 API
+     */
+    @Throws
+    fun send(messages: List<Message>, scheduledDateTime: Instant?): MultipleDetailMessageSentResponse? {
+        val parameter = MultipleDetailMessageSendingRequest(
+            messages,
+            scheduledDateTime
+        )
+        val response = this.messageHttpService.sendManyDetail(parameter).execute()
+
+        if (response.isSuccessful) {
+            return response.body()
+        } else {
+            val errorString = response.errorBody()?.string() ?: "Server error encountered";
+            throw NurigoUnknownException(errorString)
+        }
+    }
+
+    /**
      * 다중 메시지(2건 이상) 발송 API
+     * @deprecated use Send method
      * */
     @Throws
     fun sendMany(parameter: MultipleMessageSendingRequest): MultipleMessageSentResponse? {
