@@ -17,11 +17,8 @@ jobs:
         OSS_PASSWORD: ${{ secrets.OSS_PASSWORD }}
       shell: bash
       run: 
-        echo "ossusername="  > ./gradle.properties
-        echo ${OSS_USERNAME} >> ./gradle.properties
-        echo -e "\n" >> ./gradle.properties
-        echo "osspassword="  >> ./gradle.properties
-        echo ${OSS_PASSWORD} >> ./gradle.properties
+        echo "ossusername=${OSS_USERNAME}" > ./gradle.properties
+        echo "osspassword=${OSS_PASSWORD}" >> ./gradle.properties
     - name: Build
       run: |
         sh ./gradlew dokkaHtml
