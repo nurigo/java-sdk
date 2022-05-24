@@ -2,7 +2,7 @@ name: Build SDK References Documents
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build-docs:
