@@ -21,9 +21,8 @@ jobs:
         OSS_USERNAME: ${{ secrets.OSS_USERNAME }}
         OSS_PASSWORD: ${{ secrets.OSS_PASSWORD }}
       run: |
-        echo -e "ossusername=${OSS_USERNAME}\n" > ./gradle.properties
+        echo "ossusername=${OSS_USERNAME}" > ./gradle.properties
         echo "osspassword=${OSS_PASSWORD}" >> ./gradle.properties
-        cat ./gradle.properties
     - name: Build
       run: |
         sh ./gradlew dokkaHtml
