@@ -20,7 +20,7 @@ jobs:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: true
         OSS_USERNAME: ${{ secrets.OSS_USERNAME }}
         OSS_PASSWORD: ${{ secrets.OSS_PASSWORD }}
-      run: 
+      run: |
         echo -e "ossusername=${OSS_USERNAME}\n" > ./gradle.properties
         echo "osspassword=${OSS_PASSWORD}" >> ./gradle.properties
         cat ./gradle.properties
