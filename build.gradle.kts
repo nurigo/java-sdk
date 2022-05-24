@@ -67,7 +67,7 @@ compileKotlin.kotlinOptions {
 }
 
 tasks.dokkaHtml.configure {
-    outputDirectory.set(buildDir.resolve("../docs"))
+    outputDirectory.set(rootDir.resolve("docs"))
 }
 
 val ossusername: String by project
