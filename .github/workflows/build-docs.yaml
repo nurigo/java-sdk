@@ -16,9 +16,7 @@ jobs:
         GRADLE_PROPERTIES: ${{ secrets.GRADLE_PROPERTIES }}
       shell: bash
       run: |
-        mkdir -p ~/.gradle/
-        echo "::set-env name=GRADLE_USER_HOME::$HOME/.gradle"
-        echo ${GRADLE_PROPERTIES} > ~/.gradle/gradle.properties
+        echo ${GRADLE_PROPERTIES} > ./gradle.properties
     - name: Build
       run: |
         sh ./gradlew dokkaHtml
