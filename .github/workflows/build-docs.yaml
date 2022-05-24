@@ -12,6 +12,7 @@ jobs:
       uses: actions/checkout@v2
     - name: Restore gradle.properties
       env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
         GRADLE_PROPERTIES: ${{ secrets.GRADLE_PROPERTIES }}
       shell: bash
       run: |
