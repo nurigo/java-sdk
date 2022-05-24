@@ -3,6 +3,11 @@ name: Build SDK References Documents
 on:
   push:
     branches: [ main ]
+    secrets:
+      OSS_USERNAME:
+        required: true
+      OSS_PASSWORD:
+        required: true
 
 jobs:
   build-docs:
@@ -15,7 +20,6 @@ jobs:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: true
         OSS_USERNAME: ${{ secrets.OSS_USERNAME }}
         OSS_PASSWORD: ${{ secrets.OSS_PASSWORD }}
-      shell: bash
       run: 
         echo "ossusername=${OSS_USERNAME}" > ./gradle.properties
         echo "osspassword=${OSS_PASSWORD}" >> ./gradle.properties
