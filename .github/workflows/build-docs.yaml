@@ -16,7 +16,7 @@ jobs:
         GRADLE_PROPERTIES: ${{ secrets.GRADLE_PROPERTIES }}
       shell: bash
       run: |
-        echo ${GRADLE_PROPERTIES} > ./gradle.properties
+        echo ${GRADLE_PROPERTIES} > /home/runner/work/java-sdk/java-sdk/gradle.properties
     - name: Build
       run: |
         sh ./gradlew dokkaHtml
