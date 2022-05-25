@@ -6,6 +6,6 @@ import net.nurigo.sdk.message.model.Message
 
 @Serializable
 data class MultipleDetailMessageSendingRequest(
-    val messages: List<Message>,
-    val scheduledDate: Instant?
+    var messages: List<Message> = emptyList(),
+    var scheduledDate: Instant? = null,
 ) : AbstractDefaultMessageRequest()
