@@ -2,6 +2,7 @@ name: Build SDK References Documents
 
 on:
   release:
+    types: [published]
     branches: [ main ]
     secrets:
       OSS_USERNAME:
