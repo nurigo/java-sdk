@@ -1,7 +1,7 @@
 name: Build SDK References Documents
 
 on:
-  push:
+  release:
     branches: [ main ]
     secrets:
       OSS_USERNAME:
