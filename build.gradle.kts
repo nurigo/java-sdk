@@ -126,9 +126,9 @@ publishing {
                     }
                 }
                 scm {
-                    connection.set("scm:git:git://github.com/nurigo/java-sdk-v4.git")
-                    developerConnection.set("scm:git:ssh://github.com/nurigo/java-sdk-v4.git")
-                    url.set("https://github.com/nurigo/java-sdk-v4")
+                    connection.set("scm:git:git://github.com/nurigo/java-sdk.git")
+                    developerConnection.set("scm:git:ssh://github.com/nurigo/java-sdk.git")
+                    url.set("https://github.com/nurigo/java-sdk")
                 }
             }
         }
