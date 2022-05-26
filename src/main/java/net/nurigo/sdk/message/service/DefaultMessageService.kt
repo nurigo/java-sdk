@@ -156,7 +156,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
             }
             throw NurigoEmptyResponseException("서버로부터 아무 응답을 받지 못했습니다.")
         } else {
-            val errorString = response.errorBody()?.string() ?: "Server error encountered";
+            val errorString = response.errorBody()?.string() ?: "Server error encountered"
             throw NurigoUnknownException(errorString)
         }
     }
@@ -194,93 +194,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
             }
             throw NurigoEmptyResponseException("서버로부터 아무 응답을 받지 못했습니다.")
         } else {
-            val errorString = response.errorBody()?.string() ?: "Server error encountered";
-            throw NurigoUnknownException(errorString)
-        }
-    }
-
-    /**
-     * 단일 메시지 발송 및 다중 메시지(2건 이상) 예약 발송 API
-     * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
-     */
-    @Throws(
-        NurigoMessageNotReceivedException::class,
-        NurigoEmptyResponseException::class,
-        NurigoUnknownException::class
-    )
-    fun send(
-        message: Message,
-        scheduledDateTime: java.time.Instant,
-        allowDuplicates: Boolean
-    ): MultipleDetailMessageSentResponse {
-        val multipleParameter = MultipleDetailMessageSendingRequest(
-            messages = listOf(message),
-            scheduledDate = scheduledDateTime.toKotlinInstant(),
-        )
-        multipleParameter.allowDuplicates = allowDuplicates
-        val response = this.messageHttpService.sendManyDetail(multipleParameter).execute()
-
-        if (response.isSuccessful) {
-            val responseBody = response.body()
-            if (responseBody != null) {
-                val count: Count = responseBody.groupInfo?.count ?: Count()
-                val failedMessageList = responseBody.failedMessageList
-
-                if (failedMessageList.isNotEmpty() && count.total == failedMessageList.count()) {
-                    // TODO: i18n needed
-                    val messageNotReceivedException = NurigoMessageNotReceivedException("메시지 발송 접수에 실패했습니다.")
-                    messageNotReceivedException.failedMessageList = failedMessageList
-                    throw messageNotReceivedException
-                }
-
-                return responseBody
-            }
-            throw NurigoEmptyResponseException("서버로부터 아무 응답을 받지 못했습니다.")
-        } else {
-            val errorString = response.errorBody()?.string() ?: "Server error encountered";
-            throw NurigoUnknownException(errorString)
-        }
-    }
-
-    /**
-     * 단일 메시지 발송 및 다중 메시지(2건 이상) 예약 발송 API
-     * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
-     */
-    @Throws(
-        NurigoMessageNotReceivedException::class,
-        NurigoEmptyResponseException::class,
-        NurigoUnknownException::class
-    )
-    fun send(
-        message: Message,
-        scheduledDateTime: Instant,
-        allowDuplicates: Boolean
-    ): MultipleDetailMessageSentResponse {
-        val multipleParameter = MultipleDetailMessageSendingRequest(
-            messages = listOf(message),
-            scheduledDate = scheduledDateTime
-        )
-        multipleParameter.allowDuplicates = allowDuplicates
-        val response = this.messageHttpService.sendManyDetail(multipleParameter).execute()
-
-        if (response.isSuccessful) {
-            val responseBody = response.body()
-            if (responseBody != null) {
-                val count: Count = responseBody.groupInfo?.count ?: Count()
-                val failedMessageList = responseBody.failedMessageList
-
-                if (failedMessageList.isNotEmpty() && count.total == failedMessageList.count()) {
-                    // TODO: i18n needed
-                    val messageNotReceivedException = NurigoMessageNotReceivedException("메시지 발송 접수에 실패했습니다.")
-                    messageNotReceivedException.failedMessageList = failedMessageList
-                    throw messageNotReceivedException
-                }
-
-                return responseBody
-            }
-            throw NurigoEmptyResponseException("서버로부터 아무 응답을 받지 못했습니다.")
-        } else {
-            val errorString = response.errorBody()?.string() ?: "Server error encountered";
+            val errorString = response.errorBody()?.string() ?: "Server error encountered"
             throw NurigoUnknownException(errorString)
         }
     }
@@ -319,7 +233,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
             }
             throw NurigoEmptyResponseException("서버로부터 아무 응답을 받지 못했습니다.")
         } else {
-            val errorString = response.errorBody()?.string() ?: "Server error encountered";
+            val errorString = response.errorBody()?.string() ?: "Server error encountered"
             throw NurigoUnknownException(errorString)
         }
     }
@@ -357,7 +271,46 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
             }
             throw NurigoEmptyResponseException("서버로부터 아무 응답을 받지 못했습니다.")
         } else {
-            val errorString = response.errorBody()?.string() ?: "Server error encountered";
+            val errorString = response.errorBody()?.string() ?: "Server error encountered"
+            throw NurigoUnknownException(errorString)
+        }
+    }
+
+    /**
+     * 다중 메시지(2건 이상) 발송 API
+     * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
+     */
+    @Throws(
+        NurigoMessageNotReceivedException::class,
+        NurigoEmptyResponseException::class,
+        NurigoUnknownException::class
+    )
+    fun send(messages: List<Message>, allowDuplicates: Boolean): MultipleDetailMessageSentResponse {
+        val parameter = MultipleDetailMessageSendingRequest(
+            messages,
+            null
+        )
+        parameter.allowDuplicates = allowDuplicates
+        val response = this.messageHttpService.sendManyDetail(parameter).execute()
+
+        if (response.isSuccessful) {
+            val responseBody = response.body()
+            if (responseBody != null) {
+                val count: Count = responseBody.groupInfo?.count ?: Count()
+                val failedMessageList = responseBody.failedMessageList
+
+                if (failedMessageList.isNotEmpty() && count.total == failedMessageList.count()) {
+                    // TODO: i18n needed
+                    val messageNotReceivedException = NurigoMessageNotReceivedException("메시지 발송 접수에 실패했습니다.")
+                    messageNotReceivedException.failedMessageList = failedMessageList
+                    throw messageNotReceivedException
+                }
+
+                return responseBody
+            }
+            throw NurigoEmptyResponseException("서버로부터 아무 응답을 받지 못했습니다.")
+        } else {
+            val errorString = response.errorBody()?.string() ?: "Server error encountered"
             throw NurigoUnknownException(errorString)
         }
     }
@@ -395,7 +348,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
             }
             throw NurigoEmptyResponseException("서버로부터 아무 응답을 받지 못했습니다.")
         } else {
-            val errorString = response.errorBody()?.string() ?: "Server error encountered";
+            val errorString = response.errorBody()?.string() ?: "Server error encountered"
             throw NurigoUnknownException(errorString)
         }
     }
@@ -438,7 +391,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
             }
             throw NurigoEmptyResponseException("서버로부터 아무 응답을 받지 못했습니다.")
         } else {
-            val errorString = response.errorBody()?.string() ?: "Server error encountered";
+            val errorString = response.errorBody()?.string() ?: "Server error encountered"
             throw NurigoUnknownException(errorString)
         }
     }
@@ -481,11 +434,10 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
             }
             throw NurigoEmptyResponseException("서버로부터 아무 응답을 받지 못했습니다.")
         } else {
-            val errorString = response.errorBody()?.string() ?: "Server error encountered";
+            val errorString = response.errorBody()?.string() ?: "Server error encountered"
             throw NurigoUnknownException(errorString)
         }
     }
-
 
     /**
      * 다중 메시지(2건 이상) 발송 및 예약 발송 API
@@ -520,7 +472,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
             }
             throw NurigoEmptyResponseException("서버로부터 아무 응답을 받지 못했습니다.")
         } else {
-            val errorString = response.errorBody()?.string() ?: "Server error encountered";
+            val errorString = response.errorBody()?.string() ?: "Server error encountered"
             throw NurigoUnknownException(errorString)
         }
     }
