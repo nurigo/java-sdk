@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "net.nurigo"
-version = "4.2.2"
+version = "4.2.3"
 
 repositories {
     mavenCentral()
