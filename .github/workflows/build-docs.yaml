@@ -34,4 +34,4 @@ jobs:
         git config --global user.name "Github Actions"
         git add ./docs
         git commit -m "Update SDK API References"
-        git push
+        git push -u origin HEAD:main
