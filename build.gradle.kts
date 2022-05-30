@@ -1,16 +1,19 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.6.21"
     kotlin("plugin.serialization") version "1.6.21"
     id("org.jetbrains.dokka") version "1.6.21"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+    java
     `java-library`
     `maven-publish`
     signing
 }
 
 group = "net.nurigo"
-version = "4.2.3"
+version = "4.2.4"
 
 repositories {
     mavenCentral()
@@ -35,6 +38,15 @@ java {
     withSourcesJar()
 }
 
+tasks.named<ShadowJar>("shadowJar") {
+    mergeServiceFiles()
+
+    exclude("**/*.kotlin_metadata")
+    exclude("**/*.kotlin_builtins")
+
+    archiveClassifier.set("")
+}
+
 tasks.getByName<Test>("test") {
     useJUnitPlatform()
 }
@@ -49,7 +61,7 @@ tasks.withType<Jar> {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
     manifest {
-        attributes["Main-Class"] = "net.nurigo.sdk.NurigoApp"
+        attributes(mapOf("Main-Class" to "net.nurigo.sdk.NurigoApp"))
     }
 
     from(sourceSets.main.get().output)
@@ -118,11 +130,13 @@ publishing {
                     developer {
                         name.set("Nurigo CX Team")
                         email.set("contact@nurigo.net")
+                        organization.set("Nurigo Inc")
                     }
                     developer {
                         id.set("hosy")
                         name.set("Hosy Lee")
                         email.set("hosy@nurigo.net")
+                        organization.set("Nurigo Inc")
                     }
                 }
                 scm {
