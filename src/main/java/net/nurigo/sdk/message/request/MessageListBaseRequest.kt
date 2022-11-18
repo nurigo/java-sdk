@@ -13,7 +13,6 @@ data class MessageListBaseRequest(
     var startDate: Instant? = null,
     var endDate: Instant? = null,
     var messageId: String? = null,
-    var messageIds: List<String>? = null,
     var groupId: String? = null,
     var type: String? = null,
     var statusCode: String? = null,
@@ -35,7 +34,6 @@ data class MessageListBaseRequest(
         if (startDate != other.startDate) return false
         if (endDate != other.endDate) return false
         if (messageId != other.messageId) return false
-        if (messageIds != other.messageIds) return false
         if (groupId != other.groupId) return false
         if (type != other.type) return false
         if (statusCode != other.statusCode) return false
@@ -51,7 +49,6 @@ data class MessageListBaseRequest(
         result = 31 * result + (startDate?.hashCode() ?: 0)
         result = 31 * result + (endDate?.hashCode() ?: 0)
         result = 31 * result + (messageId?.hashCode() ?: 0)
-        result = 31 * result + (messageIds?.hashCode() ?: 0)
         result = 31 * result + (groupId?.hashCode() ?: 0)
         result = 31 * result + (type?.hashCode() ?: 0)
         result = 31 * result + (statusCode?.hashCode() ?: 0)

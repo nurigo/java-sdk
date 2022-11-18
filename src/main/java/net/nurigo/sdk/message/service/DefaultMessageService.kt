@@ -104,12 +104,11 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
         val tempPayload = MessageListBaseRequest(
             to = parameter.to, from = parameter.from,
             startKey = parameter.startKey, limit = parameter.limit,
-            messageId = parameter.messageId, messageIds = parameter.messageIds,
-            groupId = parameter.groupId, type = parameter.type,
-            startDate = parameter.startDate, endDate = parameter.endDate
+            messageId = parameter.messageId, groupId = parameter.groupId,
+            type = parameter.type, startDate = parameter.startDate, endDate = parameter.endDate
         )
         val payload = mutableMapOf<String, Any?>()
-        if (parameter.status != null && parameter.statusCode != null) {
+        if (parameter.status != null && !parameter.statusCode.isNullOrBlank()) {
             // TODO: i18n needed
             throw NurigoBadRequestException("status와 statusCode는 병기할 수 없습니다.")
         } else if (parameter.status != null) {
@@ -140,8 +139,39 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
 
                 else -> throw NurigoUnknownException("허용될 수 없는 status 값이 입력되었습니다.")
             }
-        } else if (parameter.statusCode != null) {
+        } else if (!parameter.statusCode.isNullOrBlank()) {
             tempPayload.statusCode = parameter.statusCode
+        }
+
+        if (!parameter.messageIds.isNullOrEmpty()) {
+            var tempCriteria = ""
+            var tempCond = ""
+
+            parameter.messageIds?.forEachIndexed { index: Int, _ ->
+                if (index == 0 && (tempPayload.criteria.isNullOrBlank() && tempPayload.cond.isNullOrBlank() && tempPayload.value.isNullOrBlank())) {
+                    tempCriteria = "messageId"
+                    tempCond = "eq"
+                } else {
+                    tempCriteria += ",messageId"
+                    tempCond += ",eq"
+                }
+            }
+
+            tempPayload.criteria = if (tempPayload.criteria.isNullOrBlank()) {
+                tempCriteria
+            } else {
+                tempPayload.criteria + tempCriteria
+            }
+            tempPayload.cond = if (tempPayload.cond.isNullOrBlank()) {
+                tempCond
+            } else {
+                tempPayload.cond + tempCond
+            }
+            tempPayload.value = if (tempPayload.value.isNullOrBlank()) {
+                parameter.messageIds!!.joinToString(",")
+            } else {
+                tempPayload.value + "," + parameter.messageIds!!.joinToString(",")
+            }
         }
 
         payload.putAll(MapHelper.toMap(tempPayload))
