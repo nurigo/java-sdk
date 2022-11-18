@@ -7,12 +7,9 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import net.nurigo.sdk.message.exception.*
-import net.nurigo.sdk.message.extension.toStringValueMap
 import net.nurigo.sdk.message.lib.Authenticator
-import net.nurigo.sdk.message.model.Balance
-import net.nurigo.sdk.message.model.Count
-import net.nurigo.sdk.message.model.Message
-import net.nurigo.sdk.message.model.StorageType
+import net.nurigo.sdk.message.lib.MapHelper
+import net.nurigo.sdk.message.model.*
 import net.nurigo.sdk.message.request.*
 import net.nurigo.sdk.message.response.*
 import net.nurigo.sdk.message.response.ErrorResponse
@@ -87,12 +84,68 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
 
     /**
      * 메시지 조회 API
+     */
+    fun getMessageList(): MessageListResponse? {
+        val response = this.messageHttpService.getMessageList(emptyMap()).execute()
+
+        if (response.isSuccessful) {
+            return response.body()
+        } else {
+            val errorResponse: ErrorResponse = Json.decodeFromString(response.errorBody()?.string() ?: "")
+            throw NurigoUnknownException("${errorResponse.errorCode}: ${errorResponse.errorMessage}")
+        }
+    }
+
+    /**
+     * 메시지 조회 API
      * */
     @Throws
-    fun getMessageList(parameter: MessageListRequest?): MessageListResponse? {
-        val generatedParameter = parameter ?: MessageListRequest()
-        val mappedParameter = generatedParameter.toStringValueMap()
-        val response = this.messageHttpService.getMessageList(mappedParameter).execute()
+    fun getMessageList(parameter: MessageListRequest): MessageListResponse? {
+        val tempPayload = MessageListBaseRequest(
+            to = parameter.to, from = parameter.from,
+            startKey = parameter.startKey, limit = parameter.limit,
+            messageId = parameter.messageId, messageIds = parameter.messageIds,
+            groupId = parameter.groupId, type = parameter.type,
+            startDate = parameter.startDate, endDate = parameter.endDate
+        )
+        val payload = mutableMapOf<String, Any?>()
+        if (parameter.status != null && parameter.statusCode != null) {
+            // TODO: i18n needed
+            throw NurigoBadRequestException("status와 statusCode는 병기할 수 없습니다.")
+        } else if (parameter.status != null) {
+            when (parameter.status) {
+                MessageStatusType.PENDING -> {
+                    tempPayload.criteria = "statusCode"
+                    tempPayload.cond = "eq"
+                    tempPayload.value = "2000"
+                }
+
+                MessageStatusType.SENDING -> {
+                    tempPayload.criteria = "statusCode"
+                    tempPayload.cond = "eq"
+                    tempPayload.value = "3000"
+                }
+
+                MessageStatusType.COMPLETE -> {
+                    tempPayload.criteria = "statusCode"
+                    tempPayload.cond = "eq"
+                    tempPayload.value = "4000"
+                }
+
+                MessageStatusType.FAILED -> {
+                    tempPayload.criteria = "statusCode,statusCode,statusCode"
+                    tempPayload.cond = "ne,ne,ne"
+                    tempPayload.value = "2000,3000,4000"
+                }
+
+                else -> throw NurigoUnknownException("허용될 수 없는 status 값이 입력되었습니다.")
+            }
+        } else if (parameter.statusCode != null) {
+            tempPayload.statusCode = parameter.statusCode
+        }
+
+        payload.putAll(MapHelper.toMap(tempPayload))
+        val response = this.messageHttpService.getMessageList(payload).execute()
 
         if (response.isSuccessful) {
             return response.body()

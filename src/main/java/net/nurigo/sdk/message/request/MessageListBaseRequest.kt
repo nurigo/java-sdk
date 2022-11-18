@@ -3,76 +3,30 @@ package net.nurigo.sdk.message.request
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import net.nurigo.sdk.message.model.CommonMessageProperty
-import net.nurigo.sdk.message.model.MessageStatusType
 
 @Serializable
-data class MessageListRequest(
-    /**
-     * 수신번호
-     */
+data class MessageListBaseRequest(
     override var to: String? = null,
-
-    /**
-     * 발신번호
-     */
     override var from: String? = null,
-
-    /**
-     * Pagination을 위한 key
-     */
     var startKey: String? = null,
-
-    /**
-     * 조회할 건 수
-     */
     var limit: Int? = null,
-
-    /**
-     * 메시지 ID
-     */
-    var messageId: String? = null,
-
-    /**
-     * 메시지 ID 목록
-     */
-    var messageIds: List<String>? = null,
-
-    /**
-     * 메시지 그룹 ID
-     */
-    var groupId: String? = null,
-
-    /**
-     * 메시지 유형 (예) ATA, SMS 등)
-     */
-    var type: String? = null,
-
-    /**
-     * 상태코드 (예) -> 2000: 발송 대기, 3000: 발송 중, 4000: 발송완료)
-     */
-    var statusCode: String? = null,
-
-    /**
-     * 조회 할 시작 날짜
-     */
     var startDate: Instant? = null,
-
-    /**
-     * 조회 할 종료 날짜
-     */
     var endDate: Instant? = null,
-
-    /**
-     * 발송 상태
-     */
-    var status: MessageStatusType? = null
+    var messageId: String? = null,
+    var messageIds: List<String>? = null,
+    var groupId: String? = null,
+    var type: String? = null,
+    var statusCode: String? = null,
+    var criteria: String? = null,
+    var cond: String? = null,
+    var value: String? = null
 ) : CommonMessageProperty {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as MessageListRequest
+        other as MessageListBaseRequest
 
         if (to != other.to) return false
         if (from != other.from) return false
@@ -85,7 +39,6 @@ data class MessageListRequest(
         if (groupId != other.groupId) return false
         if (type != other.type) return false
         if (statusCode != other.statusCode) return false
-        if (status != other.status) return false
 
         return true
     }
@@ -102,7 +55,6 @@ data class MessageListRequest(
         result = 31 * result + (groupId?.hashCode() ?: 0)
         result = 31 * result + (type?.hashCode() ?: 0)
         result = 31 * result + (statusCode?.hashCode() ?: 0)
-        result = 31 * result + (status?.hashCode() ?: 0)
         return result
     }
 }

@@ -11,8 +11,9 @@ import retrofit2.http.*
 
 interface MessageHttpService : MessageService {
 
+    @JvmSuppressWildcards
     @GET("/messages/v4/list")
-    fun getMessageList(@QueryMap parameter: Map<String, String>? = null): Call<MessageListResponse>
+    fun getMessageList(@QueryMap parameter: Map<String, Any?>? = null): Call<MessageListResponse>
 
     @POST("/messages/v4/send")
     fun sendOne(@Body parameter: SingleMessageSendingRequest): Call<SingleMessageSentResponse>
