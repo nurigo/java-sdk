@@ -169,28 +169,33 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
 
         // TODO: Refactor needed
         if (!tempPayload.criteria.isNullOrBlank() && !tempPayload.cond.isNullOrBlank() && !tempPayload.value.isNullOrBlank()) {
-            parameter.to?.let {
+            parameter.to.takeIf { !it.isNullOrBlank() }?.let {
                 tempPayload.criteria += ",to"
                 tempPayload.cond += ",eq"
                 tempPayload.value += ",$it"
             }
-            parameter.from?.let {
+            parameter.from.takeIf { !it.isNullOrBlank() }?.let {
                 tempPayload.criteria += ",from"
                 tempPayload.cond += ",eq"
                 tempPayload.value += ",$it"
             }
-            parameter.messageId?.let {
+            parameter.messageId.takeIf { !it.isNullOrBlank() }?.let {
                 tempPayload.criteria += ",messageId"
                 tempPayload.cond += ",eq"
                 tempPayload.value += ",$it"
             }
-            parameter.groupId?.let {
+            parameter.groupId.takeIf { !it.isNullOrBlank() }?.let {
                 tempPayload.criteria += ",groupId"
                 tempPayload.cond += ",eq"
                 tempPayload.value += ",$it"
             }
-            parameter.type?.let {
+            parameter.type.takeIf { !it.isNullOrBlank() }?.let {
                 tempPayload.criteria += ",type"
+                tempPayload.cond += ",eq"
+                tempPayload.value += ",$it"
+            }
+            parameter.statusCode.takeIf { !it.isNullOrBlank() }?.let {
+                tempPayload.criteria += ",statusCode"
                 tempPayload.cond += ",eq"
                 tempPayload.value += ",$it"
             }

@@ -76,6 +76,7 @@ data class Message(
     /**
      * 문자 상태
      * 예) 대기, 접수, 발송완료 등
+     * 해당 프로퍼티는 MessageStatusType과 다른 값입니다!
      */
     var status: String? = null,
 
