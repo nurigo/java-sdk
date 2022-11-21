@@ -2,6 +2,8 @@ $dokka.format:html-v1
 $dokka.linkExtension:html
 $dokka.location:kotlin/KakaoButtonType/getName/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-kakao-button-type/get-name.html
 $dokka.location:kotlin/KakaoButtonType/getOrdinal/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-kakao-button-type/get-ordinal.html
+$dokka.location:kotlin/MessageStatusType/getName/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-message-status-type/get-name.html
+$dokka.location:kotlin/MessageStatusType/getOrdinal/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-message-status-type/get-ordinal.html
 $dokka.location:kotlin/MessageType/getName/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-message-type/get-name.html
 $dokka.location:kotlin/MessageType/getOrdinal/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-message-type/get-ordinal.html
 $dokka.location:kotlin/NurigoApiKeyException/getCause/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.exception/-nurigo-api-key-exception/get-cause.html
@@ -42,9 +44,12 @@ $dokka.location:net.nurigo.sdk.message.exception/NurigoUnknownException///Pointi
 $dokka.location:net.nurigo.sdk.message.exception/NurigoUnknownException/NurigoUnknownException/#kotlin.String/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.exception/-nurigo-unknown-exception/-nurigo-unknown-exception.html
 $dokka.location:net.nurigo.sdk.message.exception/NurigoUnregisteredSenderIdException///PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.exception/-nurigo-unregistered-sender-id-exception/index.html
 $dokka.location:net.nurigo.sdk.message.exception/NurigoUnregisteredSenderIdException/NurigoUnregisteredSenderIdException/#kotlin.String/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.exception/-nurigo-unregistered-sender-id-exception/-nurigo-unregistered-sender-id-exception.html
-$dokka.location:net.nurigo.sdk.message.extension////PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.extension/index.html
-$dokka.location:net.nurigo.sdk.message.extension/DataClassMapperExtensionKt///PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.extension/-data-class-mapper-extension-kt/index.html
-$dokka.location:net.nurigo.sdk.message.extension/DataClassMapperExtensionKt/toStringValueMap/TypeParam(bounds=[kotlin.Any])#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.extension/-data-class-mapper-extension-kt/to-string-value-map.html
+$dokka.location:net.nurigo.sdk.message.lib////PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.lib/index.html
+$dokka.location:net.nurigo.sdk.message.lib/MapHelper.Companion///PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.lib/-map-helper/-companion/index.html
+$dokka.location:net.nurigo.sdk.message.lib/MapHelper.Companion/jsonObjectToMap/#kotlinx.serialization.json.JsonObject/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.lib/-map-helper/-companion/json-object-to-map.html
+$dokka.location:net.nurigo.sdk.message.lib/MapHelper.Companion/toMap/#TypeParam(bounds=[kotlin.Any?])/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.lib/-map-helper/-companion/to-map.html
+$dokka.location:net.nurigo.sdk.message.lib/MapHelper///PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.lib/-map-helper/index.html
+$dokka.location:net.nurigo.sdk.message.lib/MapHelper/MapHelper/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.lib/-map-helper/-map-helper.html
 $dokka.location:net.nurigo.sdk.message.model////PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/index.html
 $dokka.location:net.nurigo.sdk.message.model/Balance///PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-balance/index.html
 $dokka.location:net.nurigo.sdk.message.model/Balance/Balance/#kotlin.Float?#kotlin.Float?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-balance/-balance.html
@@ -135,11 +140,12 @@ $dokka.location:net.nurigo.sdk.message.model/KakaoOption/setPfId/#kotlin.String?
 $dokka.location:net.nurigo.sdk.message.model/KakaoOption/setTemplateId/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-kakao-option/set-template-id.html
 $dokka.location:net.nurigo.sdk.message.model/KakaoOption/setVariables/#kotlin.collections.MutableMap[kotlin.String,kotlin.String]?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-kakao-option/set-variables.html
 $dokka.location:net.nurigo.sdk.message.model/Message///PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-message/index.html
-$dokka.location:net.nurigo.sdk.message.model/Message/Message/#net.nurigo.sdk.message.model.KakaoOption?#net.nurigo.sdk.message.model.NaverOption?#net.nurigo.sdk.message.model.RcsOption?#net.nurigo.sdk.message.model.MessageType?#kotlin.String?#kotlin.String?#kotlin.String?#kotlinx.datetime.Instant?#kotlinx.datetime.Instant?#kotlinx.datetime.Instant?#kotlin.String?#kotlin.Boolean?#kotlin.Boolean?#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.String?#kotlinx.datetime.Instant?#kotlinx.datetime.Instant?#kotlin.String?#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-message/-message.html
+$dokka.location:net.nurigo.sdk.message.model/Message/Message/#net.nurigo.sdk.message.model.KakaoOption?#net.nurigo.sdk.message.model.NaverOption?#net.nurigo.sdk.message.model.RcsOption?#net.nurigo.sdk.message.model.MessageType?#kotlin.String?#kotlin.String?#kotlin.String?#kotlinx.datetime.Instant?#kotlinx.datetime.Instant?#kotlinx.datetime.Instant?#kotlin.String?#kotlin.Boolean?#kotlin.Boolean?#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.String?#kotlinx.datetime.Instant?#kotlinx.datetime.Instant?#kotlin.String?#kotlin.String?#kotlin.collections.Map[kotlin.String,kotlin.String]?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-message/-message.html
 $dokka.location:net.nurigo.sdk.message.model/Message/equals/#kotlin.Any?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-message/equals.html
 $dokka.location:net.nurigo.sdk.message.model/Message/getAccountId/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-message/get-account-id.html
 $dokka.location:net.nurigo.sdk.message.model/Message/getAutoTypeDetect/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-message/get-auto-type-detect.html
 $dokka.location:net.nurigo.sdk.message.model/Message/getCountry/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-message/get-country.html
+$dokka.location:net.nurigo.sdk.message.model/Message/getCustomFields/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-message/get-custom-fields.html
 $dokka.location:net.nurigo.sdk.message.model/Message/getDateCreated/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-message/get-date-created.html
 $dokka.location:net.nurigo.sdk.message.model/Message/getDateProcessed/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-message/get-date-processed.html
 $dokka.location:net.nurigo.sdk.message.model/Message/getDateReceived/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-message/get-date-received.html
@@ -163,6 +169,7 @@ $dokka.location:net.nurigo.sdk.message.model/Message/hashCode/#/PointingToDeclar
 $dokka.location:net.nurigo.sdk.message.model/Message/setAccountId/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-message/set-account-id.html
 $dokka.location:net.nurigo.sdk.message.model/Message/setAutoTypeDetect/#kotlin.Boolean?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-message/set-auto-type-detect.html
 $dokka.location:net.nurigo.sdk.message.model/Message/setCountry/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-message/set-country.html
+$dokka.location:net.nurigo.sdk.message.model/Message/setCustomFields/#kotlin.collections.Map[kotlin.String,kotlin.String]?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-message/set-custom-fields.html
 $dokka.location:net.nurigo.sdk.message.model/Message/setDateCreated/#kotlinx.datetime.Instant?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-message/set-date-created.html
 $dokka.location:net.nurigo.sdk.message.model/Message/setDateProcessed/#kotlinx.datetime.Instant?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-message/set-date-processed.html
 $dokka.location:net.nurigo.sdk.message.model/Message/setDateReceived/#kotlinx.datetime.Instant?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-message/set-date-received.html
@@ -182,6 +189,11 @@ $dokka.location:net.nurigo.sdk.message.model/Message/setSubject/#kotlin.String?/
 $dokka.location:net.nurigo.sdk.message.model/Message/setText/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-message/set-text.html
 $dokka.location:net.nurigo.sdk.message.model/Message/setTo/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-message/set-to.html
 $dokka.location:net.nurigo.sdk.message.model/Message/setType/#net.nurigo.sdk.message.model.MessageType?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-message/set-type.html
+$dokka.location:net.nurigo.sdk.message.model/MessageStatusType.COMPLETE///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}nurigo.sdk/net.nurigo.sdk.message.model/-message-status-type/-c-o-m-p-l-e-t-e/index.html
+$dokka.location:net.nurigo.sdk.message.model/MessageStatusType.FAILED///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}nurigo.sdk/net.nurigo.sdk.message.model/-message-status-type/-f-a-i-l-e-d/index.html
+$dokka.location:net.nurigo.sdk.message.model/MessageStatusType.PENDING///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}nurigo.sdk/net.nurigo.sdk.message.model/-message-status-type/-p-e-n-d-i-n-g/index.html
+$dokka.location:net.nurigo.sdk.message.model/MessageStatusType.SENDING///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}nurigo.sdk/net.nurigo.sdk.message.model/-message-status-type/-s-e-n-d-i-n-g/index.html
+$dokka.location:net.nurigo.sdk.message.model/MessageStatusType///PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-message-status-type/index.html
 $dokka.location:net.nurigo.sdk.message.model/MessageType.ATA///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}nurigo.sdk/net.nurigo.sdk.message.model/-message-type/-a-t-a/index.html
 $dokka.location:net.nurigo.sdk.message.model/MessageType.CTA///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}nurigo.sdk/net.nurigo.sdk.message.model/-message-type/-c-t-a/index.html
 $dokka.location:net.nurigo.sdk.message.model/MessageType.CTI///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}nurigo.sdk/net.nurigo.sdk.message.model/-message-type/-c-t-i/index.html
@@ -244,12 +256,39 @@ $dokka.location:net.nurigo.sdk.message.request/FileUploadRequest/setFile/#kotlin
 $dokka.location:net.nurigo.sdk.message.request/FileUploadRequest/setLink/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-file-upload-request/set-link.html
 $dokka.location:net.nurigo.sdk.message.request/FileUploadRequest/setName/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-file-upload-request/set-name.html
 $dokka.location:net.nurigo.sdk.message.request/FileUploadRequest/setType/#net.nurigo.sdk.message.model.StorageType?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-file-upload-request/set-type.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListBaseRequest///PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-base-request/index.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListBaseRequest/MessageListBaseRequest/#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.Int?#kotlinx.datetime.Instant?#kotlinx.datetime.Instant?#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-base-request/-message-list-base-request.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListBaseRequest/equals/#kotlin.Any?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-base-request/equals.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListBaseRequest/getCond/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-base-request/get-cond.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListBaseRequest/getCriteria/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-base-request/get-criteria.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListBaseRequest/getEndDate/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-base-request/get-end-date.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListBaseRequest/getFrom/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-base-request/get-from.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListBaseRequest/getGroupId/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-base-request/get-group-id.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListBaseRequest/getLimit/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-base-request/get-limit.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListBaseRequest/getMessageId/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-base-request/get-message-id.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListBaseRequest/getStartDate/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-base-request/get-start-date.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListBaseRequest/getStartKey/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-base-request/get-start-key.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListBaseRequest/getStatusCode/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-base-request/get-status-code.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListBaseRequest/getTo/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-base-request/get-to.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListBaseRequest/getType/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-base-request/get-type.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListBaseRequest/getValue/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-base-request/get-value.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListBaseRequest/hashCode/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-base-request/hash-code.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListBaseRequest/setCond/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-base-request/set-cond.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListBaseRequest/setCriteria/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-base-request/set-criteria.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListBaseRequest/setEndDate/#kotlinx.datetime.Instant?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-base-request/set-end-date.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListBaseRequest/setFrom/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-base-request/set-from.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListBaseRequest/setGroupId/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-base-request/set-group-id.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListBaseRequest/setLimit/#kotlin.Int?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-base-request/set-limit.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListBaseRequest/setMessageId/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-base-request/set-message-id.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListBaseRequest/setStartDate/#kotlinx.datetime.Instant?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-base-request/set-start-date.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListBaseRequest/setStartKey/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-base-request/set-start-key.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListBaseRequest/setStatusCode/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-base-request/set-status-code.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListBaseRequest/setTo/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-base-request/set-to.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListBaseRequest/setType/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-base-request/set-type.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListBaseRequest/setValue/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-base-request/set-value.html
 $dokka.location:net.nurigo.sdk.message.request/MessageListRequest///PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/index.html
-$dokka.location:net.nurigo.sdk.message.request/MessageListRequest/MessageListRequest/#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.Int?#kotlin.String?#kotlinx.datetime.Instant?#kotlinx.datetime.Instant?#kotlin.String?#kotlin.collections.List[kotlin.String]?#kotlin.String?#kotlin.String?#kotlin.String?#kotlinx.datetime.Instant?#kotlinx.datetime.Instant?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/-message-list-request.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListRequest/MessageListRequest/#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.Int?#kotlin.String?#kotlin.collections.List[kotlin.String]?#kotlin.String?#kotlin.String?#kotlin.String?#kotlinx.datetime.Instant?#kotlinx.datetime.Instant?#net.nurigo.sdk.message.model.MessageStatusType?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/-message-list-request.html
 $dokka.location:net.nurigo.sdk.message.request/MessageListRequest/equals/#kotlin.Any?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/equals.html
-$dokka.location:net.nurigo.sdk.message.request/MessageListRequest/getDateCreated/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/get-date-created.html
-$dokka.location:net.nurigo.sdk.message.request/MessageListRequest/getDateType/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/get-date-type.html
-$dokka.location:net.nurigo.sdk.message.request/MessageListRequest/getDateUpdated/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/get-date-updated.html
 $dokka.location:net.nurigo.sdk.message.request/MessageListRequest/getEndDate/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/get-end-date.html
 $dokka.location:net.nurigo.sdk.message.request/MessageListRequest/getFrom/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/get-from.html
 $dokka.location:net.nurigo.sdk.message.request/MessageListRequest/getGroupId/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/get-group-id.html
@@ -258,13 +297,11 @@ $dokka.location:net.nurigo.sdk.message.request/MessageListRequest/getMessageId/#
 $dokka.location:net.nurigo.sdk.message.request/MessageListRequest/getMessageIds/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/get-message-ids.html
 $dokka.location:net.nurigo.sdk.message.request/MessageListRequest/getStartDate/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/get-start-date.html
 $dokka.location:net.nurigo.sdk.message.request/MessageListRequest/getStartKey/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/get-start-key.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListRequest/getStatus/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/get-status.html
 $dokka.location:net.nurigo.sdk.message.request/MessageListRequest/getStatusCode/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/get-status-code.html
 $dokka.location:net.nurigo.sdk.message.request/MessageListRequest/getTo/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/get-to.html
 $dokka.location:net.nurigo.sdk.message.request/MessageListRequest/getType/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/get-type.html
 $dokka.location:net.nurigo.sdk.message.request/MessageListRequest/hashCode/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/hash-code.html
-$dokka.location:net.nurigo.sdk.message.request/MessageListRequest/setDateCreated/#kotlinx.datetime.Instant?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/set-date-created.html
-$dokka.location:net.nurigo.sdk.message.request/MessageListRequest/setDateType/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/set-date-type.html
-$dokka.location:net.nurigo.sdk.message.request/MessageListRequest/setDateUpdated/#kotlinx.datetime.Instant?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/set-date-updated.html
 $dokka.location:net.nurigo.sdk.message.request/MessageListRequest/setEndDate/#kotlinx.datetime.Instant?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/set-end-date.html
 $dokka.location:net.nurigo.sdk.message.request/MessageListRequest/setFrom/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/set-from.html
 $dokka.location:net.nurigo.sdk.message.request/MessageListRequest/setGroupId/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/set-group-id.html
@@ -273,6 +310,7 @@ $dokka.location:net.nurigo.sdk.message.request/MessageListRequest/setMessageId/#
 $dokka.location:net.nurigo.sdk.message.request/MessageListRequest/setMessageIds/#kotlin.collections.List[kotlin.String]?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/set-message-ids.html
 $dokka.location:net.nurigo.sdk.message.request/MessageListRequest/setStartDate/#kotlinx.datetime.Instant?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/set-start-date.html
 $dokka.location:net.nurigo.sdk.message.request/MessageListRequest/setStartKey/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/set-start-key.html
+$dokka.location:net.nurigo.sdk.message.request/MessageListRequest/setStatus/#net.nurigo.sdk.message.model.MessageStatusType?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/set-status.html
 $dokka.location:net.nurigo.sdk.message.request/MessageListRequest/setStatusCode/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/set-status-code.html
 $dokka.location:net.nurigo.sdk.message.request/MessageListRequest/setTo/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/set-to.html
 $dokka.location:net.nurigo.sdk.message.request/MessageListRequest/setType/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.request/-message-list-request/set-type.html
@@ -353,7 +391,8 @@ $dokka.location:net.nurigo.sdk.message.service////PointingToDeclaration/nurigo.
 $dokka.location:net.nurigo.sdk.message.service/DefaultMessageService///PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-default-message-service/index.html
 $dokka.location:net.nurigo.sdk.message.service/DefaultMessageService/DefaultMessageService/#kotlin.String#kotlin.String#kotlin.String/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-default-message-service/-default-message-service.html
 $dokka.location:net.nurigo.sdk.message.service/DefaultMessageService/getBalance/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-default-message-service/get-balance.html
-$dokka.location:net.nurigo.sdk.message.service/DefaultMessageService/getMessageList/#net.nurigo.sdk.message.request.MessageListRequest?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-default-message-service/get-message-list.html
+$dokka.location:net.nurigo.sdk.message.service/DefaultMessageService/getMessageList/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-default-message-service/get-message-list.html
+$dokka.location:net.nurigo.sdk.message.service/DefaultMessageService/getMessageList/#net.nurigo.sdk.message.request.MessageListRequest/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-default-message-service/get-message-list.html
 $dokka.location:net.nurigo.sdk.message.service/DefaultMessageService/send/#kotlin.collections.List[net.nurigo.sdk.message.model.Message]#java.time.Instant#kotlin.Boolean/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-default-message-service/send.html
 $dokka.location:net.nurigo.sdk.message.service/DefaultMessageService/send/#kotlin.collections.List[net.nurigo.sdk.message.model.Message]#java.time.Instant/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-default-message-service/send.html
 $dokka.location:net.nurigo.sdk.message.service/DefaultMessageService/send/#kotlin.collections.List[net.nurigo.sdk.message.model.Message]#kotlin.Boolean/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-default-message-service/send.html
@@ -367,7 +406,7 @@ $dokka.location:net.nurigo.sdk.message.service/DefaultMessageService/sendMany/#n
 $dokka.location:net.nurigo.sdk.message.service/DefaultMessageService/sendOne/#net.nurigo.sdk.message.request.SingleMessageSendingRequest/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-default-message-service/send-one.html
 $dokka.location:net.nurigo.sdk.message.service/MessageHttpService///PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-message-http-service/index.html
 $dokka.location:net.nurigo.sdk.message.service/MessageHttpService/getBalance/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-message-http-service/get-balance.html
-$dokka.location:net.nurigo.sdk.message.service/MessageHttpService/getMessageList/#kotlin.collections.Map[kotlin.String,kotlin.String]?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-message-http-service/get-message-list.html
+$dokka.location:net.nurigo.sdk.message.service/MessageHttpService/getMessageList/#kotlin.collections.Map[kotlin.String,kotlin.Any?]?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-message-http-service/get-message-list.html
 $dokka.location:net.nurigo.sdk.message.service/MessageHttpService/sendMany/#net.nurigo.sdk.message.request.MultipleMessageSendingRequest/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-message-http-service/send-many.html
 $dokka.location:net.nurigo.sdk.message.service/MessageHttpService/sendManyDetail/#net.nurigo.sdk.message.request.MultipleDetailMessageSendingRequest/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-message-http-service/send-many-detail.html
 $dokka.location:net.nurigo.sdk.message.service/MessageHttpService/sendOne/#net.nurigo.sdk.message.request.SingleMessageSendingRequest/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-message-http-service/send-one.html
@@ -378,7 +417,7 @@ $dokka.location:net.nurigo.sdk/NurigoApp///PointingToDeclaration/nurigo.sdk/net
 $dokka.location:net.nurigo.sdk/NurigoApp/initialize/#kotlin.String#kotlin.String#kotlin.String/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk/-nurigo-app/initialize.html
 net.nurigo.sdk
 net.nurigo.sdk.message.exception
-net.nurigo.sdk.message.extension
+net.nurigo.sdk.message.lib
 net.nurigo.sdk.message.model
 net.nurigo.sdk.message.request
 net.nurigo.sdk.message.response
