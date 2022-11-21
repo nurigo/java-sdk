@@ -43,7 +43,7 @@ data class Message(
     var imageId: String? = null,
 
     /**
-*     * 발송 접수일자
+     *     * 발송 접수일자
      */
     var dateProcessed: Instant? = null,
 
@@ -76,6 +76,7 @@ data class Message(
     /**
      * 문자 상태
      * 예) 대기, 접수, 발송완료 등
+     * 해당 프로퍼티는 MessageStatusType과 다른 값입니다!
      */
     var status: String? = null,
 
@@ -118,7 +119,13 @@ data class Message(
      * 발신번호, 반드시 계정 내 등록하신 발신번호를 입력하셔야 합니다.
      * 예) 029302266
      */
-    var from: String? = null
+    var from: String? = null,
+
+    /**
+     * 사용자(누리고 서비스 이용자)를 위한 발송 요청 시 커스텀 값을 넣을 수 있는 필드
+     * 메시지 조회 시에도 표시됩니다!
+     */
+    var customFields: Map<String, String>? = null
 ) {
 
     override fun equals(other: Any?): Boolean {
@@ -148,6 +155,7 @@ data class Message(
         if (dateUpdated != other.dateUpdated) return false
         if (from != other.from) return false
         if (to != other.to) return false
+        if (customFields != other.customFields) return false
 
         return true
     }
@@ -174,6 +182,7 @@ data class Message(
         result = 31 * result + (dateUpdated?.hashCode() ?: 0)
         result = 31 * result + (from?.hashCode() ?: 0)
         result = 31 * result + (to?.hashCode() ?: 0)
+        result = 31 * result + (customFields?.hashCode() ?: 0)
         return result
     }
 }

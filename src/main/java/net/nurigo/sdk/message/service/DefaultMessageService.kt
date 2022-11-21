@@ -7,12 +7,9 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import net.nurigo.sdk.message.exception.*
-import net.nurigo.sdk.message.extension.toStringValueMap
 import net.nurigo.sdk.message.lib.Authenticator
-import net.nurigo.sdk.message.model.Balance
-import net.nurigo.sdk.message.model.Count
-import net.nurigo.sdk.message.model.Message
-import net.nurigo.sdk.message.model.StorageType
+import net.nurigo.sdk.message.lib.MapHelper
+import net.nurigo.sdk.message.model.*
 import net.nurigo.sdk.message.request.*
 import net.nurigo.sdk.message.response.*
 import net.nurigo.sdk.message.response.ErrorResponse
@@ -87,12 +84,135 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
 
     /**
      * 메시지 조회 API
+     */
+    fun getMessageList(): MessageListResponse? {
+        val response = this.messageHttpService.getMessageList(emptyMap()).execute()
+
+        if (response.isSuccessful) {
+            return response.body()
+        } else {
+            val errorResponse: ErrorResponse = Json.decodeFromString(response.errorBody()?.string() ?: "")
+            throw NurigoUnknownException("${errorResponse.errorCode}: ${errorResponse.errorMessage}")
+        }
+    }
+
+    /**
+     * 메시지 조회 API
      * */
     @Throws
-    fun getMessageList(parameter: MessageListRequest?): MessageListResponse? {
-        val generatedParameter = parameter ?: MessageListRequest()
-        val mappedParameter = generatedParameter.toStringValueMap()
-        val response = this.messageHttpService.getMessageList(mappedParameter).execute()
+    fun getMessageList(parameter: MessageListRequest): MessageListResponse? {
+        val tempPayload = MessageListBaseRequest()
+        val payload = mutableMapOf<String, Any?>()
+        if (parameter.status != null && !parameter.statusCode.isNullOrBlank()) {
+            // TODO: i18n needed
+            throw NurigoBadRequestException("status와 statusCode는 병기할 수 없습니다.")
+        } else if (parameter.status != null) {
+            when (parameter.status) {
+                MessageStatusType.PENDING -> {
+                    tempPayload.criteria = "statusCode"
+                    tempPayload.cond = "eq"
+                    tempPayload.value = "2000"
+                }
+
+                MessageStatusType.SENDING -> {
+                    tempPayload.criteria = "statusCode"
+                    tempPayload.cond = "eq"
+                    tempPayload.value = "3000"
+                }
+
+                MessageStatusType.COMPLETE -> {
+                    tempPayload.criteria = "statusCode"
+                    tempPayload.cond = "eq"
+                    tempPayload.value = "4000"
+                }
+
+                MessageStatusType.FAILED -> {
+                    tempPayload.criteria = "statusCode,statusCode,statusCode"
+                    tempPayload.cond = "ne,ne,ne"
+                    tempPayload.value = "2000,3000,4000"
+                }
+
+                else -> throw NurigoUnknownException("허용될 수 없는 status 값이 입력되었습니다.")
+            }
+        }
+
+        if (!parameter.messageIds.isNullOrEmpty()) {
+            var tempCriteria = ""
+            var tempCond = ""
+
+            parameter.messageIds?.forEachIndexed { index: Int, _ ->
+                if (index == 0 && (tempPayload.criteria.isNullOrBlank() && tempPayload.cond.isNullOrBlank() && tempPayload.value.isNullOrBlank())) {
+                    tempCriteria = "messageId"
+                    tempCond = "eq"
+                } else {
+                    tempCriteria += ",messageId"
+                    tempCond += ",eq"
+                }
+            }
+
+            tempPayload.criteria = if (tempPayload.criteria.isNullOrBlank()) {
+                tempCriteria
+            } else {
+                tempPayload.criteria + tempCriteria
+            }
+            tempPayload.cond = if (tempPayload.cond.isNullOrBlank()) {
+                tempCond
+            } else {
+                tempPayload.cond + tempCond
+            }
+            tempPayload.value = if (tempPayload.value.isNullOrBlank()) {
+                parameter.messageIds!!.joinToString(",")
+            } else {
+                tempPayload.value + "," + parameter.messageIds!!.joinToString(",")
+            }
+        }
+
+        // TODO: Refactor needed
+        if (!tempPayload.criteria.isNullOrBlank() && !tempPayload.cond.isNullOrBlank() && !tempPayload.value.isNullOrBlank()) {
+            parameter.to.takeIf { !it.isNullOrBlank() }?.let {
+                tempPayload.criteria += ",to"
+                tempPayload.cond += ",eq"
+                tempPayload.value += ",$it"
+            }
+            parameter.from.takeIf { !it.isNullOrBlank() }?.let {
+                tempPayload.criteria += ",from"
+                tempPayload.cond += ",eq"
+                tempPayload.value += ",$it"
+            }
+            parameter.messageId.takeIf { !it.isNullOrBlank() }?.let {
+                tempPayload.criteria += ",messageId"
+                tempPayload.cond += ",eq"
+                tempPayload.value += ",$it"
+            }
+            parameter.groupId.takeIf { !it.isNullOrBlank() }?.let {
+                tempPayload.criteria += ",groupId"
+                tempPayload.cond += ",eq"
+                tempPayload.value += ",$it"
+            }
+            parameter.type.takeIf { !it.isNullOrBlank() }?.let {
+                tempPayload.criteria += ",type"
+                tempPayload.cond += ",eq"
+                tempPayload.value += ",$it"
+            }
+            parameter.statusCode.takeIf { !it.isNullOrBlank() }?.let {
+                tempPayload.criteria += ",statusCode"
+                tempPayload.cond += ",eq"
+                tempPayload.value += ",$it"
+            }
+        } else {
+            tempPayload.to = parameter.to
+            tempPayload.from = parameter.from
+            tempPayload.messageId = parameter.messageId
+            tempPayload.groupId = parameter.groupId
+            tempPayload.type = parameter.type
+        }
+        tempPayload.startKey = parameter.startKey
+        tempPayload.limit = parameter.limit
+        tempPayload.startDate = parameter.startDate
+        tempPayload.endDate = parameter.endDate
+
+        payload.putAll(MapHelper.toMap(tempPayload))
+        val response = this.messageHttpService.getMessageList(payload).execute()
 
         if (response.isSuccessful) {
             return response.body()
