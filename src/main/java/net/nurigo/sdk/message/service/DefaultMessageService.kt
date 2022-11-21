@@ -101,12 +101,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
      * */
     @Throws
     fun getMessageList(parameter: MessageListRequest): MessageListResponse? {
-        val tempPayload = MessageListBaseRequest(
-            to = parameter.to, from = parameter.from,
-            startKey = parameter.startKey, limit = parameter.limit,
-            messageId = parameter.messageId, groupId = parameter.groupId,
-            type = parameter.type, startDate = parameter.startDate, endDate = parameter.endDate
-        )
+        val tempPayload = MessageListBaseRequest()
         val payload = mutableMapOf<String, Any?>()
         if (parameter.status != null && !parameter.statusCode.isNullOrBlank()) {
             // TODO: i18n needed
@@ -139,8 +134,6 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
 
                 else -> throw NurigoUnknownException("허용될 수 없는 status 값이 입력되었습니다.")
             }
-        } else if (!parameter.statusCode.isNullOrBlank()) {
-            tempPayload.statusCode = parameter.statusCode
         }
 
         if (!parameter.messageIds.isNullOrEmpty()) {
@@ -173,6 +166,45 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
                 tempPayload.value + "," + parameter.messageIds!!.joinToString(",")
             }
         }
+
+        // TODO: Refactor needed
+        if (!tempPayload.criteria.isNullOrBlank() && !tempPayload.cond.isNullOrBlank() && !tempPayload.value.isNullOrBlank()) {
+            parameter.to?.let {
+                tempPayload.criteria += ",to"
+                tempPayload.cond += ",eq"
+                tempPayload.value += ",$it"
+            }
+            parameter.from?.let {
+                tempPayload.criteria += ",from"
+                tempPayload.cond += ",eq"
+                tempPayload.value += ",$it"
+            }
+            parameter.messageId?.let {
+                tempPayload.criteria += ",messageId"
+                tempPayload.cond += ",eq"
+                tempPayload.value += ",$it"
+            }
+            parameter.groupId?.let {
+                tempPayload.criteria += ",groupId"
+                tempPayload.cond += ",eq"
+                tempPayload.value += ",$it"
+            }
+            parameter.type?.let {
+                tempPayload.criteria += ",type"
+                tempPayload.cond += ",eq"
+                tempPayload.value += ",$it"
+            }
+        } else {
+            tempPayload.to = parameter.to
+            tempPayload.from = parameter.from
+            tempPayload.messageId = parameter.messageId
+            tempPayload.groupId = parameter.groupId
+            tempPayload.type = parameter.type
+        }
+        tempPayload.startKey = parameter.startKey
+        tempPayload.limit = parameter.limit
+        tempPayload.startDate = parameter.startDate
+        tempPayload.endDate = parameter.endDate
 
         payload.putAll(MapHelper.toMap(tempPayload))
         val response = this.messageHttpService.getMessageList(payload).execute()

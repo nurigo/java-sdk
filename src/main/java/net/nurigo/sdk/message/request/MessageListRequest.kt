@@ -19,6 +19,7 @@ data class MessageListRequest(
 
     /**
      * Pagination을 위한 key
+     * 조회 후 다음 페이지로 넘어가려면 조회 당시 마지막의 messageId를 입력해주셔야 합니다.
      */
     var startKey: String? = null,
 
