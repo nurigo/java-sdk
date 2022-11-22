@@ -8,5 +8,5 @@ import net.nurigo.sdk.message.model.Message
 data class MultipleDetailMessageSendingRequest(
     var messages: List<Message> = emptyList(),
     var scheduledDate: Instant? = null,
-    val showMessageList: Boolean = false
+    var showMessageList: Boolean = false
 ) : AbstractDefaultMessageRequest()
