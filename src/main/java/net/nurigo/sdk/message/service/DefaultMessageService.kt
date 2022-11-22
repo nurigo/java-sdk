@@ -436,6 +436,51 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
     }
 
     /**
+     * 다중 메시지(2건 이상) 발송 API
+     * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
+     */
+    @Throws(
+        NurigoMessageNotReceivedException::class,
+        NurigoEmptyResponseException::class,
+        NurigoUnknownException::class
+    )
+    fun send(
+        messages: List<Message>,
+        allowDuplicates: Boolean,
+        showMessageList: Boolean
+    ): MultipleDetailMessageSentResponse {
+        val parameter = MultipleDetailMessageSendingRequest(
+            messages = messages,
+            scheduledDate = null,
+            showMessageList = showMessageList,
+        )
+        parameter.allowDuplicates = allowDuplicates
+        val response = this.messageHttpService.sendManyDetail(parameter).execute()
+
+        if (response.isSuccessful) {
+            val responseBody = response.body()
+            if (responseBody != null) {
+                val count: Count = responseBody.groupInfo?.count ?: Count()
+                val failedMessageList = responseBody.failedMessageList
+
+                if (failedMessageList.isNotEmpty() && count.total == failedMessageList.count()) {
+                    // TODO: i18n needed
+                    val messageNotReceivedException = NurigoMessageNotReceivedException("메시지 발송 접수에 실패했습니다.")
+                    messageNotReceivedException.failedMessageList = failedMessageList
+                    throw messageNotReceivedException
+                }
+
+                return responseBody
+            }
+            throw NurigoEmptyResponseException("서버로부터 아무 응답을 받지 못했습니다.")
+        } else {
+            val errorString = response.errorBody()?.string() ?: "Server error encountered"
+            throw NurigoUnknownException(errorString)
+        }
+    }
+
+
+    /**
      * 다중 메시지(2건 이상) 발송 및 예약 발송 API
      * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
      */
@@ -527,12 +572,102 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
     )
     fun send(
         messages: List<Message>,
+        scheduledDateTime: java.time.Instant,
+        allowDuplicates: Boolean,
+        showMessageList: Boolean
+    ): MultipleDetailMessageSentResponse {
+        val parameter = MultipleDetailMessageSendingRequest(
+            messages = messages,
+            scheduledDate = scheduledDateTime.toKotlinInstant(),
+            showMessageList = showMessageList
+        )
+        parameter.allowDuplicates = allowDuplicates
+        val response = this.messageHttpService.sendManyDetail(parameter).execute()
+
+        if (response.isSuccessful) {
+            val responseBody = response.body()
+            if (responseBody != null) {
+                val count: Count = responseBody.groupInfo?.count ?: Count()
+                val failedMessageList = responseBody.failedMessageList
+
+                if (failedMessageList.isNotEmpty() && count.total == failedMessageList.count()) {
+                    // TODO: i18n needed
+                    val messageNotReceivedException = NurigoMessageNotReceivedException("메시지 발송 접수에 실패했습니다.")
+                    messageNotReceivedException.failedMessageList = failedMessageList
+                    throw messageNotReceivedException
+                }
+
+                return responseBody
+            }
+            throw NurigoEmptyResponseException("서버로부터 아무 응답을 받지 못했습니다.")
+        } else {
+            val errorString = response.errorBody()?.string() ?: "Server error encountered"
+            throw NurigoUnknownException(errorString)
+        }
+    }
+
+    /**
+     * 다중 메시지(2건 이상) 발송 및 예약 발송 API
+     * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
+     */
+    @Throws(
+        NurigoMessageNotReceivedException::class,
+        NurigoEmptyResponseException::class,
+        NurigoUnknownException::class
+    )
+    fun send(
+        messages: List<Message>,
         scheduledDateTime: Instant,
         allowDuplicates: Boolean
     ): MultipleDetailMessageSentResponse {
         val parameter = MultipleDetailMessageSendingRequest(
             messages,
             scheduledDateTime
+        )
+        parameter.allowDuplicates = allowDuplicates
+        val response = this.messageHttpService.sendManyDetail(parameter).execute()
+
+        if (response.isSuccessful) {
+            val responseBody = response.body()
+            if (responseBody != null) {
+                val count: Count = responseBody.groupInfo?.count ?: Count()
+                val failedMessageList = responseBody.failedMessageList
+
+                if (failedMessageList.isNotEmpty() && count.total == failedMessageList.count()) {
+                    // TODO: i18n needed
+                    val messageNotReceivedException = NurigoMessageNotReceivedException("메시지 발송 접수에 실패했습니다.")
+                    messageNotReceivedException.failedMessageList = failedMessageList
+                    throw messageNotReceivedException
+                }
+
+                return responseBody
+            }
+            throw NurigoEmptyResponseException("서버로부터 아무 응답을 받지 못했습니다.")
+        } else {
+            val errorString = response.errorBody()?.string() ?: "Server error encountered"
+            throw NurigoUnknownException(errorString)
+        }
+    }
+
+    /**
+     * 다중 메시지(2건 이상) 발송 및 예약 발송 API
+     * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
+     */
+    @Throws(
+        NurigoMessageNotReceivedException::class,
+        NurigoEmptyResponseException::class,
+        NurigoUnknownException::class
+    )
+    fun send(
+        messages: List<Message>,
+        scheduledDateTime: Instant,
+        allowDuplicates: Boolean,
+        showMessageList: Boolean
+    ): MultipleDetailMessageSentResponse {
+        val parameter = MultipleDetailMessageSendingRequest(
+            messages = messages,
+            scheduledDate = scheduledDateTime,
+            showMessageList = showMessageList
         )
         parameter.allowDuplicates = allowDuplicates
         val response = this.messageHttpService.sendManyDetail(parameter).execute()
