@@ -13,6 +13,7 @@ data class MultipleDetailMessageSentResponse(
     data class MessageList(
         var messageId: String? = null,
         var statusCode: String? = null,
-        var customFields: Map<String, String>? = null
+        var customFields: Map<String, String>? = null,
+        var statusMessage: String? = null
     )
 }
