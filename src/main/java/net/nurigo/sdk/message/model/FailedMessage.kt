@@ -40,5 +40,10 @@ data class FailedMessage(
     /**
      * 계정 고유번호
      */
-    var accountId: String? = null
+    var accountId: String? = null,
+
+    /**
+     * 사용자가 지정한 커스텀 필드 값
+     */
+    var customFields: Map<String, String>? = null
 )
