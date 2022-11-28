@@ -83,9 +83,10 @@ $dokka.location:net.nurigo.sdk.message.model/Count/setSentSuccess/#kotlin.Int?/P
 $dokka.location:net.nurigo.sdk.message.model/Count/setSentTotal/#kotlin.Int?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-count/set-sent-total.html
 $dokka.location:net.nurigo.sdk.message.model/Count/setTotal/#kotlin.Int?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-count/set-total.html
 $dokka.location:net.nurigo.sdk.message.model/FailedMessage///PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-failed-message/index.html
-$dokka.location:net.nurigo.sdk.message.model/FailedMessage/FailedMessage/#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-failed-message/-failed-message.html
+$dokka.location:net.nurigo.sdk.message.model/FailedMessage/FailedMessage/#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.collections.Map[kotlin.String,kotlin.String]?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-failed-message/-failed-message.html
 $dokka.location:net.nurigo.sdk.message.model/FailedMessage/getAccountId/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-failed-message/get-account-id.html
 $dokka.location:net.nurigo.sdk.message.model/FailedMessage/getCountry/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-failed-message/get-country.html
+$dokka.location:net.nurigo.sdk.message.model/FailedMessage/getCustomFields/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-failed-message/get-custom-fields.html
 $dokka.location:net.nurigo.sdk.message.model/FailedMessage/getFrom/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-failed-message/get-from.html
 $dokka.location:net.nurigo.sdk.message.model/FailedMessage/getMessageId/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-failed-message/get-message-id.html
 $dokka.location:net.nurigo.sdk.message.model/FailedMessage/getStatusCode/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-failed-message/get-status-code.html
@@ -94,6 +95,7 @@ $dokka.location:net.nurigo.sdk.message.model/FailedMessage/getTo/#/PointingToDec
 $dokka.location:net.nurigo.sdk.message.model/FailedMessage/getType/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-failed-message/get-type.html
 $dokka.location:net.nurigo.sdk.message.model/FailedMessage/setAccountId/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-failed-message/set-account-id.html
 $dokka.location:net.nurigo.sdk.message.model/FailedMessage/setCountry/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-failed-message/set-country.html
+$dokka.location:net.nurigo.sdk.message.model/FailedMessage/setCustomFields/#kotlin.collections.Map[kotlin.String,kotlin.String]?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-failed-message/set-custom-fields.html
 $dokka.location:net.nurigo.sdk.message.model/FailedMessage/setFrom/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-failed-message/set-from.html
 $dokka.location:net.nurigo.sdk.message.model/FailedMessage/setMessageId/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-failed-message/set-message-id.html
 $dokka.location:net.nurigo.sdk.message.model/FailedMessage/setStatusCode/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-failed-message/set-status-code.html
