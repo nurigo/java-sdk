@@ -1,6 +1,7 @@
 package net.nurigo.sdk.message.service
 
 import net.nurigo.sdk.message.model.Balance
+import net.nurigo.sdk.message.model.Quota
 import net.nurigo.sdk.message.request.FileUploadRequest
 import net.nurigo.sdk.message.request.MultipleDetailMessageSendingRequest
 import net.nurigo.sdk.message.request.MultipleMessageSendingRequest
@@ -29,4 +30,7 @@ interface MessageHttpService : MessageService {
 
     @GET("/cash/v1/balance")
     fun getBalance(): Call<Balance>
+
+    @GET("/quota/v1/me")
+    fun getQuota(): Call<Quota>
 }
