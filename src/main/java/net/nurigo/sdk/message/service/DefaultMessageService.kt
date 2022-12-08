@@ -26,16 +26,11 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
     private var messageHttpService: MessageHttpService
 
     init {
-        val client = OkHttpClient.Builder()
-            .addInterceptor { chain ->
-                val authInfo = Authenticator(apiKey, apiSecretKey).generateAuthInfo()
-                val request: Request = chain.request()
-                    .newBuilder()
-                    .addHeader("Authorization", authInfo)
-                    .build()
-                chain.proceed(request)
-            }
-            .build()
+        val client = OkHttpClient.Builder().addInterceptor { chain ->
+            val authInfo = Authenticator(apiKey, apiSecretKey).generateAuthInfo()
+            val request: Request = chain.request().newBuilder().addHeader("Authorization", authInfo).build()
+            chain.proceed(request)
+        }.build()
         val contentType = "application/json".toMediaType()
         val jsonConfig = Json {
             coerceInputValues = true
@@ -44,12 +39,9 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
             ignoreUnknownKeys = true
         }
 
-        messageHttpService = Retrofit.Builder()
-            .baseUrl(domain)
-            .addConverterFactory(jsonConfig.asConverterFactory(contentType))
-            .client(client)
-            .build()
-            .create(MessageHttpService::class.java)
+        messageHttpService =
+            Retrofit.Builder().baseUrl(domain).addConverterFactory(jsonConfig.asConverterFactory(contentType))
+                .client(client).build().create(MessageHttpService::class.java)
     }
 
     /**
@@ -69,9 +61,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
         }
         val encodedFile = String(Base64.encodeBase64(imageByte))
         val fileRequest = FileUploadRequest(
-            file = encodedFile,
-            type = fileType,
-            link = link
+            file = encodedFile, type = fileType, link = link
         )
         val response = this.messageHttpService.uploadFile(fileRequest).execute()
         if (response.isSuccessful) {
@@ -247,14 +237,11 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
      * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
      */
     @Throws(
-        NurigoMessageNotReceivedException::class,
-        NurigoEmptyResponseException::class,
-        NurigoUnknownException::class
+        NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
     )
     fun send(message: Message): MultipleDetailMessageSentResponse {
         val multipleParameter = MultipleDetailMessageSendingRequest(
-            messages = listOf(message),
-            scheduledDate = null
+            messages = listOf(message), scheduledDate = null
         )
 
         val response = this.messageHttpService.sendManyDetail(multipleParameter).execute()
@@ -286,14 +273,11 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
      * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
      */
     @Throws(
-        NurigoMessageNotReceivedException::class,
-        NurigoEmptyResponseException::class,
-        NurigoUnknownException::class
+        NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
     )
     fun send(message: Message, scheduledDateTime: java.time.Instant): MultipleDetailMessageSentResponse {
         val multipleParameter = MultipleDetailMessageSendingRequest(
-            messages = listOf(message),
-            scheduledDate = scheduledDateTime.toKotlinInstant()
+            messages = listOf(message), scheduledDate = scheduledDateTime.toKotlinInstant()
         )
         val response = this.messageHttpService.sendManyDetail(multipleParameter).execute()
 
@@ -324,14 +308,11 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
      * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
      */
     @Throws(
-        NurigoMessageNotReceivedException::class,
-        NurigoEmptyResponseException::class,
-        NurigoUnknownException::class
+        NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
     )
     fun send(message: Message, scheduledDate: Instant): MultipleDetailMessageSentResponse {
         val multipleParameter = MultipleDetailMessageSendingRequest(
-            messages = listOf(message),
-            scheduledDate = scheduledDate
+            messages = listOf(message), scheduledDate = scheduledDate
         )
 
         val response = this.messageHttpService.sendManyDetail(multipleParameter).execute()
@@ -363,14 +344,11 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
      * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
      */
     @Throws(
-        NurigoMessageNotReceivedException::class,
-        NurigoEmptyResponseException::class,
-        NurigoUnknownException::class
+        NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
     )
     fun send(messages: List<Message>): MultipleDetailMessageSentResponse {
         val parameter = MultipleDetailMessageSendingRequest(
-            messages,
-            null
+            messages, null
         )
         val response = this.messageHttpService.sendManyDetail(parameter).execute()
 
@@ -401,14 +379,11 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
      * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
      */
     @Throws(
-        NurigoMessageNotReceivedException::class,
-        NurigoEmptyResponseException::class,
-        NurigoUnknownException::class
+        NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
     )
     fun send(messages: List<Message>, allowDuplicates: Boolean): MultipleDetailMessageSentResponse {
         val parameter = MultipleDetailMessageSendingRequest(
-            messages,
-            null
+            messages, null
         )
         parameter.allowDuplicates = allowDuplicates
         val response = this.messageHttpService.sendManyDetail(parameter).execute()
@@ -440,14 +415,10 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
      * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
      */
     @Throws(
-        NurigoMessageNotReceivedException::class,
-        NurigoEmptyResponseException::class,
-        NurigoUnknownException::class
+        NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
     )
     fun send(
-        messages: List<Message>,
-        allowDuplicates: Boolean,
-        showMessageList: Boolean
+        messages: List<Message>, allowDuplicates: Boolean, showMessageList: Boolean
     ): MultipleDetailMessageSentResponse {
         val parameter = MultipleDetailMessageSendingRequest(
             messages = messages,
@@ -485,14 +456,11 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
      * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
      */
     @Throws(
-        NurigoMessageNotReceivedException::class,
-        NurigoEmptyResponseException::class,
-        NurigoUnknownException::class
+        NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
     )
     fun send(messages: List<Message>, scheduledDateTime: java.time.Instant): MultipleDetailMessageSentResponse {
         val parameter = MultipleDetailMessageSendingRequest(
-            messages,
-            scheduledDateTime.toKotlinInstant()
+            messages, scheduledDateTime.toKotlinInstant()
         )
         val response = this.messageHttpService.sendManyDetail(parameter).execute()
 
@@ -523,18 +491,13 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
      * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
      */
     @Throws(
-        NurigoMessageNotReceivedException::class,
-        NurigoEmptyResponseException::class,
-        NurigoUnknownException::class
+        NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
     )
     fun send(
-        messages: List<Message>,
-        scheduledDateTime: java.time.Instant,
-        allowDuplicates: Boolean
+        messages: List<Message>, scheduledDateTime: java.time.Instant, allowDuplicates: Boolean
     ): MultipleDetailMessageSentResponse {
         val parameter = MultipleDetailMessageSendingRequest(
-            messages,
-            scheduledDateTime.toKotlinInstant()
+            messages, scheduledDateTime.toKotlinInstant()
         )
         parameter.allowDuplicates = allowDuplicates
         val response = this.messageHttpService.sendManyDetail(parameter).execute()
@@ -566,9 +529,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
      * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
      */
     @Throws(
-        NurigoMessageNotReceivedException::class,
-        NurigoEmptyResponseException::class,
-        NurigoUnknownException::class
+        NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
     )
     fun send(
         messages: List<Message>,
@@ -577,9 +538,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
         showMessageList: Boolean
     ): MultipleDetailMessageSentResponse {
         val parameter = MultipleDetailMessageSendingRequest(
-            messages = messages,
-            scheduledDate = scheduledDateTime.toKotlinInstant(),
-            showMessageList = showMessageList
+            messages = messages, scheduledDate = scheduledDateTime.toKotlinInstant(), showMessageList = showMessageList
         )
         parameter.allowDuplicates = allowDuplicates
         val response = this.messageHttpService.sendManyDetail(parameter).execute()
@@ -611,18 +570,13 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
      * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
      */
     @Throws(
-        NurigoMessageNotReceivedException::class,
-        NurigoEmptyResponseException::class,
-        NurigoUnknownException::class
+        NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
     )
     fun send(
-        messages: List<Message>,
-        scheduledDateTime: Instant,
-        allowDuplicates: Boolean
+        messages: List<Message>, scheduledDateTime: Instant, allowDuplicates: Boolean
     ): MultipleDetailMessageSentResponse {
         val parameter = MultipleDetailMessageSendingRequest(
-            messages,
-            scheduledDateTime
+            messages, scheduledDateTime
         )
         parameter.allowDuplicates = allowDuplicates
         val response = this.messageHttpService.sendManyDetail(parameter).execute()
@@ -654,20 +608,13 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
      * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
      */
     @Throws(
-        NurigoMessageNotReceivedException::class,
-        NurigoEmptyResponseException::class,
-        NurigoUnknownException::class
+        NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
     )
     fun send(
-        messages: List<Message>,
-        scheduledDateTime: Instant,
-        allowDuplicates: Boolean,
-        showMessageList: Boolean
+        messages: List<Message>, scheduledDateTime: Instant, allowDuplicates: Boolean, showMessageList: Boolean
     ): MultipleDetailMessageSentResponse {
         val parameter = MultipleDetailMessageSendingRequest(
-            messages = messages,
-            scheduledDate = scheduledDateTime,
-            showMessageList = showMessageList
+            messages = messages, scheduledDate = scheduledDateTime, showMessageList = showMessageList
         )
         parameter.allowDuplicates = allowDuplicates
         val response = this.messageHttpService.sendManyDetail(parameter).execute()
@@ -699,14 +646,11 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
      * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
      */
     @Throws(
-        NurigoMessageNotReceivedException::class,
-        NurigoEmptyResponseException::class,
-        NurigoUnknownException::class
+        NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
     )
     fun send(messages: List<Message>, scheduledDateTime: Instant): MultipleDetailMessageSentResponse {
         val parameter = MultipleDetailMessageSendingRequest(
-            messages,
-            scheduledDateTime
+            messages, scheduledDateTime
         )
         val response = this.messageHttpService.sendManyDetail(parameter).execute()
 
@@ -761,6 +705,20 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
         val response = this.messageHttpService.getBalance().execute()
         if (response.isSuccessful) {
             return response.body() ?: throw NurigoUnknownException("잔액 조회 데이터를 불러오지 못했습니다.")
+        } else {
+            val errorResponse: ErrorResponse = Json.decodeFromString(response.errorBody()?.string() ?: "")
+            throw NurigoUnknownException("${errorResponse.errorCode}: ${errorResponse.errorMessage}")
+        }
+    }
+
+    /**
+     * 일일 발송량 한도 조회 API
+     */
+    @Throws
+    fun getQuota(): Quota {
+        val response = this.messageHttpService.getQuota().execute()
+        if (response.isSuccessful) {
+            return response.body() ?: throw NurigoUnknownException("일일 발송량 조회에 실패하였습니다.")
         } else {
             val errorResponse: ErrorResponse = Json.decodeFromString(response.errorBody()?.string() ?: "")
             throw NurigoUnknownException("${errorResponse.errorCode}: ${errorResponse.errorMessage}")
