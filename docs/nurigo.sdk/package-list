@@ -216,6 +216,18 @@ $dokka.location:net.nurigo.sdk.message.model/NaverOption/getVariables/#/Pointing
 $dokka.location:net.nurigo.sdk.message.model/NaverOption/setTalkId/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-naver-option/set-talk-id.html
 $dokka.location:net.nurigo.sdk.message.model/NaverOption/setTemplateId/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-naver-option/set-template-id.html
 $dokka.location:net.nurigo.sdk.message.model/NaverOption/setVariables/#kotlin.collections.MutableMap[kotlin.String,kotlin.String]/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-naver-option/set-variables.html
+$dokka.location:net.nurigo.sdk.message.model/Quota///PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-quota/index.html
+$dokka.location:net.nurigo.sdk.message.model/Quota/Quota/#kotlin.String?#kotlin.Boolean?#kotlin.Int?#kotlin.Int?#kotlin.Int?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-quota/-quota.html
+$dokka.location:net.nurigo.sdk.message.model/Quota/getAccountId/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-quota/get-account-id.html
+$dokka.location:net.nurigo.sdk.message.model/Quota/getAutoAdjustment/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-quota/get-auto-adjustment.html
+$dokka.location:net.nurigo.sdk.message.model/Quota/getMax/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-quota/get-max.html
+$dokka.location:net.nurigo.sdk.message.model/Quota/getMin/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-quota/get-min.html
+$dokka.location:net.nurigo.sdk.message.model/Quota/getQuota/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-quota/get-quota.html
+$dokka.location:net.nurigo.sdk.message.model/Quota/setAccountId/#kotlin.String?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-quota/set-account-id.html
+$dokka.location:net.nurigo.sdk.message.model/Quota/setAutoAdjustment/#kotlin.Boolean?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-quota/set-auto-adjustment.html
+$dokka.location:net.nurigo.sdk.message.model/Quota/setMax/#kotlin.Int?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-quota/set-max.html
+$dokka.location:net.nurigo.sdk.message.model/Quota/setMin/#kotlin.Int?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-quota/set-min.html
+$dokka.location:net.nurigo.sdk.message.model/Quota/setQuota/#kotlin.Int?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-quota/set-quota.html
 $dokka.location:net.nurigo.sdk.message.model/RcsOption///PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-rcs-option/index.html
 $dokka.location:net.nurigo.sdk.message.model/RcsOption/RcsOption/#kotlin.String?#kotlin.String?#kotlin.String?#kotlin.collections.MutableMap[kotlin.String,kotlin.String]/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-rcs-option/-rcs-option.html
 $dokka.location:net.nurigo.sdk.message.model/RcsOption/getBrandId/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.model/-rcs-option/get-brand-id.html
@@ -409,6 +421,7 @@ $dokka.location:net.nurigo.sdk.message.service/DefaultMessageService/DefaultMess
 $dokka.location:net.nurigo.sdk.message.service/DefaultMessageService/getBalance/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-default-message-service/get-balance.html
 $dokka.location:net.nurigo.sdk.message.service/DefaultMessageService/getMessageList/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-default-message-service/get-message-list.html
 $dokka.location:net.nurigo.sdk.message.service/DefaultMessageService/getMessageList/#net.nurigo.sdk.message.request.MessageListRequest/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-default-message-service/get-message-list.html
+$dokka.location:net.nurigo.sdk.message.service/DefaultMessageService/getQuota/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-default-message-service/get-quota.html
 $dokka.location:net.nurigo.sdk.message.service/DefaultMessageService/send/#kotlin.collections.List[net.nurigo.sdk.message.model.Message]#java.time.Instant#kotlin.Boolean#kotlin.Boolean/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-default-message-service/send.html
 $dokka.location:net.nurigo.sdk.message.service/DefaultMessageService/send/#kotlin.collections.List[net.nurigo.sdk.message.model.Message]#java.time.Instant#kotlin.Boolean/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-default-message-service/send.html
 $dokka.location:net.nurigo.sdk.message.service/DefaultMessageService/send/#kotlin.collections.List[net.nurigo.sdk.message.model.Message]#java.time.Instant/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-default-message-service/send.html
@@ -426,6 +439,7 @@ $dokka.location:net.nurigo.sdk.message.service/DefaultMessageService/sendOne/#ne
 $dokka.location:net.nurigo.sdk.message.service/MessageHttpService///PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-message-http-service/index.html
 $dokka.location:net.nurigo.sdk.message.service/MessageHttpService/getBalance/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-message-http-service/get-balance.html
 $dokka.location:net.nurigo.sdk.message.service/MessageHttpService/getMessageList/#kotlin.collections.Map[kotlin.String,kotlin.Any?]?/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-message-http-service/get-message-list.html
+$dokka.location:net.nurigo.sdk.message.service/MessageHttpService/getQuota/#/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-message-http-service/get-quota.html
 $dokka.location:net.nurigo.sdk.message.service/MessageHttpService/sendMany/#net.nurigo.sdk.message.request.MultipleMessageSendingRequest/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-message-http-service/send-many.html
 $dokka.location:net.nurigo.sdk.message.service/MessageHttpService/sendManyDetail/#net.nurigo.sdk.message.request.MultipleDetailMessageSendingRequest/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-message-http-service/send-many-detail.html
 $dokka.location:net.nurigo.sdk.message.service/MessageHttpService/sendOne/#net.nurigo.sdk.message.request.SingleMessageSendingRequest/PointingToDeclaration/nurigo.sdk/net.nurigo.sdk.message.service/-message-http-service/send-one.html
