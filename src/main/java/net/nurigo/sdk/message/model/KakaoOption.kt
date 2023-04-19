@@ -18,7 +18,7 @@ data class KakaoOption(
      * 변수처리를 위한 배열 값
      * 예) "#{변수1}": "1234"
      */
-    var variables: MutableMap<String, String>? = mutableMapOf(),
+    var variables: MutableMap<String, String>? = null,
 
     /**
      * 대체 발송 여부
