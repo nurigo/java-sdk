@@ -125,7 +125,12 @@ data class Message(
      * 사용자(누리고 서비스 이용자)를 위한 발송 요청 시 커스텀 값을 넣을 수 있는 필드
      * 메시지 조회 시에도 표시됩니다!
      */
-    var customFields: Map<String, String>? = null
+    var customFields: Map<String, String>? = null,
+
+    /**
+     * 대체발송 파라미터
+     */
+    var replacements: List<Message>? = null
 ) {
 
     override fun equals(other: Any?): Boolean {
