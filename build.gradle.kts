@@ -1,11 +1,12 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.6.21"
-    kotlin("plugin.serialization") version "1.6.21"
-    id("org.jetbrains.dokka") version "1.6.21"
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    kotlin("jvm") version "2.1.20"
+    kotlin("plugin.serialization") version "2.1.20"
+    id("org.jetbrains.dokka") version "1.9.10"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
     java
     `java-library`
     `maven-publish`
@@ -13,7 +14,7 @@ plugins {
 }
 
 group = "net.nurigo"
-version = "4.3.2"
+version = "4.4.0"
 
 repositories {
     mavenCentral()
@@ -22,15 +23,15 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime-jvm:0.4.0")
-    implementation("commons-codec:commons-codec:1.15")
-    implementation("com.squareup.okhttp3:okhttp:4.10.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
-    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime-jvm:0.6.2")
+    implementation("commons-codec:commons-codec:1.18.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    implementation("com.squareup.retrofit2:retrofit:3.0.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
+    implementation("com.squareup.retrofit2:converter-kotlinx-serialization:3.0.0")
 
-    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.6.21")
+    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:2.0.0")
 }
 
 java {
@@ -73,9 +74,9 @@ tasks.withType<Jar> {
 }
 
 val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions {
-    freeCompilerArgs = listOf("-opt-in=kotlin.RequiresOptIn")
-    jvmTarget = "1.8"
+compileKotlin.compilerOptions {
+    freeCompilerArgs.set(listOf("-opt-in=kotlin.RequiresOptIn"))
+    jvmTarget.set(JvmTarget.JVM_1_8)
 }
 
 tasks.dokkaHtml.configure {

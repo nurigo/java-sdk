@@ -4,7 +4,7 @@ import net.nurigo.sdk.message.service.DefaultMessageService
 
 object NurigoApp {
 
-    fun initialize(apiKey: String, apiSecretKey: String, domain: String): DefaultMessageService {
-        return DefaultMessageService(apiKey, apiSecretKey, domain)
+    fun initialize(apiKey: String, apiSecretKey: String): DefaultMessageService {
+        return DefaultMessageService(apiKey, apiSecretKey, "https://api.solapi.com")
     }
 }

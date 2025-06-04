@@ -19,9 +19,6 @@ interface MessageHttpService : MessageService {
     @POST("/messages/v4/send")
     fun sendOne(@Body parameter: SingleMessageSendingRequest): Call<SingleMessageSentResponse>
 
-    @POST("/messages/v4/send-many")
-    fun sendMany(@Body parameter: MultipleMessageSendingRequest): Call<MultipleMessageSentResponse>
-
     @POST("/messages/v4/send-many/detail")
     fun sendManyDetail(@Body parameter: MultipleDetailMessageSendingRequest): Call<MultipleDetailMessageSentResponse>
 
