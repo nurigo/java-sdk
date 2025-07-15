@@ -3,8 +3,8 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "2.1.20"
-    kotlin("plugin.serialization") version "2.1.20"
+    kotlin("jvm") version "2.2.0"
+    kotlin("plugin.serialization") version "2.2.0"
     id("org.jetbrains.dokka") version "1.9.10"
     id("com.github.johnrengelman.shadow") version "8.1.1"
     java
@@ -23,12 +23,11 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime-jvm:0.6.2")
     implementation("commons-codec:commons-codec:1.18.0")
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    implementation("com.squareup.okhttp3:okhttp:5.1.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:5.1.0")
     implementation("com.squareup.retrofit2:retrofit:3.0.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
     implementation("com.squareup.retrofit2:converter-kotlinx-serialization:3.0.0")
 
     dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:2.0.0")
@@ -75,7 +74,19 @@ tasks.withType<Jar> {
 
 val compileKotlin: KotlinCompile by tasks
 compileKotlin.compilerOptions {
-    freeCompilerArgs.set(listOf("-opt-in=kotlin.RequiresOptIn"))
+    freeCompilerArgs.set(listOf(
+        "-opt-in=kotlin.RequiresOptIn",
+        "-opt-in=kotlin.time.ExperimentalTime"
+    ))
+    jvmTarget.set(JvmTarget.JVM_1_8)
+}
+
+val compileTestKotlin: KotlinCompile by tasks
+compileTestKotlin.compilerOptions {
+    freeCompilerArgs.set(listOf(
+        "-opt-in=kotlin.RequiresOptIn",
+        "-opt-in=kotlin.time.ExperimentalTime"
+    ))
     jvmTarget.set(JvmTarget.JVM_1_8)
 }
 
@@ -118,8 +129,8 @@ publishing {
             }
 
             pom {
-                name.set("Nurigo SDK")
-                description.set("누리고 서비스에서 사용되는 문자 발송용 SDK")
+                name.set("SOLAPI SDK")
+                description.set("SOLAPI 및 SOLAPI 계열(쿨에스엠에스 등) 서비스에서 사용되는 문자 발송용 SDK")
                 url.set("https://github.com/nurigo/java-sdk")
                 licenses {
                     license {
@@ -129,15 +140,20 @@ publishing {
                 }
                 developers {
                     developer {
-                        name.set("Nurigo CX Team")
-                        email.set("contact@nurigo.net")
-                        organization.set("Nurigo Inc")
+                        name.set("SOLAPI Contact")
+                        email.set("contact@SOLAPI.com")
+                        organization.set("SOLAPI Inc")
+                    }
+                    developer {
+                        name.set("Lucy Lee")
+                        email.set("lucy@solapi.com")
+                        organization.set("SOLAPI Inc")
                     }
                     developer {
                         id.set("hosy")
                         name.set("Hosy Lee")
-                        email.set("hosy@nurigo.net")
-                        organization.set("Nurigo Inc")
+                        email.set("hosy@solapi.com")
+                        organization.set("SOLAPI Inc")
                     }
                 }
                 scm {

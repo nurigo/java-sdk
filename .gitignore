@@ -5,3 +5,4 @@ gradle.properties
 secring.gpg
 signing.gpg
 main.kt
+bin/*

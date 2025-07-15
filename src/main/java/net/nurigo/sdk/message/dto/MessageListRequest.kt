@@ -1,12 +1,13 @@
-package net.nurigo.sdk.message.request
+package net.nurigo.sdk.message.dto
 
-import kotlinx.datetime.Instant
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import net.nurigo.sdk.message.model.CommonMessageProperty
 import net.nurigo.sdk.message.model.MessageStatusType
+import java.time.Instant
 
 @Serializable
-data class MessageListRequest(
+data class MessageListRequest constructor(
     /**
      * 수신번호
      */
@@ -56,11 +57,13 @@ data class MessageListRequest(
     /**
      * 조회 할 시작 날짜
      */
+    @Contextual
     var startDate: Instant? = null,
 
     /**
      * 조회 할 종료 날짜
      */
+    @Contextual
     var endDate: Instant? = null,
 
     /**

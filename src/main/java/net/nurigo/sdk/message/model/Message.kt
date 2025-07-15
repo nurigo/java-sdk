@@ -1,10 +1,16 @@
 package net.nurigo.sdk.message.model
 
-import kotlinx.datetime.Instant
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import net.nurigo.sdk.message.model.kakao.KakaoOption
+import net.nurigo.sdk.message.model.naver.NaverOption
+import net.nurigo.sdk.message.model.rcs.RcsOption
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 @Serializable
-data class Message(
+@ExperimentalTime
+data class Message constructor(
     /**
      * 카카오 알림톡, 친구톡 발송을 위한 파라미터
      */
@@ -45,16 +51,19 @@ data class Message(
     /**
      *     * 발송 접수일자
      */
+    @Contextual
     var dateProcessed: Instant? = null,
 
     /**
      * 통신사 결과 값 통보일자
      */
+    @Contextual
     var dateReported: Instant? = null,
 
     /**
      * 실제 메시지 발송 완료일자
      */
+    @Contextual
     var dateReceived: Instant? = null,
 
     /**
@@ -103,11 +112,13 @@ data class Message(
     /**
      * 메시지 생성일자
      */
+    @Contextual
     var dateCreated: Instant? = null,
 
     /**
      * 메시지 수정일자
      */
+    @Contextual
     var dateUpdated: Instant? = null,
 
     /**
@@ -125,7 +136,7 @@ data class Message(
      * 사용자(누리고 서비스 이용자)를 위한 발송 요청 시 커스텀 값을 넣을 수 있는 필드
      * 메시지 조회 시에도 표시됩니다!
      */
-    var customFields: Map<String, String>? = null,
+    var customFields: MutableMap<String, String>? = null,
 
     /**
      * 대체발송 파라미터

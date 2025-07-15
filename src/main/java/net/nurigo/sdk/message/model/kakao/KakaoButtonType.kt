@@ -1,4 +1,4 @@
-package net.nurigo.sdk.message.model
+package net.nurigo.sdk.message.model.kakao
 
 enum class KakaoButtonType {
     /**

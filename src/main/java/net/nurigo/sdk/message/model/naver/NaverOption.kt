@@ -1,4 +1,4 @@
-package net.nurigo.sdk.message.model
+package net.nurigo.sdk.message.model.naver
 
 import kotlinx.serialization.Serializable
 

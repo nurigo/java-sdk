@@ -3,7 +3,6 @@ package net.nurigo.sdk.message.response
 import kotlinx.serialization.Serializable
 import net.nurigo.sdk.message.model.Count
 
-// TODO: Need to add more response properties
 @Serializable
 data class MultipleMessageSentResponse(
     var groupId: String? = null,

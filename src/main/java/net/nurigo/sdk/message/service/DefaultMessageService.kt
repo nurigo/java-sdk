@@ -1,7 +1,5 @@
 package net.nurigo.sdk.message.service
 
-import kotlinx.datetime.Instant
-import kotlinx.datetime.toKotlinInstant
 import kotlinx.serialization.json.Json
 import net.nurigo.sdk.message.exception.*
 import net.nurigo.sdk.message.lib.Authenticator
@@ -9,7 +7,7 @@ import net.nurigo.sdk.message.lib.MapHelper
 import net.nurigo.sdk.message.lib.handleErrorResponse
 import net.nurigo.sdk.message.lib.processSendRequest
 import net.nurigo.sdk.message.model.*
-import net.nurigo.sdk.message.request.*
+import net.nurigo.sdk.message.dto.*
 import net.nurigo.sdk.message.response.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -19,7 +17,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import java.io.File
 import java.io.FileInputStream
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
+import kotlin.time.toKotlinInstant
 
+@OptIn(ExperimentalTime::class)
 class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String) : MessageService {
     private var messageHttpService: MessageHttpService
 
@@ -93,7 +95,6 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
         val tempPayload = MessageListBaseRequest()
         val payload = mutableMapOf<String, Any?>()
         if (parameter.status != null && !parameter.statusCode.isNullOrBlank()) {
-            // TODO: i18n needed
             throw NurigoBadRequestException("status와 statusCode는 병기할 수 없습니다.")
         } else if (parameter.status != null) {
             when (parameter.status) {
@@ -156,38 +157,13 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
             }
         }
 
-        // TODO: Refactor needed
         if (!tempPayload.criteria.isNullOrBlank() && !tempPayload.cond.isNullOrBlank() && !tempPayload.value.isNullOrBlank()) {
-            parameter.to.takeIf { !it.isNullOrBlank() }?.let {
-                tempPayload.criteria += ",to"
-                tempPayload.cond += ",eq"
-                tempPayload.value += ",$it"
-            }
-            parameter.from.takeIf { !it.isNullOrBlank() }?.let {
-                tempPayload.criteria += ",from"
-                tempPayload.cond += ",eq"
-                tempPayload.value += ",$it"
-            }
-            parameter.messageId.takeIf { !it.isNullOrBlank() }?.let {
-                tempPayload.criteria += ",messageId"
-                tempPayload.cond += ",eq"
-                tempPayload.value += ",$it"
-            }
-            parameter.groupId.takeIf { !it.isNullOrBlank() }?.let {
-                tempPayload.criteria += ",groupId"
-                tempPayload.cond += ",eq"
-                tempPayload.value += ",$it"
-            }
-            parameter.type.takeIf { !it.isNullOrBlank() }?.let {
-                tempPayload.criteria += ",type"
-                tempPayload.cond += ",eq"
-                tempPayload.value += ",$it"
-            }
-            parameter.statusCode.takeIf { !it.isNullOrBlank() }?.let {
-                tempPayload.criteria += ",statusCode"
-                tempPayload.cond += ",eq"
-                tempPayload.value += ",$it"
-            }
+            addParameterToCriteria(tempPayload, "to", parameter.to)
+            addParameterToCriteria(tempPayload, "from", parameter.from)
+            addParameterToCriteria(tempPayload, "messageId", parameter.messageId)
+            addParameterToCriteria(tempPayload, "groupId", parameter.groupId)
+            addParameterToCriteria(tempPayload, "type", parameter.type)
+            addParameterToCriteria(tempPayload, "statusCode", parameter.statusCode)
         } else {
             tempPayload.to = parameter.to
             tempPayload.from = parameter.from
@@ -216,6 +192,11 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
      * 단일 메시지 발송 API
      * */
     @Throws
+    @Deprecated(
+        "해당 메소드는 제거될 예정입니다. 향후 send 메소드를 이용해주세요.",
+        ReplaceWith("send(message)"),
+        DeprecationLevel.WARNING
+    )
     fun sendOne(parameter: SingleMessageSendingRequest): SingleMessageSentResponse? {
         val response = this.messageHttpService.sendOne(parameter).execute()
 
@@ -247,9 +228,9 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
     @Throws(
         NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
     )
-    fun send(message: Message, scheduledDateTime: java.time.Instant): MultipleDetailMessageSentResponse {
+    fun send(message: Message, scheduledDateTime: Instant): MultipleDetailMessageSentResponse {
         val multipleParameter = MultipleDetailMessageSendingRequest(
-            messages = listOf(message), scheduledDate = scheduledDateTime.toKotlinInstant()
+            messages = listOf(message), scheduledDate = scheduledDateTime
         )
         return processSendRequest(this.messageHttpService, multipleParameter)
     }
@@ -261,9 +242,9 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
     @Throws(
         NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
     )
-    fun send(message: Message, scheduledDate: Instant): MultipleDetailMessageSentResponse {
+    fun send(message: Message, scheduledDateTime: java.time.Instant): MultipleDetailMessageSentResponse {
         val multipleParameter = MultipleDetailMessageSendingRequest(
-            messages = listOf(message), scheduledDate = scheduledDate
+            messages = listOf(message), scheduledDate = scheduledDateTime.toKotlinInstant()
         )
         return processSendRequest(this.messageHttpService, multipleParameter)
     }
@@ -298,6 +279,21 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
     }
 
     /**
+     * 다중 메시지(2건 이상) 발송 및 예약 발송 API
+     * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
+     */
+    @Throws(
+        NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
+    )
+    fun send(messages: List<Message>, scheduledDateTime: java.time.Instant, allowDuplicates: Boolean): MultipleDetailMessageSentResponse {
+        val parameter = MultipleDetailMessageSendingRequest(
+            messages, scheduledDateTime.toKotlinInstant()
+        )
+        parameter.allowDuplicates = allowDuplicates
+        return processSendRequest(this.messageHttpService, parameter)
+    }
+
+    /**
      * 다중 메시지(2건 이상) 발송 API
      * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
      */
@@ -316,21 +312,6 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
         return processSendRequest(this.messageHttpService, parameter)
     }
 
-
-    /**
-     * 다중 메시지(2건 이상) 발송 및 예약 발송 API
-     * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
-     */
-    @Throws(
-        NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
-    )
-    fun send(messages: List<Message>, scheduledDateTime: java.time.Instant): MultipleDetailMessageSentResponse {
-        val parameter = MultipleDetailMessageSendingRequest(
-            messages, scheduledDateTime.toKotlinInstant()
-        )
-        return processSendRequest(this.messageHttpService, parameter)
-    }
-
     /**
      * 다중 메시지(2건 이상) 발송 및 예약 발송 API
      * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
@@ -339,27 +320,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
         NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
     )
     fun send(
-        messages: List<Message>, scheduledDateTime: java.time.Instant, allowDuplicates: Boolean
-    ): MultipleDetailMessageSentResponse {
-        val parameter = MultipleDetailMessageSendingRequest(
-            messages, scheduledDateTime.toKotlinInstant()
-        )
-        parameter.allowDuplicates = allowDuplicates
-        return processSendRequest(this.messageHttpService, parameter)
-    }
-
-    /**
-     * 다중 메시지(2건 이상) 발송 및 예약 발송 API
-     * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
-     */
-    @Throws(
-        NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
-    )
-    fun send(
-        messages: List<Message>,
-        scheduledDateTime: java.time.Instant,
-        allowDuplicates: Boolean,
-        showMessageList: Boolean
+        messages: List<Message>, scheduledDateTime: java.time.Instant, allowDuplicates: Boolean, showMessageList: Boolean
     ): MultipleDetailMessageSentResponse {
         val parameter = MultipleDetailMessageSendingRequest(
             messages = messages, scheduledDate = scheduledDateTime.toKotlinInstant(), showMessageList = showMessageList
@@ -417,6 +378,20 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
     }
 
     /**
+     * 다중 메시지(2건 이상) 발송 및 예약 발송 API
+     * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
+     */
+    @Throws(
+        NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
+    )
+    fun send(messages: List<Message>, scheduledDateTime: java.time.Instant): MultipleDetailMessageSentResponse {
+        val parameter = MultipleDetailMessageSendingRequest(
+            messages, scheduledDateTime.toKotlinInstant()
+        )
+        return processSendRequest(this.messageHttpService, parameter)
+    }
+
+    /**
      * 잔액 조회 API
      */
     @Throws
@@ -439,6 +414,17 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
             return response.body() ?: throw NurigoUnknownException("일일 발송량 조회에 실패하였습니다.")
         } else {
             handleErrorResponse(response.errorBody()?.string())
+        }
+    }
+
+    /**
+     * Helper function to add parameter to criteria, condition, and value strings
+     */
+    private fun addParameterToCriteria(tempPayload: MessageListBaseRequest, fieldName: String, parameterValue: String?) {
+        parameterValue.takeIf { !it.isNullOrBlank() }?.let {
+            tempPayload.criteria += ",$fieldName"
+            tempPayload.cond += ",eq"
+            tempPayload.value += ",$it"
         }
     }
 }
