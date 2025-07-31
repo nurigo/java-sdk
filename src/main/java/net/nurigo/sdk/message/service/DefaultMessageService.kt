@@ -187,8 +187,6 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
     }
 
     /**
-     * @deprecated 해당 메소드는 제거될 예정입니다. 향후 send 메소드를 이용해주세요.
-     * @see send
      * 단일 메시지 발송 API
      * */
     @Throws
@@ -215,180 +213,70 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
         NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
     )
     fun send(message: Message): MultipleDetailMessageSentResponse {
-        val multipleParameter = MultipleDetailMessageSendingRequest(
-            messages = listOf(message), scheduledDate = null
-        )
-        return processSendRequest(this.messageHttpService, multipleParameter)
+        return send(listOf(message))
     }
 
     /**
-     * 단일 메시지 발송 및 다중 메시지(2건 이상) 예약 발송 API
+     * 단일 메시지 발송 및 예약 발송 API
      * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
      */
     @Throws(
         NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
     )
     fun send(message: Message, scheduledDateTime: Instant): MultipleDetailMessageSentResponse {
-        val multipleParameter = MultipleDetailMessageSendingRequest(
-            messages = listOf(message), scheduledDate = scheduledDateTime
-        )
-        return processSendRequest(this.messageHttpService, multipleParameter)
+        return send(listOf(message), scheduledDateTime = scheduledDateTime)
     }
 
     /**
-     * 단일 메시지 발송 및 다중 메시지(2건 이상) 예약 발송 API
+     * 단일 메시지 발송 및 예약 발송 API
      * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
      */
     @Throws(
         NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
     )
     fun send(message: Message, scheduledDateTime: java.time.Instant): MultipleDetailMessageSentResponse {
-        val multipleParameter = MultipleDetailMessageSendingRequest(
-            messages = listOf(message), scheduledDate = scheduledDateTime.toKotlinInstant()
-        )
-        return processSendRequest(this.messageHttpService, multipleParameter)
+        return send(listOf(message), scheduledDateTime = scheduledDateTime.toKotlinInstant())
     }
 
     /**
-     * 다중 메시지(2건 이상) 발송 API
+     * 다중 메시지 발송 및 예약 발송 API
      * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
      */
-    @Throws(
-        NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
-    )
-    fun send(messages: List<Message>): MultipleDetailMessageSentResponse {
-        val parameter = MultipleDetailMessageSendingRequest(
-            messages, null
-        )
-        return processSendRequest(this.messageHttpService, parameter)
-    }
-
-    /**
-     * 다중 메시지(2건 이상) 발송 API
-     * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
-     */
-    @Throws(
-        NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
-    )
-    fun send(messages: List<Message>, allowDuplicates: Boolean): MultipleDetailMessageSentResponse {
-        val parameter = MultipleDetailMessageSendingRequest(
-            messages, null
-        )
-        parameter.allowDuplicates = allowDuplicates
-        return processSendRequest(this.messageHttpService, parameter)
-    }
-
-    /**
-     * 다중 메시지(2건 이상) 발송 및 예약 발송 API
-     * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
-     */
-    @Throws(
-        NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
-    )
-    fun send(messages: List<Message>, scheduledDateTime: java.time.Instant, allowDuplicates: Boolean): MultipleDetailMessageSentResponse {
-        val parameter = MultipleDetailMessageSendingRequest(
-            messages, scheduledDateTime.toKotlinInstant()
-        )
-        parameter.allowDuplicates = allowDuplicates
-        return processSendRequest(this.messageHttpService, parameter)
-    }
-
-    /**
-     * 다중 메시지(2건 이상) 발송 API
-     * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
-     */
+    @JvmOverloads
     @Throws(
         NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
     )
     fun send(
-        messages: List<Message>, allowDuplicates: Boolean, showMessageList: Boolean
+        messages: List<Message>,
+        scheduledDateTime: Instant? = null,
+        allowDuplicates: Boolean = false,
+        showMessageList: Boolean = false
     ): MultipleDetailMessageSentResponse {
         val parameter = MultipleDetailMessageSendingRequest(
             messages = messages,
-            scheduledDate = null,
-            showMessageList = showMessageList,
+            scheduledDate = scheduledDateTime,
+            showMessageList = (if (showMessageList) true else null) == true
         )
-        parameter.allowDuplicates = allowDuplicates
+        if (allowDuplicates) {
+            parameter.allowDuplicates = true
+        }
         return processSendRequest(this.messageHttpService, parameter)
     }
 
     /**
-     * 다중 메시지(2건 이상) 발송 및 예약 발송 API
+     * 다중 메시지 발송 및 예약 발송 API
      * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
      */
     @Throws(
         NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
     )
     fun send(
-        messages: List<Message>, scheduledDateTime: java.time.Instant, allowDuplicates: Boolean, showMessageList: Boolean
+        messages: List<Message>,
+        scheduledDateTime: java.time.Instant,
+        allowDuplicates: Boolean = false,
+        showMessageList: Boolean = false
     ): MultipleDetailMessageSentResponse {
-        val parameter = MultipleDetailMessageSendingRequest(
-            messages = messages, scheduledDate = scheduledDateTime.toKotlinInstant(), showMessageList = showMessageList
-        )
-        parameter.allowDuplicates = allowDuplicates
-        return processSendRequest(this.messageHttpService, parameter)
-    }
-
-    /**
-     * 다중 메시지(2건 이상) 발송 및 예약 발송 API
-     * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
-     */
-    @Throws(
-        NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
-    )
-    fun send(
-        messages: List<Message>, scheduledDateTime: Instant, allowDuplicates: Boolean
-    ): MultipleDetailMessageSentResponse {
-        val parameter = MultipleDetailMessageSendingRequest(
-            messages, scheduledDateTime
-        )
-        parameter.allowDuplicates = allowDuplicates
-        return processSendRequest(this.messageHttpService, parameter)
-    }
-
-    /**
-     * 다중 메시지(2건 이상) 발송 및 예약 발송 API
-     * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
-     */
-    @Throws(
-        NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
-    )
-    fun send(
-        messages: List<Message>, scheduledDateTime: Instant, allowDuplicates: Boolean, showMessageList: Boolean
-    ): MultipleDetailMessageSentResponse {
-        val parameter = MultipleDetailMessageSendingRequest(
-            messages = messages, scheduledDate = scheduledDateTime, showMessageList = showMessageList
-        )
-        parameter.allowDuplicates = allowDuplicates
-        return processSendRequest(this.messageHttpService, parameter)
-    }
-
-    /**
-     * 다중 메시지(2건 이상) 발송 및 예약 발송 API
-     * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
-     */
-    @Throws(
-        NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
-    )
-    fun send(messages: List<Message>, scheduledDateTime: Instant): MultipleDetailMessageSentResponse {
-        val parameter = MultipleDetailMessageSendingRequest(
-            messages, scheduledDateTime
-        )
-        return processSendRequest(this.messageHttpService, parameter)
-    }
-
-    /**
-     * 다중 메시지(2건 이상) 발송 및 예약 발송 API
-     * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
-     */
-    @Throws(
-        NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
-    )
-    fun send(messages: List<Message>, scheduledDateTime: java.time.Instant): MultipleDetailMessageSentResponse {
-        val parameter = MultipleDetailMessageSendingRequest(
-            messages, scheduledDateTime.toKotlinInstant()
-        )
-        return processSendRequest(this.messageHttpService, parameter)
+        return send(messages, scheduledDateTime.toKotlinInstant(), allowDuplicates, showMessageList)
     }
 
     /**
