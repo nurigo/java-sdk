@@ -39,5 +39,26 @@ data class KakaoOption(
     /**
      * 친구톡 버튼
      */
-    var buttons: List<KakaoButton>? = null
-)
+    var buttons: List<KakaoButton>? = null,
+
+    /**
+     * Kakao 브랜드 메시지 용 파라미터
+     */
+    var bms: KakaoBmsOption? = null
+) {
+    init {
+        // 변수 키 값을 자동으로 #{변수명} 형태로 변환
+        variables?.let { vars ->
+            val transformedVariables = mutableMapOf<String, String>()
+            vars.forEach { (key, value) ->
+                val transformedKey = if (!key.startsWith("#{") || !key.endsWith("}")) {
+                    "#{$key}"
+                } else {
+                    key
+                }
+                transformedVariables[transformedKey] = value
+            }
+            variables = transformedVariables
+        }
+    }
+}
