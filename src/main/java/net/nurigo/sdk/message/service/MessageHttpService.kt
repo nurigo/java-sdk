@@ -2,10 +2,13 @@ package net.nurigo.sdk.message.service
 
 import net.nurigo.sdk.message.model.Balance
 import net.nurigo.sdk.message.model.Quota
-import net.nurigo.sdk.message.dto.FileUploadRequest
-import net.nurigo.sdk.message.dto.MultipleDetailMessageSendingRequest
-import net.nurigo.sdk.message.dto.SingleMessageSendingRequest
-import net.nurigo.sdk.message.response.*
+import net.nurigo.sdk.message.dto.request.FileUploadRequest
+import net.nurigo.sdk.message.dto.request.MultipleDetailMessageSendingRequest
+import net.nurigo.sdk.message.dto.request.SingleMessageSendingRequest
+import net.nurigo.sdk.message.dto.response.FileUploadResponse
+import net.nurigo.sdk.message.dto.response.MessageListResponse
+import net.nurigo.sdk.message.dto.response.MultipleDetailMessageSentResponse
+import net.nurigo.sdk.message.dto.response.SingleMessageSentResponse
 import retrofit2.Call
 import retrofit2.http.*
 

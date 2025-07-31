@@ -4,11 +4,19 @@ import kotlinx.serialization.json.Json
 import net.nurigo.sdk.message.exception.*
 import net.nurigo.sdk.message.lib.Authenticator
 import net.nurigo.sdk.message.lib.MapHelper
+import net.nurigo.sdk.message.lib.addParameterToCriteria
 import net.nurigo.sdk.message.lib.handleErrorResponse
 import net.nurigo.sdk.message.lib.processSendRequest
 import net.nurigo.sdk.message.model.*
-import net.nurigo.sdk.message.dto.*
-import net.nurigo.sdk.message.response.*
+import net.nurigo.sdk.message.dto.request.FileUploadRequest
+import net.nurigo.sdk.message.dto.request.MessageListBaseRequest
+import net.nurigo.sdk.message.dto.request.MessageListRequest
+import net.nurigo.sdk.message.dto.request.MultipleDetailMessageSendingRequest
+import net.nurigo.sdk.message.dto.request.SingleMessageSendingRequest
+import net.nurigo.sdk.message.dto.response.ErrorResponse
+import net.nurigo.sdk.message.dto.response.MessageListResponse
+import net.nurigo.sdk.message.dto.response.MultipleDetailMessageSentResponse
+import net.nurigo.sdk.message.dto.response.SingleMessageSentResponse
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -17,20 +25,22 @@ import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import java.io.File
 import java.io.FileInputStream
-import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 import kotlin.time.toKotlinInstant
 
-@OptIn(ExperimentalTime::class)
 class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String) : MessageService {
     private var messageHttpService: MessageHttpService
 
     init {
-        val client = OkHttpClient.Builder().addInterceptor { chain ->
-            val authInfo = Authenticator(apiKey, apiSecretKey).generateAuthInfo()
-            val request: Request = chain.request().newBuilder().addHeader("Authorization", authInfo).build()
-            chain.proceed(request)
-        }.build()
+        val client = OkHttpClient.Builder()
+            .connectTimeout(50, java.util.concurrent.TimeUnit.SECONDS)
+            .readTimeout(50, java.util.concurrent.TimeUnit.SECONDS)
+            .writeTimeout(50, java.util.concurrent.TimeUnit.SECONDS)
+            .addInterceptor { chain ->
+                val authInfo = Authenticator(apiKey, apiSecretKey).generateAuthInfo()
+                val request: Request = chain.request().newBuilder().addHeader("Authorization", authInfo).build()
+                chain.proceed(request)
+            }.build()
         val contentType = "application/json".toMediaType()
         val jsonConfig = Json {
             coerceInputValues = true
@@ -77,110 +87,63 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
     /**
      * 메시지 조회 API
      */
-    fun getMessageList(): MessageListResponse? {
-        val response = this.messageHttpService.getMessageList(emptyMap()).execute()
+    @JvmOverloads
+    fun getMessageList(parameter: MessageListRequest? = null): MessageListResponse? {
+        val payload = parameter?.let { it ->
+            val tempPayload = MessageListBaseRequest()
 
-        if (response.isSuccessful) {
-            return response.body()
-        } else {
-            handleErrorResponse(response.errorBody()?.string())
-        }
-    }
-
-    /**
-     * 메시지 조회 API
-     * */
-    @Throws
-    fun getMessageList(parameter: MessageListRequest): MessageListResponse? {
-        val tempPayload = MessageListBaseRequest()
-        val payload = mutableMapOf<String, Any?>()
-        if (parameter.status != null && !parameter.statusCode.isNullOrBlank()) {
-            throw NurigoBadRequestException("status와 statusCode는 병기할 수 없습니다.")
-        } else if (parameter.status != null) {
-            when (parameter.status) {
-                MessageStatusType.PENDING -> {
-                    tempPayload.criteria = "statusCode"
-                    tempPayload.cond = "eq"
-                    tempPayload.value = "2000"
-                }
-
-                MessageStatusType.SENDING -> {
-                    tempPayload.criteria = "statusCode"
-                    tempPayload.cond = "eq"
-                    tempPayload.value = "3000"
-                }
-
-                MessageStatusType.COMPLETE -> {
-                    tempPayload.criteria = "statusCode"
-                    tempPayload.cond = "eq"
-                    tempPayload.value = "4000"
-                }
-
-                MessageStatusType.FAILED -> {
-                    tempPayload.criteria = "statusCode,statusCode,statusCode"
-                    tempPayload.cond = "ne,ne,ne"
-                    tempPayload.value = "2000,3000,4000"
-                }
-
-                else -> throw NurigoUnknownException("허용될 수 없는 status 값이 입력되었습니다.")
-            }
-        }
-
-        if (!parameter.messageIds.isNullOrEmpty()) {
-            var tempCriteria = ""
-            var tempCond = ""
-
-            parameter.messageIds?.forEachIndexed { index: Int, _ ->
-                if (index == 0 && (tempPayload.criteria.isNullOrBlank() && tempPayload.cond.isNullOrBlank() && tempPayload.value.isNullOrBlank())) {
-                    tempCriteria = "messageId"
-                    tempCond = "eq"
-                } else {
-                    tempCriteria += ",messageId"
-                    tempCond += ",eq"
-                }
+            if (it.status != null && !it.statusCode.isNullOrBlank()) {
+                throw NurigoBadRequestException("status와 statusCode는 병기할 수 없습니다.")
             }
 
-            tempPayload.criteria = if (tempPayload.criteria.isNullOrBlank()) {
-                tempCriteria
-            } else {
-                tempPayload.criteria + tempCriteria
+            it.status?.let { status ->
+                val (criteria, cond, value) = when (status) {
+                    MessageStatusType.PENDING -> Triple("statusCode", "eq", "2000")
+                    MessageStatusType.SENDING -> Triple("statusCode", "eq", "3000")
+                    MessageStatusType.COMPLETE -> Triple("statusCode", "eq", "4000")
+                    MessageStatusType.FAILED -> Triple(
+                        "statusCode,statusCode,statusCode",
+                        "ne,ne,ne",
+                        "2000,3000,4000"
+                    )
+                }
+                tempPayload.criteria = criteria
+                tempPayload.cond = cond
+                tempPayload.value = value
             }
-            tempPayload.cond = if (tempPayload.cond.isNullOrBlank()) {
-                tempCond
-            } else {
-                tempPayload.cond + tempCond
-            }
-            tempPayload.value = if (tempPayload.value.isNullOrBlank()) {
-                parameter.messageIds!!.joinToString(",")
-            } else {
-                tempPayload.value + "," + parameter.messageIds!!.joinToString(",")
-            }
-        }
 
-        if (!tempPayload.criteria.isNullOrBlank() && !tempPayload.cond.isNullOrBlank() && !tempPayload.value.isNullOrBlank()) {
-            addParameterToCriteria(tempPayload, "to", parameter.to)
-            addParameterToCriteria(tempPayload, "from", parameter.from)
-            addParameterToCriteria(tempPayload, "messageId", parameter.messageId)
-            addParameterToCriteria(tempPayload, "groupId", parameter.groupId)
-            addParameterToCriteria(tempPayload, "type", parameter.type)
-            addParameterToCriteria(tempPayload, "statusCode", parameter.statusCode)
-        } else {
-            tempPayload.to = parameter.to
-            tempPayload.from = parameter.from
-            tempPayload.messageId = parameter.messageId
-            tempPayload.groupId = parameter.groupId
-            tempPayload.type = parameter.type
-        }
-        tempPayload.startKey = parameter.startKey
-        tempPayload.limit = parameter.limit
-        tempPayload.startDate = parameter.startDate
-        tempPayload.endDate = parameter.endDate
+            it.messageIds?.takeIf { it.isNotEmpty() }?.let { ids ->
+                val messageIdCriteria = "messageId"
+                val eqCond = "eq"
+                tempPayload.criteria =
+                    (tempPayload.criteria?.let { "$it," } ?: "") + ids.joinToString(",") { messageIdCriteria }
+                tempPayload.cond = (tempPayload.cond?.let { "$it," } ?: "") + ids.joinToString(",") { eqCond }
+                tempPayload.value = (tempPayload.value?.let { "$it," } ?: "") + ids.joinToString(",")
+            }
 
-        payload.putAll(MapHelper.toMap(tempPayload))
+            listOf(
+                "to" to it.to,
+                "from" to it.from,
+                "messageId" to it.messageId,
+                "groupId" to it.groupId,
+                "type" to it.type,
+                "statusCode" to it.statusCode
+            ).forEach { (field, value) ->
+                addParameterToCriteria(tempPayload, field, value)
+            }
+
+            tempPayload.startKey = it.startKey
+            tempPayload.limit = it.limit
+            tempPayload.startDate = it.startDate
+            tempPayload.endDate = it.endDate
+
+            MapHelper.toMap(tempPayload)
+        } ?: emptyMap<String, Any>()
+
         val response = this.messageHttpService.getMessageList(payload).execute()
 
-        if (response.isSuccessful) {
-            return response.body()
+        return if (response.isSuccessful) {
+            response.body()
         } else {
             handleErrorResponse(response.errorBody()?.string())
         }
@@ -305,14 +268,5 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
         }
     }
 
-    /**
-     * Helper function to add parameter to criteria, condition, and value strings
-     */
-    private fun addParameterToCriteria(tempPayload: MessageListBaseRequest, fieldName: String, parameterValue: String?) {
-        parameterValue.takeIf { !it.isNullOrBlank() }?.let {
-            tempPayload.criteria += ",$fieldName"
-            tempPayload.cond += ",eq"
-            tempPayload.value += ",$it"
-        }
-    }
+    
 }

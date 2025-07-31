@@ -1,4 +1,4 @@
-package net.nurigo.sdk.message.dto
+package net.nurigo.sdk.message.dto.request
 
 import kotlinx.serialization.Serializable
 
