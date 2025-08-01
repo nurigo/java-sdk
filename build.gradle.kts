@@ -1,12 +1,13 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import org.jetbrains.dokka.gradle.DokkaTaskPartial
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "2.2.0"
     kotlin("plugin.serialization") version "2.2.0"
-    id("org.jetbrains.dokka") version "1.9.10"
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("org.jetbrains.dokka") version "2.0.0"
+    id("com.gradleup.shadow") version "8.3.8"
     java
     `java-library`
     `maven-publish`
@@ -14,7 +15,7 @@ plugins {
 }
 
 group = "net.nurigo"
-version = "4.4.0"
+version = "5.0.0"
 
 repositories {
     mavenCentral()
@@ -33,9 +34,35 @@ dependencies {
     dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:2.0.0")
 }
 
+val generatedSrcDir = layout.buildDirectory.dir("generated/source/kotlin")
+
+sourceSets.main.get().java.srcDir(generatedSrcDir)
+
+val generateVersionFile by tasks.register("generateVersionFile") {
+    val file = generatedSrcDir.get().file("net/nurigo/sdk/Version.kt")
+    outputs.file(file)
+    doLast {
+        file.asFile.parentFile.mkdirs()
+        file.asFile.writeText("""|package net.nurigo.sdk
+                               |
+                               |internal object Version {
+                               |    const val SDK_VERSION = "$version"
+                               |}
+                               |""".trimMargin())
+    }
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    dependsOn(generateVersionFile)
+}
+
 java {
     withJavadocJar()
     withSourcesJar()
+}
+
+tasks.named("sourcesJar") {
+    dependsOn(generateVersionFile)
 }
 
 tasks.named<ShadowJar>("shadowJar") {
@@ -57,25 +84,9 @@ tasks.withType<JavaCompile>().configureEach {
     })
 }
 
-tasks.withType<Jar> {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
-    manifest {
-        attributes(mapOf("Main-Class" to "net.nurigo.sdk.NurigoApp"))
-    }
-
-    from(sourceSets.main.get().output)
-
-    dependsOn(configurations.runtimeClasspath)
-    from({
-        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
-    })
-}
-
 val compileKotlin: KotlinCompile by tasks
 compileKotlin.compilerOptions {
     freeCompilerArgs.set(listOf(
-        "-opt-in=kotlin.RequiresOptIn",
         "-opt-in=kotlin.time.ExperimentalTime"
     ))
     jvmTarget.set(JvmTarget.JVM_1_8)
@@ -84,14 +95,13 @@ compileKotlin.compilerOptions {
 val compileTestKotlin: KotlinCompile by tasks
 compileTestKotlin.compilerOptions {
     freeCompilerArgs.set(listOf(
-        "-opt-in=kotlin.RequiresOptIn",
         "-opt-in=kotlin.time.ExperimentalTime"
     ))
     jvmTarget.set(JvmTarget.JVM_1_8)
 }
 
-tasks.dokkaHtml.configure {
-    outputDirectory.set(rootDir.resolve("docs"))
+tasks.withType<DokkaTaskPartial>().configureEach {
+    outputDirectory.set(project.rootDir.resolve("docs"))
 }
 
 val ossusername: String by project
@@ -117,16 +127,7 @@ publishing {
             artifactId = "sdk"
             version = version
 
-            from(components["java"])
-
-            versionMapping {
-                usage("java-api") {
-                    fromResolutionOf("runtimeClasspath")
-                }
-                usage("java-runtime") {
-                    fromResolutionResult()
-                }
-            }
+            artifact(tasks.shadowJar)
 
             pom {
                 name.set("SOLAPI SDK")
@@ -135,7 +136,7 @@ publishing {
                 licenses {
                     license {
                         name.set("The Apache License, Version 2.0")
-                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                        url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
                     }
                 }
                 developers {

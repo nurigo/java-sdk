@@ -2,7 +2,7 @@ package net.nurigo.sdk.message.exception
 
 import net.nurigo.sdk.message.model.FailedMessage
 
-class NurigoMessageNotReceivedException(message: String) : NurigoException,
+class SolapiMessageNotReceivedException(message: String) : SolapiException,
     Exception(message) {
     var failedMessageList: List<FailedMessage> = emptyList()
 

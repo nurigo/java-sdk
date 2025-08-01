@@ -7,6 +7,5 @@ import net.nurigo.sdk.message.model.Message
 data class MessageListResponse(
     var startKey: String? = null,
     var limit: Int? = null,
-    //var messageList: Map<String, Message> = emptyMap()
     var messageList: Map<String, Message>? = null
 )

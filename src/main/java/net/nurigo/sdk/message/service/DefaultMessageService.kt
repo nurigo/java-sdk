@@ -12,11 +12,9 @@ import net.nurigo.sdk.message.dto.request.FileUploadRequest
 import net.nurigo.sdk.message.dto.request.MessageListBaseRequest
 import net.nurigo.sdk.message.dto.request.MessageListRequest
 import net.nurigo.sdk.message.dto.request.MultipleDetailMessageSendingRequest
-import net.nurigo.sdk.message.dto.request.SingleMessageSendingRequest
 import net.nurigo.sdk.message.dto.response.ErrorResponse
 import net.nurigo.sdk.message.dto.response.MessageListResponse
 import net.nurigo.sdk.message.dto.response.MultipleDetailMessageSentResponse
-import net.nurigo.sdk.message.dto.response.SingleMessageSentResponse
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -26,7 +24,6 @@ import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import java.io.File
 import java.io.FileInputStream
 import kotlin.time.Instant
-import kotlin.time.toKotlinInstant
 
 class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String) : MessageService {
     private var messageHttpService: MessageHttpService
@@ -80,7 +77,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
         } else {
             // 파일 업로드는 특별한 예외를 던지므로 공통 에러 핸들러를 사용하지 않음
             val errorResponse: ErrorResponse = Json.decodeFromString(response.errorBody()?.string() ?: "")
-            throw NurigoFileUploadException(errorResponse.errorMessage)
+            throw SolapiFileUploadException(errorResponse.errorMessage)
         }
     }
 
@@ -93,7 +90,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
             val tempPayload = MessageListBaseRequest()
 
             if (it.status != null && !it.statusCode.isNullOrBlank()) {
-                throw NurigoBadRequestException("status와 statusCode는 병기할 수 없습니다.")
+                throw SolapiBadRequestException("status와 statusCode는 병기할 수 없습니다.")
             }
 
             it.status?.let { status ->
@@ -150,66 +147,15 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
     }
 
     /**
-     * 단일 메시지 발송 API
-     * */
-    @Throws
-    @Deprecated(
-        "해당 메소드는 제거될 예정입니다. 향후 send 메소드를 이용해주세요.",
-        ReplaceWith("send(message)"),
-        DeprecationLevel.WARNING
-    )
-    fun sendOne(parameter: SingleMessageSendingRequest): SingleMessageSentResponse? {
-        val response = this.messageHttpService.sendOne(parameter).execute()
-
-        if (response.isSuccessful) {
-            return response.body()
-        } else {
-            handleErrorResponse(response.errorBody()?.string())
-        }
-    }
-
-    /**
-     * 단일 메시지 발송 API
+     * 단일, 다중 메시지 발송 메소드
      * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
+     * SendRequestConfig 파라미터를 통해 예약발송, 중복 수신번호 허용, 메시지 리스트 표시 옵션을 활성화/비활성화 할 수 있습니다.
      */
     @Throws(
-        NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
-    )
-    fun send(message: Message): MultipleDetailMessageSentResponse {
-        return send(listOf(message))
-    }
-
-    /**
-     * 단일 메시지 발송 및 예약 발송 API
-     * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
-     */
-    @Throws(
-        NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
-    )
-    fun send(message: Message, scheduledDateTime: Instant): MultipleDetailMessageSentResponse {
-        return send(listOf(message), scheduledDateTime = scheduledDateTime)
-    }
-
-    /**
-     * 단일 메시지 발송 및 예약 발송 API
-     * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
-     */
-    @Throws(
-        NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
-    )
-    fun send(message: Message, scheduledDateTime: java.time.Instant): MultipleDetailMessageSentResponse {
-        return send(listOf(message), scheduledDateTime = scheduledDateTime.toKotlinInstant())
-    }
-
-    /**
-     * 다중 메시지 발송 및 예약 발송 API
-     * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
-     */
-    @JvmOverloads
-    @Throws(
-        NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
+        SolapiMessageNotReceivedException::class, SolapiEmptyResponseException::class, SolapiUnknownException::class
     )
     fun send(
+        // TODO: SendRequestConfig를 통해서 파라미터를 접근하도록 해야함, messages 파라미터 단일 message 객체로도 접근할 수 있게끔 오버로딩 지원 필요
         messages: List<Message>,
         scheduledDateTime: Instant? = null,
         allowDuplicates: Boolean = false,
@@ -227,29 +173,13 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
     }
 
     /**
-     * 다중 메시지 발송 및 예약 발송 API
-     * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
-     */
-    @Throws(
-        NurigoMessageNotReceivedException::class, NurigoEmptyResponseException::class, NurigoUnknownException::class
-    )
-    fun send(
-        messages: List<Message>,
-        scheduledDateTime: java.time.Instant,
-        allowDuplicates: Boolean = false,
-        showMessageList: Boolean = false
-    ): MultipleDetailMessageSentResponse {
-        return send(messages, scheduledDateTime.toKotlinInstant(), allowDuplicates, showMessageList)
-    }
-
-    /**
      * 잔액 조회 API
      */
     @Throws
     fun getBalance(): Balance {
         val response = this.messageHttpService.getBalance().execute()
         if (response.isSuccessful) {
-            return response.body() ?: throw NurigoUnknownException("잔액 조회 데이터를 불러오지 못했습니다.")
+            return response.body() ?: throw SolapiUnknownException("잔액 조회 데이터를 불러오지 못했습니다.")
         } else {
             handleErrorResponse(response.errorBody()?.string())
         }
@@ -262,11 +192,9 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
     fun getQuota(): Quota {
         val response = this.messageHttpService.getQuota().execute()
         if (response.isSuccessful) {
-            return response.body() ?: throw NurigoUnknownException("일일 발송량 조회에 실패하였습니다.")
+            return response.body() ?: throw SolapiUnknownException("일일 발송량 조회에 실패하였습니다.")
         } else {
             handleErrorResponse(response.errorBody()?.string())
         }
     }
-
-    
 }

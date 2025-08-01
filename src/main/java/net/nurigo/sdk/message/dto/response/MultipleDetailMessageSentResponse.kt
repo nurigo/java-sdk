@@ -2,11 +2,12 @@ package net.nurigo.sdk.message.dto.response
 
 import kotlinx.serialization.Serializable
 import net.nurigo.sdk.message.model.FailedMessage
+import net.nurigo.sdk.message.model.group.GroupInfo
 
 @Serializable
 data class MultipleDetailMessageSentResponse(
     var failedMessageList: List<FailedMessage> = emptyList(),
-    var groupInfo: MultipleMessageSentResponse? = null,
+    var groupInfo: GroupInfo? = null,
     var messageList: List<MessageList>? = null
 ) {
     @Serializable
