@@ -12,6 +12,7 @@ import net.nurigo.sdk.message.dto.request.FileUploadRequest
 import net.nurigo.sdk.message.dto.request.MessageListBaseRequest
 import net.nurigo.sdk.message.dto.request.MessageListRequest
 import net.nurigo.sdk.message.dto.request.MultipleDetailMessageSendingRequest
+import net.nurigo.sdk.message.dto.request.SendRequestConfig
 import net.nurigo.sdk.message.dto.response.ErrorResponse
 import net.nurigo.sdk.message.dto.response.MessageListResponse
 import net.nurigo.sdk.message.dto.response.MultipleDetailMessageSentResponse
@@ -23,7 +24,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import java.io.File
 import java.io.FileInputStream
-import kotlin.time.Instant
 
 class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String) : MessageService {
     private var messageHttpService: MessageHttpService
@@ -151,22 +151,43 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
      * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
      * SendRequestConfig 파라미터를 통해 예약발송, 중복 수신번호 허용, 메시지 리스트 표시 옵션을 활성화/비활성화 할 수 있습니다.
      */
+    @JvmOverloads
     @Throws(
         SolapiMessageNotReceivedException::class, SolapiEmptyResponseException::class, SolapiUnknownException::class
     )
     fun send(
-        // TODO: SendRequestConfig를 통해서 파라미터를 접근하도록 해야함, messages 파라미터 단일 message 객체로도 접근할 수 있게끔 오버로딩 지원 필요
-        messages: List<Message>,
-        scheduledDateTime: Instant? = null,
-        allowDuplicates: Boolean = false,
-        showMessageList: Boolean = false
+        message: Message,
+        sendRequestConfig: SendRequestConfig = SendRequestConfig(),
     ): MultipleDetailMessageSentResponse {
+        return send(listOf(message), sendRequestConfig)
+    }
+
+    /**
+     * 단일, 다중 메시지 발송 메소드
+     * sendOne 및 sendMany 보다 더 개선된 오류 및 데이터 정보를 반환합니다.
+     * SendRequestConfig 파라미터를 통해 예약발송, 중복 수신번호 허용, 메시지 리스트 표시 옵션을 활성화/비활성화 할 수 있습니다.
+     */
+    @JvmOverloads
+    @Throws(
+        SolapiMessageNotReceivedException::class, SolapiEmptyResponseException::class, SolapiUnknownException::class
+    )
+    fun send(
+        messages: List<Message>,
+        sendRequestConfig: SendRequestConfig = SendRequestConfig(),
+    ): MultipleDetailMessageSentResponse {
+        if (messages.isEmpty()) {
+            throw SolapiBadRequestException("메시지가 1건 이상 등록되어야 합니다.")
+        }
+        if (messages.size > 10000) {
+            throw SolapiBadRequestException("10,000건 이상의 메시지는 한 번에 발송할 수 없습니다.")
+        }
+
         val parameter = MultipleDetailMessageSendingRequest(
             messages = messages,
-            scheduledDate = scheduledDateTime,
-            showMessageList = (if (showMessageList) true else null) == true
+            scheduledDate = sendRequestConfig.scheduledDate,
+            showMessageList = sendRequestConfig.showMessageList
         )
-        if (allowDuplicates) {
+        if (sendRequestConfig.allowDuplicates) {
             parameter.allowDuplicates = true
         }
         return processSendRequest(this.messageHttpService, parameter)

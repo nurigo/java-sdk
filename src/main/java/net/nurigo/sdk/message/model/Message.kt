@@ -5,12 +5,10 @@ import kotlinx.serialization.Serializable
 import net.nurigo.sdk.message.model.kakao.KakaoOption
 import net.nurigo.sdk.message.model.naver.NaverOption
 import net.nurigo.sdk.message.model.rcs.RcsOption
-import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
 @Serializable
-@ExperimentalTime
-data class Message constructor(
+data class Message (
     /**
      * 카카오 알림톡, 친구톡 발송을 위한 파라미터
      */
@@ -143,6 +141,11 @@ data class Message constructor(
      */
     var replacements: List<Message>? = null
 ) {
+
+    init {
+        from = from?.replace("-", "")
+        to = to?.replace("-", "")
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

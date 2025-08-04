@@ -8,7 +8,7 @@ import net.nurigo.sdk.message.model.group.GroupInfo
 data class MultipleDetailMessageSentResponse(
     var failedMessageList: List<FailedMessage> = emptyList(),
     var groupInfo: GroupInfo? = null,
-    var messageList: List<MessageList>? = null
+    var messageList: List<MessageList> = emptyList(),
 ) {
     @Serializable
     data class MessageList(
