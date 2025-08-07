@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class FaxOption(
-    var fileIds: List<String> = emptyList(),
+    var fileIds: List<String>? = null,
 )
