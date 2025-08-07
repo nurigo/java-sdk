@@ -11,6 +11,6 @@ data class VoiceOption(
     var counselorNumber: String? = null
 ) {
     init {
-        require(replyRange != null && counselorNumber != null) { "replyRange와 counselorNumber는 같이 사용할 수 없습니다." }
+        require(!(replyRange != null && counselorNumber != null)) { "replyRange와 counselorNumber는 같이 사용할 수 없습니다." }
     }
 }
