@@ -11,13 +11,13 @@ data class KakaoAlimtalkTemplateResponse(
     var name: String? = null,
     var channelId: String? = null,
     var channelGroupId: String? = null,
-    var assignType: KakaoAlimtalkAssignType? = KakaoAlimtalkAssignType.CHANNEL,
-    var accountId: String,
+    var assignType: KakaoAlimtalkAssignType? = null,
+    var accountId: String? = null,
     var securityFlag: Boolean? = false,
     var categoryCode: String? = null,
-    var isHidden: Boolean,
-    var isDeleted: Boolean,
-    var content: String,
+    var isHidden: Boolean? = null,
+    var isDeleted: Boolean? = null,
+    var content: String? = null,
     var buttons: List<KakaoAlimtalkTemplateResponseButton>? = null,
     var quickReplies: List<KakaoAlimtalkTemplateResponseQuickReply>? = null,
     var highlight: KakaoAlimtalkTemplateHighlight? = null,
@@ -26,8 +26,8 @@ data class KakaoAlimtalkTemplateResponse(
     var code: String? = null,
     var commentable: Boolean? = null,
     var status: KakaoAlimtalkTemplateStatus? = null,
-    var messageType: KakaoAlimtalkMessageType? = KakaoAlimtalkMessageType.BASIC,
-    var emphasizeType: KakaoAlimtalkEmphasizeType? = KakaoAlimtalkEmphasizeType.NONE,
+    var messageType: KakaoAlimtalkMessageType? = null,
+    var emphasizeType: KakaoAlimtalkEmphasizeType? = null,
     var extra: String? = null,
     var ad: String? = null,
     var emphasizeTitle: String? = null,
@@ -52,6 +52,6 @@ data class KakaoAlimtalkTemplateResponse(
 
     @Serializable
     data class KakaoAlimtalkTemplateVariable(
-        var name: String
+        var name: String? = null
     )
 }

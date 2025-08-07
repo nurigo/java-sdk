@@ -4,7 +4,6 @@ import kotlinx.serialization.Serializable
 
 /**
  * 카카오 알림톡 템플릿의 바로가기 정보를 정의하는 공통 모델입니다.
- * 요청 및 응답 DTO에서 모두 사용됩니다.
  */
 @Serializable
 data class KakaoAlimtalkTemplateQuickReply(
@@ -45,7 +44,6 @@ data class KakaoAlimtalkTemplateQuickReply(
 
     /**
      * 외부 브라우저 사용 여부 (요청 시)
-     * 응답에서는 Boolean? 타입으로 제공되므로, 응답 DTO에서 별도 처리가 필요합니다.
      */
-    var targetOut: String? = null
+    var targetOut: Boolean? = null
 )

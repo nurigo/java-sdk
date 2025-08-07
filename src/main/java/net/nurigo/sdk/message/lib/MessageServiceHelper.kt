@@ -7,6 +7,7 @@ import net.nurigo.sdk.message.dto.request.MultipleDetailMessageSendingRequest
 import net.nurigo.sdk.message.dto.response.ErrorResponse
 import net.nurigo.sdk.message.dto.response.MultipleDetailMessageSentResponse
 import net.nurigo.sdk.message.service.MessageHttpService
+import retrofit2.Response
 
 /**
  * 메시지 발송 요청을 처리하는 공통 헬퍼 메소드
@@ -52,5 +53,17 @@ fun handleErrorResponse(errorBody: String?): Nothing {
         "InvalidApiKey" -> throw SolapiInvalidApiKeyException(errorResponse.errorMessage)
         "FailedToAddMessage" -> throw SolapiBadRequestException(errorResponse.errorMessage)
         else -> throw SolapiUnknownException("${errorResponse.errorCode}: ${errorResponse.errorMessage}")
+    }
+}
+
+/**
+ * SOLAPI API 응답을 제어하는 공통 헬퍼 메소드
+ */
+@Throws
+fun <T> handleApiResponse(response: Response<T>, errorMessage: String): T {
+    if (response.isSuccessful) {
+        return response.body() ?: throw SolapiUnknownException(errorMessage)
+    } else {
+        handleErrorResponse(response.errorBody()?.string())
     }
 }

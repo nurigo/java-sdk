@@ -5,7 +5,7 @@ import net.nurigo.sdk.message.dto.request.MessageListBaseRequest
 /**
  * Helper function to add parameter to criteria, condition, and value strings
  */
-fun addParameterToCriteria(payload: MessageListBaseRequest, fieldName: String, parameterValue: String?) {
+fun addMessageListParameterToCriteria(payload: MessageListBaseRequest, fieldName: String, parameterValue: String?) {
     parameterValue?.takeIf { it.isNotBlank() }?.let { value ->
         payload.criteria = if (payload.criteria.isNullOrBlank()) fieldName else "${payload.criteria},$fieldName"
         payload.cond = if (payload.cond.isNullOrBlank()) "eq" else "${payload.cond},eq"

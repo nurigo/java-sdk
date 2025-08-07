@@ -4,7 +4,7 @@ import kotlinx.serialization.json.Json
 import net.nurigo.sdk.message.exception.*
 import net.nurigo.sdk.message.lib.Authenticator
 import net.nurigo.sdk.message.lib.MapHelper
-import net.nurigo.sdk.message.lib.addParameterToCriteria
+import net.nurigo.sdk.message.lib.addMessageListParameterToCriteria
 import net.nurigo.sdk.message.lib.handleErrorResponse
 import net.nurigo.sdk.message.lib.processSendRequest
 import net.nurigo.sdk.message.model.*
@@ -13,9 +13,17 @@ import net.nurigo.sdk.message.dto.request.MessageListBaseRequest
 import net.nurigo.sdk.message.dto.request.MessageListRequest
 import net.nurigo.sdk.message.dto.request.MultipleDetailMessageSendingRequest
 import net.nurigo.sdk.message.dto.request.SendRequestConfig
+import net.nurigo.sdk.message.dto.request.kakao.KakaoAlimtalkSendableTemplateListRequest
+import net.nurigo.sdk.message.dto.request.kakao.KakaoAlimtalkTemplateMutationRequest
+import net.nurigo.sdk.message.dto.request.kakao.KakaoAlimtalkTemplateListRequest
+import net.nurigo.sdk.message.dto.request.kakao.KakaoAlimtalkTemplateUpdateNameRequest
 import net.nurigo.sdk.message.dto.response.ErrorResponse
 import net.nurigo.sdk.message.dto.response.MessageListResponse
 import net.nurigo.sdk.message.dto.response.MultipleDetailMessageSentResponse
+import net.nurigo.sdk.message.dto.response.kakao.KakaoAlimtalkTemplateListResponse
+import net.nurigo.sdk.message.dto.response.kakao.KakaoAlimtalkTemplateResponse
+import net.nurigo.sdk.message.lib.handleApiResponse
+import net.nurigo.sdk.message.model.kakao.KakaoAlimtalkTemplateCategory
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -53,8 +61,8 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
 
 
     /**
-     * 파일 업로드 API
-     * @suppress 파일을 접근 가능한 경로로 입력하셔야 합니다.
+     * 파일 업로드 메소드
+     * 파일을 접근 가능한 경로로 입력하셔야 합니다.
      * */
     @Throws
     fun uploadFile(file: File, fileType: StorageType = StorageType.MMS, link: String? = null): String? {
@@ -82,7 +90,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
     }
 
     /**
-     * 메시지 조회 API
+     * 메시지 조회 메소드
      */
     @JvmOverloads
     fun getMessageList(parameter: MessageListRequest? = null): MessageListResponse? {
@@ -126,7 +134,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
                 "type" to it.type,
                 "statusCode" to it.statusCode
             ).forEach { (field, value) ->
-                addParameterToCriteria(tempPayload, field, value)
+                addMessageListParameterToCriteria(tempPayload, field, value)
             }
 
             tempPayload.startKey = it.startKey
@@ -194,28 +202,136 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
     }
 
     /**
-     * 잔액 조회 API
+     * 잔액 조회 메소드
      */
     @Throws
     fun getBalance(): Balance {
         val response = this.messageHttpService.getBalance().execute()
-        if (response.isSuccessful) {
-            return response.body() ?: throw SolapiUnknownException("잔액 조회 데이터를 불러오지 못했습니다.")
-        } else {
-            handleErrorResponse(response.errorBody()?.string())
-        }
+        return handleApiResponse(response, "잔액 조회에 실패했습니다.")
     }
 
     /**
-     * 일일 발송량 한도 조회 API
+     * 일일 발송량 한도 조회 메소드
      */
     @Throws
     fun getQuota(): Quota {
         val response = this.messageHttpService.getQuota().execute()
-        if (response.isSuccessful) {
-            return response.body() ?: throw SolapiUnknownException("일일 발송량 조회에 실패하였습니다.")
-        } else {
-            handleErrorResponse(response.errorBody()?.string())
-        }
+        return handleApiResponse(response, "일일 발송량 조회에 실패했습니다.")
+    }
+
+    /**
+     * 카카오 알림톡 템플릿 카테고리 조회 메소드
+     *
+     * 카카오 알림톡 템플릿을 생성하기 전에 해당 카테고리를 조회하신 다음, 조회한 값을 카카오 알림톡 템플릿 생성 메소드에 파라미터로 같이 넣어주셔야 합니다.
+     */
+    @Throws
+    fun getKakaoAlimtalkTemplateCategories(): List<KakaoAlimtalkTemplateCategory> {
+        val response = this.messageHttpService.getAlimtalkTemplateCategories().execute()
+        return handleApiResponse(response, "카카오 알림톡 템플릿 카테고리 조회에 실패했습니다.")
+    }
+
+    /**
+     * 카카오 알림톡 템플릿 생성 메소드
+     */
+    @Throws
+    fun createKakaoAlimtalkTemplate(parameter: KakaoAlimtalkTemplateMutationRequest): KakaoAlimtalkTemplateResponse {
+        val response = this.messageHttpService.createAlimtalkTemplate(parameter).execute()
+        return handleApiResponse(response, "카카오 알림톡 템플릿 생성에 실패했습니다, 에러가 반복되는 경우 SOLAPI 측 관리자에게 문의해주세요.")
+    }
+
+    /**
+     * 카카오 알림톡 템플릿 목록 조회 메소드
+     */
+    @Throws
+    @JvmOverloads
+    fun getKakaoAlimtalkTemplates(parameter: KakaoAlimtalkTemplateListRequest? = null): KakaoAlimtalkTemplateListResponse {
+        val queryParams = parameter?.generateToQueryParams()
+        val response = this.messageHttpService.getAlimtalkTemplates(queryParams).execute()
+        return handleApiResponse(response, "카카오 알림톡 템플릿 목록 조회에 실패했습니다.")
+    }
+
+    /**
+     * 카카오 알림톡 템플릿 조회 메소드
+     *
+     * 카카오 알림톡 템플릿 조회 메소드를 호출 할 경우 해당 템플릿의 휴면 상태 또한 실시간으로 갱신됩니다. 만일 조회한 템플릿이 휴면 상태일 경우 휴면해지 요청 메소드를 통해 휴면 상태를 해지하실 수 있습니다.
+     * @see requestKakaoAlimtalkTemplateReactivation
+     */
+    @Throws
+    fun getKakaoAlimtalkTemplate(templateId: String): KakaoAlimtalkTemplateResponse {
+        val response = this.messageHttpService.getAlimtalkTemplate(templateId).execute()
+        return handleApiResponse(response, "카카오 알림톡 템플릿 조회에 실패했습니다.")
+    }
+
+    /**
+     * 카카오 알림톡 템플릿 휴면 해지요청 메소드
+     */
+    @Throws
+    fun requestKakaoAlimtalkTemplateReactivation(templateId: String): KakaoAlimtalkTemplateResponse {
+        val response = this.messageHttpService.requestAlimtalkTemplateReactivation(templateId).execute()
+        return handleApiResponse(response, "카카오 알림톡 템플릿 휴면 해지요청에 실패했습니다.")
+    }
+
+    /**
+     * 발송 가능한 카카오 알림톡 템플릿 목록 조회 메소드
+     */
+    @Throws
+    fun getSendableKakaoAlimtalkTemplates(parameter: KakaoAlimtalkSendableTemplateListRequest? = null): List<KakaoAlimtalkTemplateResponse> {
+        val queryParams = parameter?.generateToQueryParams()
+        val response = this.messageHttpService.getSendableAlimtalkTemplates(queryParams).execute()
+        return handleApiResponse(response, "발송 가능한 카카오 알림톡 템플릿 목록 조회에 실패했습니다.")
+    }
+
+    /**
+     * 카카오 알림톡 템플릿 승인취소 후 대기 상태 전환 메소드
+     */
+    @Throws
+    fun transitionKakaoAlimtalkTemplateToPending(templateId: String): KakaoAlimtalkTemplateResponse {
+        val response = this.messageHttpService.transitionAlimtalkTemplateToPending(templateId).execute()
+        return handleApiResponse(response, "카카오 알림톡 템플릿 승인 취소에 실패했습니다.")
+    }
+
+    @Throws
+    fun updateKakaoAlimtalkTemplate(templateId: String, parameter: KakaoAlimtalkTemplateMutationRequest): KakaoAlimtalkTemplateResponse {
+        val response = this.messageHttpService.updateAlimtalkTemplate(templateId, parameter).execute()
+        return handleApiResponse(response, "카카오 알림톡 템플릿 수정에 실패했습니다.")
+    }
+
+    /**
+     * 카카오 알림톡 템플릿 이름 수정 메소드
+     * 알림톡 템플릿의 이름은 다른 템플릿과 중복하여 사용할 수 있고, 승인완료 된 템플릿도 수정할 수 있습니다.
+     */
+    @Throws
+    fun updateKakaoAlimtalkTemplateName(templateId: String, name: String): KakaoAlimtalkTemplateResponse {
+        val response = this.messageHttpService.updateAlimtalkTemplateName(templateId,
+            KakaoAlimtalkTemplateUpdateNameRequest(name)
+        ).execute()
+        return handleApiResponse(response, "카카오 알림톡 템플릿의 이름 수정에 실패했습니다.")
+    }
+
+    /**
+     * 카카오 알림톡 템플릿 검수 요청 메소드
+     */
+    @Throws
+    fun requestKakaoAlimtalkTemplateInspection(templateId: String): KakaoAlimtalkTemplateResponse {
+        val response = this.messageHttpService.requestKakaoAlimtalkTemplateInspection(templateId).execute()
+        return handleApiResponse(response, "카카오 알림톡 템플릿 검수 요청에 실패했습니다.")
+    }
+
+    /**
+     * 카카오 알림톡 템플릿 검수 취소 메소드
+     */
+    @Throws
+    fun cancelKakaoAlimtalkTemplateInspection(templateId: String): KakaoAlimtalkTemplateResponse {
+        val response = this.messageHttpService.cancelAlimtalkTemplateInspection(templateId).execute()
+        return handleApiResponse(response, "카카오 알림톡 템플릿 검수 취소에 실패했습니다.")
+    }
+
+    /**
+     * 카카오 알림톡 템플릿 삭제 메소드
+     */
+    @Throws
+    fun removeKakaoAlimtalkTemplate(templateId: String): KakaoAlimtalkTemplateResponse {
+        val response = this.messageHttpService.removeAlimtalkTemplate(templateId).execute()
+        return handleApiResponse(response, "카카오 알림톡 템플릿 삭제에 실패했습니다.")
     }
 }

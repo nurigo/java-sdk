@@ -3,13 +3,12 @@ package net.nurigo.sdk.message.service
 import net.nurigo.sdk.message.model.Balance
 import net.nurigo.sdk.message.model.Quota
 import net.nurigo.sdk.message.dto.request.FileUploadRequest
-import net.nurigo.sdk.message.dto.request.kakao.KakaoAlimtalkTemplateCreateRequest
 import net.nurigo.sdk.message.dto.request.MultipleDetailMessageSendingRequest
-import net.nurigo.sdk.message.dto.request.SingleMessageSendingRequest
+import net.nurigo.sdk.message.dto.request.kakao.KakaoAlimtalkTemplateMutationRequest
+import net.nurigo.sdk.message.dto.request.kakao.KakaoAlimtalkTemplateUpdateNameRequest
 import net.nurigo.sdk.message.dto.response.FileUploadResponse
 import net.nurigo.sdk.message.dto.response.MessageListResponse
 import net.nurigo.sdk.message.dto.response.MultipleDetailMessageSentResponse
-import net.nurigo.sdk.message.dto.response.SingleMessageSentResponse
 import net.nurigo.sdk.message.dto.response.kakao.KakaoAlimtalkTemplateListResponse
 import net.nurigo.sdk.message.dto.response.kakao.KakaoAlimtalkTemplateResponse
 import net.nurigo.sdk.message.model.kakao.KakaoAlimtalkTemplateCategory
@@ -21,9 +20,6 @@ interface MessageHttpService : MessageService {
     @JvmSuppressWildcards
     @GET("/messages/v4/list")
     fun getMessageList(@QueryMap parameter: Map<String, Any?>? = null): Call<MessageListResponse>
-
-    @POST("/messages/v4/send")
-    fun sendOne(@Body parameter: SingleMessageSendingRequest): Call<SingleMessageSentResponse>
 
     @POST("/messages/v4/send-many/detail")
     fun sendManyDetail(@Body parameter: MultipleDetailMessageSendingRequest): Call<MultipleDetailMessageSentResponse>
@@ -41,22 +37,22 @@ interface MessageHttpService : MessageService {
     fun getAlimtalkTemplateCategories(): Call<List<KakaoAlimtalkTemplateCategory>>
 
     @POST("/kakao/v2/templates")
-    fun createAlimtalkTemplate(@Body parameter: KakaoAlimtalkTemplateCreateRequest): Call<KakaoAlimtalkTemplateResponse>
+    fun createAlimtalkTemplate(@Body parameter: KakaoAlimtalkTemplateMutationRequest): Call<KakaoAlimtalkTemplateResponse>
 
     @PUT("/kakao/v2/templates/{templateId}")
-    fun updateAlimtalkTemplate(@Path("templateId") templateId: String): Call<KakaoAlimtalkTemplateResponse>
+    fun updateAlimtalkTemplate(@Path("templateId") templateId: String, parameter: KakaoAlimtalkTemplateMutationRequest): Call<KakaoAlimtalkTemplateResponse>
 
     @PUT("/kakao/v2/templates/{templateId}/inspection")
-    fun inspectKakaoAlimtalkTemplate(@Path("templateId") templateId: String): Call<KakaoAlimtalkTemplateResponse>
+    fun requestKakaoAlimtalkTemplateInspection(@Path("templateId") templateId: String): Call<KakaoAlimtalkTemplateResponse>
 
     @GET("/kakao/v2/templates/{templateId}")
     fun getAlimtalkTemplate(@Path("templateId") templateId: String): Call<KakaoAlimtalkTemplateResponse>
 
     @GET("/kakao/v2/templates")
-    fun getAlimtalkTemplates(): Call<KakaoAlimtalkTemplateListResponse>
+    fun getAlimtalkTemplates(@QueryMap(encoded = true) parameter: Map<String, String>? = null): Call<KakaoAlimtalkTemplateListResponse>
 
     @GET("/kakao/v2/templates/sendable")
-    fun getSendableAlimtalkTemplates(): Call<List<KakaoAlimtalkTemplateResponse>>
+    fun getSendableAlimtalkTemplates(@QueryMap parameter: Map<String, String>? = null): Call<List<KakaoAlimtalkTemplateResponse>>
 
     @PUT("/kakao/v2/templates/{templateId}/approval/cancel")
     fun transitionAlimtalkTemplateToPending(@Path("templateId") templateId: String): Call<KakaoAlimtalkTemplateResponse>
@@ -71,5 +67,5 @@ interface MessageHttpService : MessageService {
     fun requestAlimtalkTemplateReactivation(@Path("templateId") templateId: String): Call<KakaoAlimtalkTemplateResponse>
 
     @PUT("/kakao/v2/templates/{templateId}/name")
-    fun updateAlimtalkTemplateName(@Path("templateId") templateId: String): Call<KakaoAlimtalkTemplateResponse>
+    fun updateAlimtalkTemplateName(@Path("templateId") templateId: String, @Body name: KakaoAlimtalkTemplateUpdateNameRequest): Call<KakaoAlimtalkTemplateResponse>
 }

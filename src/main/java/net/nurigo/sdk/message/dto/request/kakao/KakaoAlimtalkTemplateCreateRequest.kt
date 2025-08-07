@@ -4,11 +4,10 @@ import kotlinx.serialization.Serializable
 import net.nurigo.sdk.message.model.kakao.*
 
 /**
- * 카카오 알림톡 템플릿 생성 요청 DTO
- * @see <a href ="https://developers.solapi.com/references/kakao/templates/createTemplate#body-params">알림톡 템플릿 추가 문서</a>
+ * 카카오 알림톡 템플릿 생성/수정 요청 데이터 클래스
  */
 @Serializable
-data class KakaoAlimtalkTemplateCreateRequest(
+data class KakaoAlimtalkTemplateMutationRequest(
     /**
      * 카카오톡 채널 고유 아이디. 채널에 템플릿을 등록하고 싶을 경우 필수입니다.
      */
