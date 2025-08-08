@@ -9,8 +9,4 @@ data class VoiceOption(
     var tailMessage: String? = null,
     var replyRange: Int? = null,
     var counselorNumber: String? = null
-) {
-    init {
-        require(!(replyRange != null && counselorNumber != null)) { "replyRange와 counselorNumber는 같이 사용할 수 없습니다." }
-    }
-}
+)
