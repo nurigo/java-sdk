@@ -13,7 +13,7 @@ data class SendRequestConfig @JvmOverloads constructor(
 
     @JvmOverloads
     constructor(
-        scheduledDate: LocalDateTime?,
+        scheduledDate: LocalDateTime? = null,
         appId: String? = null,
         allowDuplicates: Boolean = false,
         showMessageList: Boolean = false,
@@ -26,7 +26,7 @@ data class SendRequestConfig @JvmOverloads constructor(
 
     @JvmOverloads
     constructor(
-        scheduledDate: java.time.Instant?,
+        scheduledDate: java.time.Instant? = null,
         appId: String? = null,
         allowDuplicates: Boolean = false,
         showMessageList: Boolean = false,
@@ -37,12 +37,12 @@ data class SendRequestConfig @JvmOverloads constructor(
         showMessageList
     )
 
-    fun setScheduledDate(scheduledDate: LocalDateTime?) {
-        this.scheduledDate = scheduledDate?.atZone(ZoneId.systemDefault())?.toInstant()?.toEpochMilli()
+    fun setScheduledDate(scheduledDate: LocalDateTime) {
+        this.scheduledDate = scheduledDate.atZone(ZoneId.systemDefault())?.toInstant()?.toEpochMilli()
             ?.let { Instant.fromEpochMilliseconds(it) }
     }
 
-    fun setScheduledDate(scheduledDate: java.time.Instant?) {
-        this.scheduledDate = scheduledDate?.toEpochMilli()?.let { Instant.fromEpochMilliseconds(it) }
+    fun setScheduledDate(scheduledDate: java.time.Instant) {
+        this.scheduledDate = scheduledDate.toEpochMilli().let { Instant.fromEpochMilliseconds(it) }
     }
 }
