@@ -1,8 +1,8 @@
 package net.nurigo.sdk.message.service
 
-import kotlinx.serialization.json.Json
 import net.nurigo.sdk.message.exception.*
 import net.nurigo.sdk.message.lib.Authenticator
+import net.nurigo.sdk.message.lib.JsonSupport
 import net.nurigo.sdk.message.lib.MapHelper
 import net.nurigo.sdk.message.lib.addMessageListParameterToCriteria
 import net.nurigo.sdk.message.lib.handleErrorResponse
@@ -47,15 +47,9 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
                 chain.proceed(request)
             }.build()
         val contentType = "application/json".toMediaType()
-        val jsonConfig = Json {
-            coerceInputValues = true
-            explicitNulls = false
-            encodeDefaults = true
-            ignoreUnknownKeys = true
-        }
 
         messageHttpService =
-            Retrofit.Builder().baseUrl(domain).addConverterFactory(jsonConfig.asConverterFactory(contentType))
+            Retrofit.Builder().baseUrl(domain).addConverterFactory(JsonSupport.json.asConverterFactory(contentType))
                 .client(client).build().create(MessageHttpService::class.java)
     }
 
@@ -84,7 +78,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
             return response.body()?.fileId
         } else {
             // 파일 업로드는 특별한 예외를 던지므로 공통 에러 핸들러를 사용하지 않음
-            val errorResponse: ErrorResponse = Json.decodeFromString(response.errorBody()?.string() ?: "")
+            val errorResponse: ErrorResponse = JsonSupport.json.decodeFromString(response.errorBody()?.string() ?: "")
             throw SolapiFileUploadException(errorResponse.errorMessage)
         }
     }
@@ -165,7 +159,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
     )
     fun send(
         message: Message,
-        sendRequestConfig: SendRequestConfig = SendRequestConfig(),
+        sendRequestConfig: SendRequestConfig? = null,
     ): MultipleDetailMessageSentResponse {
         return send(listOf(message), sendRequestConfig)
     }
@@ -181,7 +175,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
     )
     fun send(
         messages: List<Message>,
-        sendRequestConfig: SendRequestConfig = SendRequestConfig(),
+        sendRequestConfig: SendRequestConfig? = null,
     ): MultipleDetailMessageSentResponse {
         if (messages.isEmpty()) {
             throw SolapiBadRequestException("메시지가 1건 이상 등록되어야 합니다.")
@@ -192,10 +186,10 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
 
         val parameter = MultipleDetailMessageSendingRequest(
             messages = messages,
-            scheduledDate = sendRequestConfig.scheduledDate,
-            showMessageList = sendRequestConfig.showMessageList
+            scheduledDate = sendRequestConfig?.scheduledDate,
+            showMessageList = sendRequestConfig?.showMessageList == true
         )
-        if (sendRequestConfig.allowDuplicates) {
+        if (sendRequestConfig?.allowDuplicates == true) {
             parameter.allowDuplicates = true
         }
         return processSendRequest(this.messageHttpService, parameter)

@@ -1,9 +1,9 @@
 package net.nurigo.sdk.message.dto.request
 
 import kotlinx.serialization.Contextual
+import java.time.LocalDateTime
 import kotlinx.serialization.Serializable
 import net.nurigo.sdk.message.model.CommonMessageProperty
-import kotlin.time.Instant
 
 @Serializable
 data class MessageListBaseRequest(
@@ -20,8 +20,8 @@ data class MessageListBaseRequest(
     var value: String? = null,
 
     @Contextual
-    var startDate: Instant? = null,
+    var startDate: LocalDateTime? = null,
 
     @Contextual
-    var endDate: Instant? = null
+    var endDate: LocalDateTime? = null
 ) : CommonMessageProperty

@@ -1,6 +1,5 @@
 package net.nurigo.sdk.message.lib
 
-import kotlinx.serialization.json.Json
 import net.nurigo.sdk.message.exception.*
 import net.nurigo.sdk.message.model.group.GroupCount
 import net.nurigo.sdk.message.dto.request.MultipleDetailMessageSendingRequest
@@ -47,7 +46,7 @@ fun processSendRequest(
  */
 @Throws(SolapiBadRequestException::class, SolapiInvalidApiKeyException::class, SolapiUnknownException::class)
 fun handleErrorResponse(errorBody: String?): Nothing {
-    val errorResponse: ErrorResponse = Json.decodeFromString(errorBody ?: "")
+    val errorResponse: ErrorResponse = JsonSupport.json.decodeFromString(errorBody ?: "")
     when (errorResponse.errorCode) {
         "ValidationError" -> throw SolapiBadRequestException(errorResponse.errorMessage)
         "InvalidApiKey" -> throw SolapiInvalidApiKeyException(errorResponse.errorMessage)

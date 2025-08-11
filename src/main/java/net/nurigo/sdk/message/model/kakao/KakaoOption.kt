@@ -1,6 +1,7 @@
 package net.nurigo.sdk.message.model.kakao
 
 import kotlinx.serialization.Serializable
+import java.util.HashMap
 
 @Serializable
 data class KakaoOption(
@@ -18,7 +19,8 @@ data class KakaoOption(
      * 변수처리를 위한 배열 값
      * 예) "#{변수1}": "1234"
      */
-    var variables: MutableMap<String, String>? = null,
+    @JvmField
+    var variables: Map<String, String>? = null,
 
     /**
      * 대체 발송 여부
@@ -48,17 +50,27 @@ data class KakaoOption(
 ) {
     init {
         // 변수 키 값을 자동으로 #{변수명} 형태로 변환
-        variables?.let { vars ->
-            val transformedVariables = mutableMapOf<String, String>()
-            vars.forEach { (key, value) ->
-                val transformedKey = if (!key.startsWith("#{") || !key.endsWith("}")) {
-                    "#{$key}"
-                } else {
-                    key
-                }
-                transformedVariables[transformedKey] = value
-            }
-            variables = transformedVariables
+        variables?.let {
+            variables = formatVariables(it)
         }
+    }
+
+    private fun formatVariables(originalVars: Map<String, String>): MutableMap<String, String> {
+        val groupedByFormattedKey = originalVars.entries.groupBy {
+            val key = it.key
+            if (key.startsWith("#{") && key.endsWith("}")) key else "#{$key}"
+        }
+
+        return groupedByFormattedKey.mapValues { (_, entries) ->
+            (entries.find { it.key.startsWith("#{") && it.key.endsWith("}") } ?: entries.first()).value
+        }.toMutableMap()
+    }
+
+    fun setVariables(variables: HashMap<String, String>) {
+        this.variables = formatVariables(variables)
+    }
+
+    fun setVariables(variables: Map<String, String>) {
+        this.variables = formatVariables(variables)
     }
 }

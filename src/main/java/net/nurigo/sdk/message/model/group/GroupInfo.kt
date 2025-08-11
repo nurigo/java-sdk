@@ -1,9 +1,9 @@
 package net.nurigo.sdk.message.model.group
 
 import kotlinx.serialization.Contextual
+import java.time.LocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlin.time.Instant
 
 @Serializable
 data class GroupInfo(
@@ -33,11 +33,11 @@ data class GroupInfo(
     var price: Map<String, PriceInfoDetail>? = null,
 
     @Contextual
-    var dateSent: Instant? = null,
+    var dateSent: LocalDateTime? = null,
     @Contextual
-    var dateCreated: Instant? = null,
+    var dateCreated: LocalDateTime? = null,
     @Contextual
-    var dateUpdated: Instant? = null,
+    var dateUpdated: LocalDateTime? = null,
     @Contextual
-    var dateCompleted: Instant? = null
+    var dateCompleted: LocalDateTime? = null
 )

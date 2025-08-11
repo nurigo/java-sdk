@@ -1,13 +1,13 @@
 package net.nurigo.sdk.message.model
 
 import kotlinx.serialization.Contextual
+import java.time.LocalDateTime
 import kotlinx.serialization.Serializable
 import net.nurigo.sdk.message.model.fax.FaxOption
 import net.nurigo.sdk.message.model.kakao.KakaoOption
 import net.nurigo.sdk.message.model.naver.NaverOption
 import net.nurigo.sdk.message.model.rcs.RcsOption
 import net.nurigo.sdk.message.model.voice.VoiceOption
-import kotlin.time.Instant
 
 @Serializable
 data class Message (
@@ -52,19 +52,19 @@ data class Message (
      *     * 발송 접수일자
      */
     @Contextual
-    var dateProcessed: Instant? = null,
+    var dateProcessed: LocalDateTime? = null,
 
     /**
      * 통신사 결과 값 통보일자
      */
     @Contextual
-    var dateReported: Instant? = null,
+    var dateReported: LocalDateTime? = null,
 
     /**
      * 실제 메시지 발송 완료일자
      */
     @Contextual
-    var dateReceived: Instant? = null,
+    var dateReceived: LocalDateTime? = null,
 
     /**
      * 메시지 상태코드
@@ -113,13 +113,13 @@ data class Message (
      * 메시지 생성일자
      */
     @Contextual
-    var dateCreated: Instant? = null,
+    var dateCreated: LocalDateTime? = null,
 
     /**
      * 메시지 수정일자
      */
     @Contextual
-    var dateUpdated: Instant? = null,
+    var dateUpdated: LocalDateTime? = null,
 
     /**
      * 수신번호
@@ -161,69 +161,4 @@ data class Message (
         from = from?.replace("-", "")
         to = to?.replace("-", "")
     }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as Message
-
-        if (replacement != other.replacement) return false
-        if (autoTypeDetect != other.autoTypeDetect) return false
-        if (kakaoOptions != other.kakaoOptions) return false
-        if (naverOptions != other.naverOptions) return false
-        if (rcsOptions != other.rcsOptions) return false
-        if (type != other.type) return false
-        if (country != other.country) return false
-        if (subject != other.subject) return false
-        if (imageId != other.imageId) return false
-        if (dateProcessed != other.dateProcessed) return false
-        if (dateReported != other.dateReported) return false
-        if (dateReceived != other.dateReceived) return false
-        if (statusCode != other.statusCode) return false
-        if (status != other.status) return false
-        if (messageId != other.messageId) return false
-        if (groupId != other.groupId) return false
-        if (accountId != other.accountId) return false
-        if (text != other.text) return false
-        if (dateCreated != other.dateCreated) return false
-        if (dateUpdated != other.dateUpdated) return false
-        if (to != other.to) return false
-        if (from != other.from) return false
-        if (customFields != other.customFields) return false
-        if (replacements != other.replacements) return false
-        if (voiceOptions != other.voiceOptions) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = replacement?.hashCode() ?: 0
-        result = 31 * result + (autoTypeDetect?.hashCode() ?: 0)
-        result = 31 * result + (kakaoOptions?.hashCode() ?: 0)
-        result = 31 * result + (naverOptions?.hashCode() ?: 0)
-        result = 31 * result + (rcsOptions?.hashCode() ?: 0)
-        result = 31 * result + (type?.hashCode() ?: 0)
-        result = 31 * result + (country?.hashCode() ?: 0)
-        result = 31 * result + (subject?.hashCode() ?: 0)
-        result = 31 * result + (imageId?.hashCode() ?: 0)
-        result = 31 * result + (dateProcessed?.hashCode() ?: 0)
-        result = 31 * result + (dateReported?.hashCode() ?: 0)
-        result = 31 * result + (dateReceived?.hashCode() ?: 0)
-        result = 31 * result + (statusCode?.hashCode() ?: 0)
-        result = 31 * result + (status?.hashCode() ?: 0)
-        result = 31 * result + (messageId?.hashCode() ?: 0)
-        result = 31 * result + (groupId?.hashCode() ?: 0)
-        result = 31 * result + (accountId?.hashCode() ?: 0)
-        result = 31 * result + (text?.hashCode() ?: 0)
-        result = 31 * result + (dateCreated?.hashCode() ?: 0)
-        result = 31 * result + (dateUpdated?.hashCode() ?: 0)
-        result = 31 * result + (to?.hashCode() ?: 0)
-        result = 31 * result + (from?.hashCode() ?: 0)
-        result = 31 * result + (customFields?.hashCode() ?: 0)
-        result = 31 * result + (replacements?.hashCode() ?: 0)
-        result = 31 * result + (voiceOptions?.hashCode() ?: 0)
-        return result
-    }
-
 }
