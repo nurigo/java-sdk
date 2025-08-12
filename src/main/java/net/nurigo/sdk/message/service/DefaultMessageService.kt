@@ -17,11 +17,13 @@ import net.nurigo.sdk.message.dto.request.kakao.KakaoAlimtalkSendableTemplateLis
 import net.nurigo.sdk.message.dto.request.kakao.KakaoAlimtalkTemplateMutationRequest
 import net.nurigo.sdk.message.dto.request.kakao.KakaoAlimtalkTemplateListRequest
 import net.nurigo.sdk.message.dto.request.kakao.KakaoAlimtalkTemplateUpdateNameRequest
+import net.nurigo.sdk.message.dto.request.kakao.KakaoBrandMessageTemplateListRequest
 import net.nurigo.sdk.message.dto.response.ErrorResponse
 import net.nurigo.sdk.message.dto.response.MessageListResponse
 import net.nurigo.sdk.message.dto.response.MultipleDetailMessageSentResponse
 import net.nurigo.sdk.message.dto.response.kakao.KakaoAlimtalkTemplateListResponse
 import net.nurigo.sdk.message.dto.response.kakao.KakaoAlimtalkTemplateResponse
+import net.nurigo.sdk.message.dto.response.kakao.KakaoBrandMessageTemplateListResponse
 import net.nurigo.sdk.message.lib.handleApiResponse
 import net.nurigo.sdk.message.model.kakao.KakaoAlimtalkTemplateCategory
 import okhttp3.MediaType.Companion.toMediaType
@@ -240,7 +242,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
     @Throws
     @JvmOverloads
     fun getKakaoAlimtalkTemplates(parameter: KakaoAlimtalkTemplateListRequest? = null): KakaoAlimtalkTemplateListResponse {
-        val queryParams = parameter?.generateToQueryParams() ?: emptyMap()
+        val queryParams = parameter?.generateQueryParams() ?: emptyMap()
         val response = this.messageHttpService.getKakaoAlimtalkTemplates(queryParams).execute()
         return handleApiResponse(response, "카카오 알림톡 템플릿 목록 조회에 실패했습니다.")
     }
@@ -320,5 +322,16 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
     fun removeKakaoAlimtalkTemplate(templateId: String): KakaoAlimtalkTemplateResponse {
         val response = this.messageHttpService.removeKakaoAlimtalkTemplate(templateId).execute()
         return handleApiResponse(response, "카카오 알림톡 템플릿 삭제에 실패했습니다.")
+    }
+
+    /**
+     * 카카오 브랜드 메시지 템플릿 조회 메소드
+     */
+    @Throws
+    @JvmOverloads
+    fun getKakaoBrandMessageTemplates(parameter: KakaoBrandMessageTemplateListRequest? = null): KakaoBrandMessageTemplateListResponse {
+        val queryParams = parameter?.generateQueryParams() ?: emptyMap()
+        val response = this.messageHttpService.getKakaoBrandMessageTemplates(queryParams).execute()
+        return handleApiResponse(response, "카카오 브랜드 메시지 템플릿 조회에 실패했습니다.")
     }
 }

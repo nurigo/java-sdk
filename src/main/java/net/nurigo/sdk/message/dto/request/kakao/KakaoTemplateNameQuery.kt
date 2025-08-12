@@ -1,6 +1,6 @@
 package net.nurigo.sdk.message.dto.request.kakao
 
-data class KakaoAlimtalkTemplateNameQuery(
+data class KakaoTemplateNameQuery(
     val name: String,
     val queryCondition: KakaoAlimtalkTemplateNameQueryCondition,
 ) {

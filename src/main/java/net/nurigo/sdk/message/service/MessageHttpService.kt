@@ -11,6 +11,7 @@ import net.nurigo.sdk.message.dto.response.MessageListResponse
 import net.nurigo.sdk.message.dto.response.MultipleDetailMessageSentResponse
 import net.nurigo.sdk.message.dto.response.kakao.KakaoAlimtalkTemplateListResponse
 import net.nurigo.sdk.message.dto.response.kakao.KakaoAlimtalkTemplateResponse
+import net.nurigo.sdk.message.dto.response.kakao.KakaoBrandMessageTemplateListResponse
 import net.nurigo.sdk.message.model.kakao.KakaoAlimtalkTemplateCategory
 import retrofit2.Call
 import retrofit2.http.*
@@ -65,4 +66,7 @@ interface MessageHttpService : MessageService {
 
     @PUT("/kakao/v2/templates/{templateId}/name")
     fun updateKakaoAlimtalkTemplateName(@Path("templateId") templateId: String, @Body name: KakaoAlimtalkTemplateUpdateNameRequest): Call<KakaoAlimtalkTemplateResponse>
+
+    @GET("/kakao/v2/brand-templates")
+    fun getKakaoBrandMessageTemplates(@QueryMap parameter: Map<String, String> = emptyMap()): Call<KakaoBrandMessageTemplateListResponse>
 }

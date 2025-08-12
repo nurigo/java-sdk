@@ -1,13 +1,9 @@
 package net.nurigo.sdk.message.dto.request.kakao
 
-import kotlinx.serialization.Contextual
-import java.time.LocalDateTime
-import kotlinx.serialization.Serializable
+import java.time.Instant
 
-@Serializable
-data class KakaoAlimtalkTemplateDateQuery(
-    @Contextual
-    val date: LocalDateTime,
+data class KakaoTemplateDateQuery(
+    val date: Instant,
     val queryCondition: KakaoAlimtalkTemplateDateQueryCondition,
 ) {
     enum class KakaoAlimtalkTemplateDateQueryCondition {

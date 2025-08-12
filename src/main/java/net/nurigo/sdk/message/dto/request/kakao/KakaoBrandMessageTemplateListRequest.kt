@@ -3,16 +3,14 @@ package net.nurigo.sdk.message.dto.request.kakao
 import net.nurigo.sdk.message.dto.request.kakao.KakaoTemplateDateQuery.KakaoAlimtalkTemplateDateQueryCondition.*
 import net.nurigo.sdk.message.dto.request.kakao.KakaoTemplateDateQuery.KakaoAlimtalkTemplateDateQueryCondition.EQUALS as DATE_EQUALS
 import net.nurigo.sdk.message.dto.request.kakao.KakaoTemplateNameQuery.KakaoAlimtalkTemplateNameQueryCondition.*
-import net.nurigo.sdk.message.model.kakao.KakaoAlimtalkTemplateStatus
+import net.nurigo.sdk.message.model.kakao.KakaoBrandMessageTemplate
 
-data class KakaoAlimtalkTemplateListRequest(
-    var channelId: String? = null,
-    var channelGroupId: String? = null,
+data class KakaoBrandMessageTemplateListRequest(
     var name: KakaoTemplateNameQuery? = null,
-    var templateId: String? = null,
-    var isHidden: Boolean? = false,
-    var status : KakaoAlimtalkTemplateStatus? = null,
-    var isMine: Boolean? = false,
+    var pfId: String? = null,
+    var pfGroupId: String? = null,
+    var brandTemplateId: String? = null,
+    var chatBubbleType: KakaoBrandMessageTemplate.ChatBubbleType? = null,
     var startKey: String? = null,
     var limit: Int? = null,
     var dateCreated: KakaoTemplateDateQuery? = null,
@@ -21,8 +19,8 @@ data class KakaoAlimtalkTemplateListRequest(
     fun generateQueryParams(): Map<String, String> {
         val params = mutableMapOf<String, String>()
 
-        this.channelGroupId?.let { params["channelGroupId"] = it }
-        this.channelId?.let { params["channelId"] = it }
+        this.pfGroupId?.let { params["pfGroupId"] = it }
+        this.pfId?.let { params["pfId"] = it }
         this.name?.let { it ->
             when (it.queryCondition) {
                 EQUALS -> params["name[eq]"] = it.name
@@ -30,10 +28,8 @@ data class KakaoAlimtalkTemplateListRequest(
                 LIKE -> params["name[like]"] = it.name
             }
         }
-        this.templateId?.let { params["templateId"] = it }
-        this.isHidden?.let { params["isHidden"] = it.toString() }
-        this.status?.let { params["status"] = it.toString() }
-        this.isMine?.let { params["isMine"] = it.toString() }
+        this.brandTemplateId?.let { params["brandTemplateId"] = it }
+        this.chatBubbleType?.let { params["chatBubbleType"] = it.toString() }
         this.startKey?.let { params["startKey"] = it }
         this.limit?.let { params["limit"] = it.toString() }
         this.dateCreated?.let { it ->

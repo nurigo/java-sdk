@@ -11,7 +11,7 @@ data class KakaoAlimtalkTemplateResponse(
     var name: String? = null,
     var channelId: String? = null,
     var channelGroupId: String? = null,
-    var assignType: KakaoAlimtalkAssignType? = null,
+    var assignType: KakaoTemplateAssignType? = null,
     var accountId: String? = null,
     var securityFlag: Boolean? = false,
     var categoryCode: String? = null,
