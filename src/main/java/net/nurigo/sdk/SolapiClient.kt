@@ -4,6 +4,13 @@ import net.nurigo.sdk.message.service.DefaultMessageService
 
 object SolapiClient {
 
-    fun createInstance(apiKey: String, apiSecretKey: String): DefaultMessageService =
-        DefaultMessageService(apiKey, apiSecretKey, "https://api.solapi.com")
+    @JvmOverloads
+    fun createInstance(apiKey: String, apiSecretKey: String, useStaticIP: Boolean = false): DefaultMessageService {
+        var apiUrl = "https://api.solapi.com"
+        if (useStaticIP) {
+            apiUrl = "https://api-static.solapi.com"
+        }
+        return DefaultMessageService(apiKey, apiSecretKey, apiUrl)
+    }
+
 }

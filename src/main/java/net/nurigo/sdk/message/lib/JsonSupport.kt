@@ -18,8 +18,29 @@ import kotlinx.serialization.modules.SerializersModule
 /**
  * 중앙 집중식 Json 및 직렬화 설정.
  * LocalDateTime 은 ISO_LOCAL_DATE_TIME 문자열로 직렬화/역직렬화합니다.
+ * Instant 는 ISO_INSTANT(Z) 문자열로 직렬화/역직렬화합니다.
  */
 object JsonSupport {
+    private object InstantIsoSerializer : KSerializer<Instant> {
+        private val formatter: DateTimeFormatter = DateTimeFormatter.ISO_INSTANT
+
+        override val descriptor: SerialDescriptor =
+            PrimitiveSerialDescriptor("Instant", PrimitiveKind.STRING)
+
+        override fun serialize(encoder: Encoder, value: Instant) {
+            encoder.encodeString(formatter.format(value))
+        }
+
+        override fun deserialize(decoder: Decoder): Instant {
+            val text = decoder.decodeString()
+            // Lenient parsing: accept ISO_INSTANT, ISO_OFFSET_DATE_TIME, ISO_ZONED_DATE_TIME, ISO_LOCAL_DATE_TIME(UTC)
+            return runCatching { Instant.parse(text) }
+                .recoverCatching { OffsetDateTime.parse(text, DateTimeFormatter.ISO_OFFSET_DATE_TIME).toInstant() }
+                .recoverCatching { ZonedDateTime.parse(text, DateTimeFormatter.ISO_ZONED_DATE_TIME).toInstant() }
+                .recoverCatching { LocalDateTime.parse(text, DateTimeFormatter.ISO_LOCAL_DATE_TIME).toInstant(ZoneOffset.UTC) }
+                .getOrElse { throw it }
+        }
+    }
     private object LocalDateTimeIsoSerializer : KSerializer<LocalDateTime> {
         private val formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
 
@@ -43,6 +64,7 @@ object JsonSupport {
 
     val serializersModule: SerializersModule = SerializersModule {
         contextual(LocalDateTime::class, LocalDateTimeIsoSerializer)
+        contextual(Instant::class, InstantIsoSerializer)
     }
 
     val json: Json = Json {

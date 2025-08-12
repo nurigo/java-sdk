@@ -2,7 +2,7 @@ package net.nurigo.sdk.message.dto.request
 
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import java.time.LocalDateTime
+import java.time.Instant
 
 @Serializable
 data class SendRequestConfig(
@@ -10,5 +10,5 @@ data class SendRequestConfig(
     var allowDuplicates: Boolean = false,
     var showMessageList: Boolean = false,
     @Contextual
-    var scheduledDate: LocalDateTime? = null
+    var scheduledDate: Instant? = null
 )

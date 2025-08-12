@@ -59,6 +59,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
      * 파일을 접근 가능한 경로로 입력하셔야 합니다.
      * */
     @Throws
+    @JvmOverloads
     fun uploadFile(file: File, fileType: StorageType = StorageType.MMS, link: String? = null): String? {
         val length = file.length()
         val imageByte = ByteArray(length.toInt())
@@ -239,7 +240,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
     @Throws
     @JvmOverloads
     fun getKakaoAlimtalkTemplates(parameter: KakaoAlimtalkTemplateListRequest? = null): KakaoAlimtalkTemplateListResponse {
-        val queryParams = parameter?.generateToQueryParams()
+        val queryParams = parameter?.generateToQueryParams() ?: emptyMap()
         val response = this.messageHttpService.getAlimtalkTemplates(queryParams).execute()
         return handleApiResponse(response, "카카오 알림톡 템플릿 목록 조회에 실패했습니다.")
     }
@@ -269,8 +270,9 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
      * 발송 가능한 카카오 알림톡 템플릿 목록 조회 메소드
      */
     @Throws
+    @JvmOverloads
     fun getSendableKakaoAlimtalkTemplates(parameter: KakaoAlimtalkSendableTemplateListRequest? = null): List<KakaoAlimtalkTemplateResponse> {
-        val queryParams = parameter?.generateToQueryParams()
+        val queryParams = parameter?.generateToQueryParams() ?: emptyMap()
         val response = this.messageHttpService.getSendableAlimtalkTemplates(queryParams).execute()
         return handleApiResponse(response, "발송 가능한 카카오 알림톡 템플릿 목록 조회에 실패했습니다.")
     }

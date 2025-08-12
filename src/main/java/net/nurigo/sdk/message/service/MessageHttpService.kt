@@ -49,10 +49,10 @@ interface MessageHttpService : MessageService {
     fun getAlimtalkTemplate(@Path("templateId") templateId: String): Call<KakaoAlimtalkTemplateResponse>
 
     @GET("/kakao/v2/templates")
-    fun getAlimtalkTemplates(@QueryMap(encoded = true) parameter: Map<String, String>? = null): Call<KakaoAlimtalkTemplateListResponse>
+    fun getAlimtalkTemplates(@QueryMap(encoded = true) parameter: Map<String, String> = emptyMap()): Call<KakaoAlimtalkTemplateListResponse>
 
     @GET("/kakao/v2/templates/sendable")
-    fun getSendableAlimtalkTemplates(@QueryMap parameter: Map<String, String>? = null): Call<List<KakaoAlimtalkTemplateResponse>>
+    fun getSendableAlimtalkTemplates(@QueryMap parameter: Map<String, String> = emptyMap()): Call<List<KakaoAlimtalkTemplateResponse>>
 
     @PUT("/kakao/v2/templates/{templateId}/approval/cancel")
     fun transitionAlimtalkTemplateToPending(@Path("templateId") templateId: String): Call<KakaoAlimtalkTemplateResponse>

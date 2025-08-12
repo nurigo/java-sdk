@@ -1,5 +1,8 @@
 package net.nurigo.sdk.message.model.kakao
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class KakaoAlimtalkTemplateCategory(
     /**
      * 카테고리 코드

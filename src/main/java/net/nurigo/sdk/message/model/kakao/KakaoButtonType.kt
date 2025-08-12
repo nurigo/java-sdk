@@ -1,5 +1,8 @@
 package net.nurigo.sdk.message.model.kakao
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 enum class KakaoButtonType {
     /**
      * 웹링크
