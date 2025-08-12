@@ -34,38 +34,38 @@ interface MessageHttpService : MessageService {
     fun getQuota(): Call<Quota>
 
     @GET("/kakao/v2/templates/categories")
-    fun getAlimtalkTemplateCategories(): Call<List<KakaoAlimtalkTemplateCategory>>
+    fun getKakaoAlimtalkTemplateCategories(): Call<List<KakaoAlimtalkTemplateCategory>>
 
     @POST("/kakao/v2/templates")
-    fun createAlimtalkTemplate(@Body parameter: KakaoAlimtalkTemplateMutationRequest): Call<KakaoAlimtalkTemplateResponse>
+    fun createKakaoAlimtalkTemplate(@Body parameter: KakaoAlimtalkTemplateMutationRequest): Call<KakaoAlimtalkTemplateResponse>
 
     @PUT("/kakao/v2/templates/{templateId}")
-    fun updateAlimtalkTemplate(@Path("templateId") templateId: String, parameter: KakaoAlimtalkTemplateMutationRequest): Call<KakaoAlimtalkTemplateResponse>
+    fun updateKakaoAlimtalkTemplate(@Path("templateId") templateId: String, @Body parameter: KakaoAlimtalkTemplateMutationRequest): Call<KakaoAlimtalkTemplateResponse>
 
     @PUT("/kakao/v2/templates/{templateId}/inspection")
     fun requestKakaoAlimtalkTemplateInspection(@Path("templateId") templateId: String): Call<KakaoAlimtalkTemplateResponse>
 
     @GET("/kakao/v2/templates/{templateId}")
-    fun getAlimtalkTemplate(@Path("templateId") templateId: String): Call<KakaoAlimtalkTemplateResponse>
+    fun getKakaoAlimtalkTemplate(@Path("templateId") templateId: String): Call<KakaoAlimtalkTemplateResponse>
 
     @GET("/kakao/v2/templates")
-    fun getAlimtalkTemplates(@QueryMap(encoded = true) parameter: Map<String, String> = emptyMap()): Call<KakaoAlimtalkTemplateListResponse>
+    fun getKakaoAlimtalkTemplates(@QueryMap(encoded = true) parameter: Map<String, String> = emptyMap()): Call<KakaoAlimtalkTemplateListResponse>
 
     @GET("/kakao/v2/templates/sendable")
-    fun getSendableAlimtalkTemplates(@QueryMap parameter: Map<String, String> = emptyMap()): Call<List<KakaoAlimtalkTemplateResponse>>
+    fun getSendableKakaoAlimtalkTemplates(@QueryMap parameter: Map<String, String> = emptyMap()): Call<List<KakaoAlimtalkTemplateResponse>>
 
     @PUT("/kakao/v2/templates/{templateId}/approval/cancel")
-    fun transitionAlimtalkTemplateToPending(@Path("templateId") templateId: String): Call<KakaoAlimtalkTemplateResponse>
+    fun transitionKakaoAlimtalkTemplateToPending(@Path("templateId") templateId: String): Call<KakaoAlimtalkTemplateResponse>
 
     @PUT("/kakao/v2/templates/{templateId}/inspection/cancel")
-    fun cancelAlimtalkTemplateInspection(@Path("templateId") templateId: String): Call<KakaoAlimtalkTemplateResponse>
+    fun cancelKakaoAlimtalkTemplateInspection(@Path("templateId") templateId: String): Call<KakaoAlimtalkTemplateResponse>
 
     @DELETE("/kakao/v2/templates/{templateId}")
-    fun removeAlimtalkTemplate(@Path("templateId") templateId: String): Call<KakaoAlimtalkTemplateResponse>
+    fun removeKakaoAlimtalkTemplate(@Path("templateId") templateId: String): Call<KakaoAlimtalkTemplateResponse>
 
     @POST("/kakao/v2/templates/{templateId}/relese-dormant")
-    fun requestAlimtalkTemplateReactivation(@Path("templateId") templateId: String): Call<KakaoAlimtalkTemplateResponse>
+    fun requestKakaoAlimtalkTemplateReactivation(@Path("templateId") templateId: String): Call<KakaoAlimtalkTemplateResponse>
 
     @PUT("/kakao/v2/templates/{templateId}/name")
-    fun updateAlimtalkTemplateName(@Path("templateId") templateId: String, @Body name: KakaoAlimtalkTemplateUpdateNameRequest): Call<KakaoAlimtalkTemplateResponse>
+    fun updateKakaoAlimtalkTemplateName(@Path("templateId") templateId: String, @Body name: KakaoAlimtalkTemplateUpdateNameRequest): Call<KakaoAlimtalkTemplateResponse>
 }

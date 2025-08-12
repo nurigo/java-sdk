@@ -221,7 +221,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
      */
     @Throws
     fun getKakaoAlimtalkTemplateCategories(): List<KakaoAlimtalkTemplateCategory> {
-        val response = this.messageHttpService.getAlimtalkTemplateCategories().execute()
+        val response = this.messageHttpService.getKakaoAlimtalkTemplateCategories().execute()
         return handleApiResponse(response, "카카오 알림톡 템플릿 카테고리 조회에 실패했습니다.")
     }
 
@@ -230,7 +230,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
      */
     @Throws
     fun createKakaoAlimtalkTemplate(parameter: KakaoAlimtalkTemplateMutationRequest): KakaoAlimtalkTemplateResponse {
-        val response = this.messageHttpService.createAlimtalkTemplate(parameter).execute()
+        val response = this.messageHttpService.createKakaoAlimtalkTemplate(parameter).execute()
         return handleApiResponse(response, "카카오 알림톡 템플릿 생성에 실패했습니다, 에러가 반복되는 경우 SOLAPI 측 관리자에게 문의해주세요.")
     }
 
@@ -241,7 +241,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
     @JvmOverloads
     fun getKakaoAlimtalkTemplates(parameter: KakaoAlimtalkTemplateListRequest? = null): KakaoAlimtalkTemplateListResponse {
         val queryParams = parameter?.generateToQueryParams() ?: emptyMap()
-        val response = this.messageHttpService.getAlimtalkTemplates(queryParams).execute()
+        val response = this.messageHttpService.getKakaoAlimtalkTemplates(queryParams).execute()
         return handleApiResponse(response, "카카오 알림톡 템플릿 목록 조회에 실패했습니다.")
     }
 
@@ -253,7 +253,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
      */
     @Throws
     fun getKakaoAlimtalkTemplate(templateId: String): KakaoAlimtalkTemplateResponse {
-        val response = this.messageHttpService.getAlimtalkTemplate(templateId).execute()
+        val response = this.messageHttpService.getKakaoAlimtalkTemplate(templateId).execute()
         return handleApiResponse(response, "카카오 알림톡 템플릿 조회에 실패했습니다.")
     }
 
@@ -262,7 +262,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
      */
     @Throws
     fun requestKakaoAlimtalkTemplateReactivation(templateId: String): KakaoAlimtalkTemplateResponse {
-        val response = this.messageHttpService.requestAlimtalkTemplateReactivation(templateId).execute()
+        val response = this.messageHttpService.requestKakaoAlimtalkTemplateReactivation(templateId).execute()
         return handleApiResponse(response, "카카오 알림톡 템플릿 휴면 해지요청에 실패했습니다.")
     }
 
@@ -273,7 +273,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
     @JvmOverloads
     fun getSendableKakaoAlimtalkTemplates(parameter: KakaoAlimtalkSendableTemplateListRequest? = null): List<KakaoAlimtalkTemplateResponse> {
         val queryParams = parameter?.generateToQueryParams() ?: emptyMap()
-        val response = this.messageHttpService.getSendableAlimtalkTemplates(queryParams).execute()
+        val response = this.messageHttpService.getSendableKakaoAlimtalkTemplates(queryParams).execute()
         return handleApiResponse(response, "발송 가능한 카카오 알림톡 템플릿 목록 조회에 실패했습니다.")
     }
 
@@ -282,13 +282,13 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
      */
     @Throws
     fun transitionKakaoAlimtalkTemplateToPending(templateId: String): KakaoAlimtalkTemplateResponse {
-        val response = this.messageHttpService.transitionAlimtalkTemplateToPending(templateId).execute()
+        val response = this.messageHttpService.transitionKakaoAlimtalkTemplateToPending(templateId).execute()
         return handleApiResponse(response, "카카오 알림톡 템플릿 승인 취소에 실패했습니다.")
     }
 
     @Throws
     fun updateKakaoAlimtalkTemplate(templateId: String, parameter: KakaoAlimtalkTemplateMutationRequest): KakaoAlimtalkTemplateResponse {
-        val response = this.messageHttpService.updateAlimtalkTemplate(templateId, parameter).execute()
+        val response = this.messageHttpService.updateKakaoAlimtalkTemplate(templateId, parameter).execute()
         return handleApiResponse(response, "카카오 알림톡 템플릿 수정에 실패했습니다.")
     }
 
@@ -298,7 +298,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
      */
     @Throws
     fun updateKakaoAlimtalkTemplateName(templateId: String, name: String): KakaoAlimtalkTemplateResponse {
-        val response = this.messageHttpService.updateAlimtalkTemplateName(templateId,
+        val response = this.messageHttpService.updateKakaoAlimtalkTemplateName(templateId,
             KakaoAlimtalkTemplateUpdateNameRequest(name)
         ).execute()
         return handleApiResponse(response, "카카오 알림톡 템플릿의 이름 수정에 실패했습니다.")
@@ -318,7 +318,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
      */
     @Throws
     fun cancelKakaoAlimtalkTemplateInspection(templateId: String): KakaoAlimtalkTemplateResponse {
-        val response = this.messageHttpService.cancelAlimtalkTemplateInspection(templateId).execute()
+        val response = this.messageHttpService.cancelKakaoAlimtalkTemplateInspection(templateId).execute()
         return handleApiResponse(response, "카카오 알림톡 템플릿 검수 취소에 실패했습니다.")
     }
 
@@ -327,7 +327,7 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
      */
     @Throws
     fun removeKakaoAlimtalkTemplate(templateId: String): KakaoAlimtalkTemplateResponse {
-        val response = this.messageHttpService.removeAlimtalkTemplate(templateId).execute()
+        val response = this.messageHttpService.removeKakaoAlimtalkTemplate(templateId).execute()
         return handleApiResponse(response, "카카오 알림톡 템플릿 삭제에 실패했습니다.")
     }
 }
