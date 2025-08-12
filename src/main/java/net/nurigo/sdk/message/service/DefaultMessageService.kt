@@ -277,15 +277,6 @@ class DefaultMessageService(apiKey: String, apiSecretKey: String, domain: String
         return handleApiResponse(response, "발송 가능한 카카오 알림톡 템플릿 목록 조회에 실패했습니다.")
     }
 
-    /**
-     * 카카오 알림톡 템플릿 승인취소 후 대기 상태 전환 메소드
-     */
-    @Throws
-    fun transitionKakaoAlimtalkTemplateToPending(templateId: String): KakaoAlimtalkTemplateResponse {
-        val response = this.messageHttpService.transitionKakaoAlimtalkTemplateToPending(templateId).execute()
-        return handleApiResponse(response, "카카오 알림톡 템플릿 승인 취소에 실패했습니다.")
-    }
-
     @Throws
     fun updateKakaoAlimtalkTemplate(templateId: String, parameter: KakaoAlimtalkTemplateMutationRequest): KakaoAlimtalkTemplateResponse {
         val response = this.messageHttpService.updateKakaoAlimtalkTemplate(templateId, parameter).execute()

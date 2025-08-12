@@ -54,9 +54,6 @@ interface MessageHttpService : MessageService {
     @GET("/kakao/v2/templates/sendable")
     fun getSendableKakaoAlimtalkTemplates(@QueryMap parameter: Map<String, String> = emptyMap()): Call<List<KakaoAlimtalkTemplateResponse>>
 
-    @PUT("/kakao/v2/templates/{templateId}/approval/cancel")
-    fun transitionKakaoAlimtalkTemplateToPending(@Path("templateId") templateId: String): Call<KakaoAlimtalkTemplateResponse>
-
     @PUT("/kakao/v2/templates/{templateId}/inspection/cancel")
     fun cancelKakaoAlimtalkTemplateInspection(@Path("templateId") templateId: String): Call<KakaoAlimtalkTemplateResponse>
 
