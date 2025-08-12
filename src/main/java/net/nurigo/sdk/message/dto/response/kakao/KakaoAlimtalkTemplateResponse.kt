@@ -24,6 +24,7 @@ data class KakaoAlimtalkTemplateResponse(
     var item: KakaoAlimtalkTemplateItem? = null,
     var comments: List<KakaoAlimtalkTemplateComment>? = null,
     var code: String? = null,
+    var codes: List<KakaoAlimtalkTemplateCodeList>? = null,
     var commentable: Boolean? = null,
     var status: KakaoAlimtalkTemplateStatus? = null,
     var messageType: KakaoAlimtalkMessageType? = null,
