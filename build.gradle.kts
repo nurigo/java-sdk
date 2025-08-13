@@ -1,4 +1,5 @@
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
+import org.jetbrains.dokka.gradle.tasks.DokkaGeneratePublicationTask
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -6,6 +7,7 @@ plugins {
     kotlin("jvm") version "2.2.0"
     kotlin("plugin.serialization") version "2.2.0"
     id("org.jetbrains.dokka") version "2.0.0"
+    id("org.jetbrains.dokka-javadoc") version "2.0.0"
     id("com.gradleup.shadow") version "8.3.8"
     java
     `java-library`
@@ -109,6 +111,23 @@ tasks.withType<DokkaTaskPartial>().configureEach {
     outputDirectory.set(project.rootDir.resolve("docs"))
 }
 
+val dokkaJavadocJar by tasks.register<Jar>("dokkaJavadocJar") {
+    // v2 작업명에 의존
+    val genJavadoc = tasks.named("dokkaGeneratePublicationJavadoc", DokkaGeneratePublicationTask::class)
+    dependsOn(genJavadoc)
+
+    // v2 작업의 산출 디렉터리를 JAR에 포함
+    from(genJavadoc.flatMap { it.outputDirectory })
+    archiveClassifier.set("javadoc")
+}
+
+val dokkaHtmlJar by tasks.register<Jar>("dokkaHtmlJar") {
+    val genHtml = tasks.named("dokkaGeneratePublicationHtml", DokkaGeneratePublicationTask::class)
+    dependsOn(genHtml)
+    from(genHtml.flatMap { it.outputDirectory })
+    archiveClassifier.set("html-docs")
+}
+
 val ossusername: String by project
 val osspassword: String by project
 
@@ -132,7 +151,10 @@ publishing {
             artifactId = "sdk"
             version = version
 
-            artifact(tasks.shadowJar)
+            from(components["shadow"])
+
+            artifact(tasks.named("sourcesJar"))
+            artifact(dokkaJavadocJar)
 
             pom {
                 name.set("SOLAPI SDK")
