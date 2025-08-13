@@ -69,6 +69,9 @@ tasks.named("sourcesJar") {
 }
 
 tasks.named<ShadowJar>("shadowJar") {
+    isEnableRelocation = true
+    relocationPrefix = "com.solapi.shadow"
+
     mergeServiceFiles()
 
     exclude("**/*.kotlin_metadata")
