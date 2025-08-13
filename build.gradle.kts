@@ -1,4 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -68,7 +67,7 @@ tasks.named("sourcesJar") {
     dependsOn(generateVersionFile)
 }
 
-tasks.named<ShadowJar>("shadowJar") {
+tasks.shadowJar {
     isEnableRelocation = true
     relocationPrefix = "com.solapi.shadow"
 
