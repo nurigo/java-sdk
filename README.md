@@ -1,5 +1,7 @@
 # Nurigo Java SDK
 
+## 🛑 해당 Java SDK는 더 이상 유지보수 되지 않습니다! 향후 Java/Kotlin SDK는 [SOLAPI SDK](https://github.com/solapi/solapi-kotlin)를 통해 이용 해 주세요.
+
 ### 실행방법
 
 ---
